@@ -1,8 +1,9 @@
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Run test
 
 on:
   push:
-    branches: ["feature/*"]
+    branches: 
+    - feature/*
 
   workflow_dispatch:
 
