@@ -2,7 +2,8 @@ name: Run test
 
 on:
   push:
-    branches: ["feature/*"]
+    branches: 
+    - feature/*
 
   workflow_dispatch:
 
