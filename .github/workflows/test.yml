@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  run:
 
     runs-on: ubuntu-latest
 
