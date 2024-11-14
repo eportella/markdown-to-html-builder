@@ -3,6 +3,7 @@ name: Run test
 on:
   push:
     branches:
+    - main
     - feature/*
 
   workflow_dispatch:
