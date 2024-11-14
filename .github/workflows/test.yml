@@ -3,7 +3,6 @@ name: Run test
 on:
   push:
     branches:
-    - main
     - feature/*
 
   workflow_dispatch:
@@ -13,9 +12,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  cancel-in-progress: false
-  
 jobs:
   build:
 
