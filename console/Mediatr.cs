@@ -429,7 +429,7 @@ internal sealed class HtmlH2StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH2StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH2StringBuildRequest, string?>
+internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH2StringBuildRequestHandler()
@@ -458,7 +458,7 @@ internal sealed class HtmlH3StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH3StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH3StringBuildRequest, string?>
+internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH3StringBuildRequestHandler()
@@ -487,7 +487,7 @@ internal sealed class HtmlH4StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH4StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH4StringBuildRequest, string?>
+internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH4StringBuildRequestHandler()
@@ -516,7 +516,7 @@ internal sealed class HtmlH5StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH5StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH5StringBuildRequest, string?>
+internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH5StringBuildRequestHandler()
@@ -545,7 +545,7 @@ internal sealed class HtmlH6StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH6StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH6StringBuildRequest, string?>
+internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH6StringBuildRequestHandler()

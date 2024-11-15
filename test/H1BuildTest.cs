@@ -3,10 +3,10 @@ namespace test;
 public class H1BuildTest
 {
     [Theory]
-    [InlineData("# teste", "<h1>teste</h1>")]
+    [InlineData("# Headding", "<h1>Headding</h1>")]
     [InlineData("# #", "<h1>#</h1>")]
-    [InlineData("# #teste", "<h1>#teste</h1>")]
-    [InlineData("# # teste", "<h1># teste</h1>")]
+    [InlineData("# #Headding", "<h1>#Headding</h1>")]
+    [InlineData("# # Headding", "<h1># Headding</h1>")]
     public async Task Success(string informaed, string expected)
     {
         var arrange = new HtmlH1StringBuildRequest
