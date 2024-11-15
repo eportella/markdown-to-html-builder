@@ -384,10 +384,6 @@ internal sealed class HtmlBuildRequest : IRequest<string>
 
 internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest, string?>
 {
-    static HtmlBuildRequestHandler()
-    {
-
-    }
     public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
