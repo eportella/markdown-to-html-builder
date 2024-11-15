@@ -584,7 +584,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex("^- (.+)$");
+        Regex = new Regex("^- (.+)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
