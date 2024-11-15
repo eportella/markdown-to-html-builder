@@ -382,7 +382,7 @@ internal sealed class HtmlH1StringBuildRequest : IRequest<string>
     public string? @String { get; init; }
 }
 
-internal sealed class HtmlH1StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH1StringBuildRequest, string?>
+internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
@@ -391,7 +391,8 @@ internal sealed class HtmlH1StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         
         var match = Regex.Match(content);
         do
