@@ -5,13 +5,11 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using HtmlAgilityPack;
 using MediatR;
-
-internal sealed class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
-    public LoggingPipelineBehavior(
-    )
+    public TimeElapsedPipelineBehavior()
     {
         Stopwatch = new Stopwatch();
     }
@@ -26,11 +24,11 @@ internal sealed class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBe
     }
 }
 
-internal sealed class StreamLoggingPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
+internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
         where TRequest : IStreamRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
-    public StreamLoggingPipelineBehavior(
+    public TimeElapsedStreamPipelineBehavior(
     )
     {
         Stopwatch = new Stopwatch();
