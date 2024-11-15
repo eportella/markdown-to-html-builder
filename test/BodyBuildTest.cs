@@ -9,12 +9,12 @@ public class BodyBuildTest
     [InlineData("a\nB\nc\nD\n", "<body>a\nB\nc\nD\n</body>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new HtmlBuildRequest
+        var arrange = new BodyBuildRequest
         {
             String = informed
         };
 
-        var result = await new HtmlBuildRequestHandler()
+        var result = await new BodyBuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
