@@ -1,4 +1,5 @@
 using MediatR;
+using Moq;
 
 namespace test;
 
@@ -7,7 +8,7 @@ public class TimeElapsedTest
     [Fact]
     public async Task Success()
     {
-        var arrange = new Request();
+        var arrange = Mock.Of<Request>();
 
         var act = new TimeElapsedPipelineBehavior<Request, Unit>();
 
@@ -21,17 +22,17 @@ public class TimeElapsedTest
     [Fact]
     public async Task StreamSuccess()
     {
-        var arrange = new StreamRequest();
+        var arrange = Mock.Of<StreamRequest>();
+        var next = Mock.Of<StreamHandlerDelegate<Unit>>();
+        
+        var act = new TimeElapsedStreamPipelineBehavior<StreamRequest, Unit>();
 
-        var act = new TimeElapsedStreamPipelineBehavior<StreamRequest, Unit>()
-            .Handle(
+
+        await foreach (var assert in act.Handle(
                 arrange,
-                () => Setup(),
+                next,
                 CancellationToken.None
-            );
-
-
-        await foreach (var assert in act) ;
+            )) ;
 
         static async IAsyncEnumerable<Unit> Setup()
         {
@@ -39,11 +40,11 @@ public class TimeElapsedTest
             yield break;
         };
     }
-    class Request : IRequest<Unit>
+    public class Request : IRequest<Unit>
     {
 
     }
-    class StreamRequest : IStreamRequest<Unit>
+    public class StreamRequest : IStreamRequest<Unit>
     {
 
     }
