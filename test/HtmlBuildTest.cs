@@ -4,12 +4,13 @@ namespace test;
 
 public class HtmlBuildTest
 {
-    [Fact]
-    public async Task EmptyContentSuccess()
+    [Theory]
+    [InlineData("", "<html></html>")]
+    public async Task EmptyContentSuccess(string informaed, string expected)
     {
         var arrange = new HtmlBuildRequest
         {
-            String = string.Empty
+            String = informaed
         };
 
         var result = await new HtmlBuildRequestHandler()
@@ -18,6 +19,6 @@ public class HtmlBuildTest
                 CancellationToken.None
             );
 
-        Assert.Equal("<html></html>", result);
+        Assert.Equal(expected, result);
     }
 }
