@@ -575,11 +575,44 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     }
 }
 
+internal sealed class HtmlLiStringBuildRequest : IRequest<string>
+{
+    public string? @String { get; init; }
+}
+internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlLiStringBuildRequestHandler()
+    {
+        Regex = new Regex("^- (.+)$");
+    }
+    public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content
+                .Replace(
+                    match.Groups[0].Value,
+                    $"<li>{match.Groups[1].Value}</li>"
+                );
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
 internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlStringBuildRequest, string?>
+internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
     static Regex UlRegex { get; }
     static Regex LiRegex { get; }
@@ -601,7 +634,7 @@ internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlSt
             content = content
                 .Replace(
                     match.Groups[0].Value,
-                    $"<ul>{string.Join(string.Empty, match.Groups[2].Captures.Select(li => $"<li>{LiRegex.Replace(li.Value, "$1")}</li>"))}</ul>"
+                    $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[2].Value }, cancellationToken)}</ul>"
                 );
             match = match.NextMatch();
         } while (true);

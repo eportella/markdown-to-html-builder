@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class UlBuildTest
@@ -5,17 +8,22 @@ public class UlBuildTest
     [Theory]
     [InlineData(
 @"
-- a
-", 
-"<ul><li>a</li>></ul>")]
+- list item
+",
+"<ul>#empty#</ul>")]
     public async Task Success(string informaed, string expected)
     {
+        var mediator = Mock.Of<IMediator>();
+        Mock.Get(mediator)
+            .Setup(s => s.Send(It.IsAny<HtmlLiStringBuildRequest>(), CancellationToken.None))
+            .ReturnsAsync("#empty#");
+
         var arrange = new HtmlUlStringBuildRequest
         {
             String = informaed
         };
 
-        var result = await new HtmlUlStringBuildRequestHandler()
+        var result = await new HtmlUlStringBuildRequestHandler(mediator)
             .Handle(
                 arrange,
                 CancellationToken.None
