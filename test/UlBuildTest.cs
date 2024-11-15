@@ -10,13 +10,13 @@ public class UlBuildTest
 @"
 - list item
 ",
-"<ul>#empty#</ul>")]
+"<ul></ul>")]
     public async Task Success(string informed, string expected)
     {
         var mediator = Mock.Of<IMediator>();
         Mock.Get(mediator)
             .Setup(s => s.Send(It.IsAny<HtmlLiStringBuildRequest>(), CancellationToken.None))
-            .ReturnsAsync("#empty#");
+            .ReturnsAsync(string.Empty);
 
         var arrange = new HtmlUlStringBuildRequest
         {
