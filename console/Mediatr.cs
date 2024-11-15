@@ -47,13 +47,13 @@ internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : I
     }
 }
 
-internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo>
+internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo?>
 {
 
 }
-internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo>
+internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo?>
 {
-    public async Task<DirectoryInfo> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
+    public async Task<DirectoryInfo?> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         return new DirectoryInfo(Directory.GetCurrentDirectory()).Parent;
