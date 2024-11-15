@@ -16,7 +16,7 @@ internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipeli
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         Stopwatch.Start();
-        
+
         var response = await next();
         Stopwatch.Stop();
         Console.WriteLine($"{typeof(TRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
@@ -66,7 +66,7 @@ internal sealed class JekyllDirectoryInfoGetRequest : IRequest<DirectoryInfo>
 }
 internal sealed class JekyllDirectoryInfoGetRequestHandler(IMediator mediator) : IRequestHandler<JekyllDirectoryInfoGetRequest, DirectoryInfo>
 {
-    
+
     public async Task<DirectoryInfo> Handle(JekyllDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         return (await mediator.Send(new RootDirectoryInfoGetRequest(), cancellationToken))!.GetDirectories("_jekyll")[0];
@@ -377,6 +377,26 @@ internal sealed class StringGetdRequestHandler(IMediator mediator) : IRequestHan
     }
 }
 
+internal sealed class HtmlBuildRequest : IRequest<string>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest, string?>
+{
+    static HtmlBuildRequestHandler()
+    {
+
+    }
+    public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String!;
+        content = $"<html>{content}</html>";
+        return content;
+    }
+}
+
 internal sealed class HtmlH1StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
@@ -393,7 +413,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     {
         await Task.Yield();
         var content = request.@String!;
-        
+
         var match = Regex.Match(content);
         do
         {
@@ -403,7 +423,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
             content = content.Replace(match.Groups[0].Value, $"<h1>{match.Groups[1].Value}</h1>");
 
             match = match.NextMatch();
-        } while(true);
+        } while (true);
 
         return content;
     }
@@ -445,7 +465,8 @@ internal sealed class HtmlH3StringBuildRequest : IRequest<string>
 internal sealed class HtmlH3StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH3StringBuildRequest, string?>
 {
     static Regex Regex { get; }
-    static HtmlH3StringBuildRequestHandler(){
+    static HtmlH3StringBuildRequestHandler()
+    {
         Regex = new Regex(@"^### (.+)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
@@ -652,7 +673,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
     {
         var content = request.@String;
-        
+
         content = await mediator.Send(new HtmlH1StringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { @String = content }, cancellationToken);
@@ -662,7 +683,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBrStringBuildRequest { @String = content }, cancellationToken);
-        
+
         return content;
     }
 }
@@ -677,11 +698,11 @@ internal sealed class LogRequestHandler(IMediator mediator) : IRequestHandler<Lo
     {
         Console.WriteLine();
         Console.WriteLine($"LOG->'{request.FileInfo.FullName}'");
-        
+
         var content = await mediator.Send(new StringGetdRequest { FileInfo = request.FileInfo }, cancellationToken);
         Console.WriteLine(content);
         Console.WriteLine();
-        content = await mediator.Send(new HtmlStringBuildRequest { @String = content}, cancellationToken );
+        content = await mediator.Send(new HtmlStringBuildRequest { @String = content }, cancellationToken);
         Console.WriteLine(content);
         Console.WriteLine();
     }
