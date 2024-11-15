@@ -24,9 +24,11 @@ public class TimeElapsedTest
     {
         var arrange = Mock.Of<StreamRequest>();
         var next = Mock.Of<StreamHandlerDelegate<Unit>>();
-        
-        var act = new TimeElapsedStreamPipelineBehavior<StreamRequest, Unit>();
+        Mock.Get(next)
+            .Setup(@delegate=> @delegate())
+            .Returns(AsyncEnumerable);
 
+        var act = new TimeElapsedStreamPipelineBehavior<StreamRequest, Unit>();
 
         await foreach (var assert in act.Handle(
                 arrange,
@@ -34,7 +36,7 @@ public class TimeElapsedTest
                 CancellationToken.None
             )) ;
 
-        static async IAsyncEnumerable<Unit> Setup()
+        static async IAsyncEnumerable<Unit> AsyncEnumerable()
         {
             await Task.Yield();
             yield break;
