@@ -1,10 +1,9 @@
-using Moq;
-
 namespace test;
 
 public class HtmlBuildTest
 {
     [Theory]
+    [InlineData(default, "<html></html>")]
     [InlineData("", "<html></html>")]
     [InlineData("a", "<html>a</html>")]
     [InlineData("a\nB\nc\nD\n", "<html>a\nB\nc\nD\n</html>")]
