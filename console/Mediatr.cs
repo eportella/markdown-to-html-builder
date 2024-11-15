@@ -393,6 +393,22 @@ internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest
     }
 }
 
+internal sealed class BodyBuildRequest : IRequest<string?>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest, string?>
+{
+    public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String;
+        content = $"<body>{content}</body>";
+        return content;
+    }
+}
+
 internal sealed class HtmlH1StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
