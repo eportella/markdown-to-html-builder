@@ -7,6 +7,7 @@ public class HtmlBuildTest
     [Theory]
     [InlineData("", "<html></html>")]
     [InlineData("a", "<html>a</html>")]
+    [InlineData("a\nB\nc\nD\n", "<html>a\nB\nc\nD\n</html>")]
     public async Task EmptyContentSuccess(string informaed, string expected)
     {
         var arrange = new HtmlBuildRequest
