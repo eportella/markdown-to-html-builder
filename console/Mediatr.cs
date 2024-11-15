@@ -438,7 +438,8 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     }
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -467,7 +468,8 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -496,7 +498,8 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     }
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -525,7 +528,8 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     }
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -554,7 +558,8 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     }
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
