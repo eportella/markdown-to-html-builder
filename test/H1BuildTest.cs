@@ -7,11 +7,11 @@ public class H1BuildTest
     [InlineData("# #", "<h1>#</h1>")]
     [InlineData("# #Headding", "<h1>#Headding</h1>")]
     [InlineData("# # Headding", "<h1># Headding</h1>")]
-    public async Task Success(string informaed, string expected)
+    public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH1StringBuildRequest
         {
-            String = informaed
+            String = informed
         };
 
         var result = await new HtmlH1StringBuildRequestHandler()

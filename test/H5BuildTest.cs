@@ -7,11 +7,11 @@ public class H5BuildTest
     [InlineData("##### #", "<h5>#</h5>")]
     [InlineData("##### #Headding", "<h5>#Headding</h5>")]
     [InlineData("##### # Headding", "<h5># Headding</h5>")]
-    public async Task Success(string informaed, string expected)
+    public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH5StringBuildRequest
         {
-            String = informaed
+            String = informed
         };
 
         var result = await new HtmlH5StringBuildRequestHandler()

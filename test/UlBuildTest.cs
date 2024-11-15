@@ -11,7 +11,7 @@ public class UlBuildTest
 - list item
 ",
 "<ul>#empty#</ul>")]
-    public async Task Success(string informaed, string expected)
+    public async Task Success(string informed, string expected)
     {
         var mediator = Mock.Of<IMediator>();
         Mock.Get(mediator)
@@ -20,7 +20,7 @@ public class UlBuildTest
 
         var arrange = new HtmlUlStringBuildRequest
         {
-            String = informaed
+            String = informed
         };
 
         var result = await new HtmlUlStringBuildRequestHandler(mediator)

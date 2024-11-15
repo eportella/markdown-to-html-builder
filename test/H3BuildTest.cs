@@ -7,11 +7,11 @@ public class H3BuildTest
     [InlineData("### #", "<h3>#</h3>")]
     [InlineData("### #Headding", "<h3>#Headding</h3>")]
     [InlineData("### # Headding", "<h3># Headding</h3>")]
-    public async Task Success(string informaed, string expected)
+    public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH3StringBuildRequest
         {
-            String = informaed
+            String = informed
         };
 
         var result = await new HtmlH3StringBuildRequestHandler()
