@@ -616,7 +616,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
                 .Replace(
                     match.Groups[0].Value.Trim('\r','\n'),
                     $"<li>{match.Groups[1].Value.Trim('\r','\n')}</li>"
-                );
+                ).Trim('\r','\n');
             match = match.NextMatch();
         } while (true);
 
