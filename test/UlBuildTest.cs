@@ -8,26 +8,44 @@ public class UlBuildTest
     [Theory]
     [InlineData(
 @"
-- list item 1
-",
+- list item 1",
 "<ul></ul>")]
-[InlineData(
+    [InlineData(
 @"- list item 1
-- list item 2
-",
+- list item 2",
 "<ul></ul>")]
-[InlineData(
+    [InlineData(
 @"- list item 1
 - list item 2
 - list item 3",
 "<ul></ul>")]
-[InlineData(
+    [InlineData(
+@"- list item 1
+",
+"<ul></ul>")]
+    [InlineData(
+@"- list item 1
+- list item 2
+",
+"<ul></ul>")]
+    [InlineData(
 @"- list item 1
 - list item 2
 - list item 3
 ",
 "<ul></ul>")]
-[InlineData(
+    [InlineData(
+@"
+- list item 1
+",
+"<ul></ul>")]
+    [InlineData(
+@"
+- list item 1
+- list item 2
+",
+"<ul></ul>")]
+    [InlineData(
 @"
 - list item 1
 - list item 2
