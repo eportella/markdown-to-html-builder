@@ -600,7 +600,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex("^- (.+)(?!\r)$", RegexOptions.Multiline);
+        Regex = new Regex("^- (.+)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -614,8 +614,8 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
 
             content = content
                 .Replace(
-                    match.Groups[0].Value,
-                    $"<li>{match.Groups[1].Value}</li>"
+                    match.Groups[0].Value.Trim('\r','\n'),
+                    $"<li>{match.Groups[1].Value.Trim('\r','\n')}</li>"
                 );
             match = match.NextMatch();
         } while (true);
