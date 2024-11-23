@@ -600,7 +600,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex("^- (.+)$", RegexOptions.Multiline);
+        Regex = new Regex("^- (.+)(?!\r)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
