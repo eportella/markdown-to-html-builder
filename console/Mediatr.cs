@@ -666,7 +666,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
     static Regex Regex { get; }
     static HtmlAStringBuildRequestHandler()
     {
-        Regex = new Regex(" \\[(.*?)\\]\\((.*?)\\)", RegexOptions.Multiline);
+        Regex = new Regex("\\[(.*?)\\]\\((.*?)\\)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -678,7 +678,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $@" <a href=""{match.Groups[2].Value}"">{match.Groups[1].Value}</a>");
+            content = content.Replace(match.Groups[0].Value, $@"<a href=""{match.Groups[2].Value}"">{match.Groups[1].Value}</a>");
             match = match.NextMatch();
         } while (true);
 
