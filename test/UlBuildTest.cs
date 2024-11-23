@@ -12,12 +12,16 @@ public class UlBuildTest
 ",
 "<ul></ul>")]
 [InlineData(
-@"
-- list item
-
+@"- list item
 - list item
 ",
-"<ul></ul><ul></ul>")]
+"<ul></ul>")]
+[InlineData(
+@"- list item
+- list item
+- list item
+",
+"<ul></ul>")]
     public async Task Success(string informed, string expected)
     {
         var mediator = Mock.Of<IMediator>();
