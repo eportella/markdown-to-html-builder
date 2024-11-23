@@ -631,11 +631,9 @@ internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
     static Regex UlRegex { get; }
-    static Regex LiRegex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
         UlRegex = new Regex($"{Environment.NewLine}((- .+{Environment.NewLine})+)", RegexOptions.Multiline);
-        LiRegex = new Regex("^- (.+)$");
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
