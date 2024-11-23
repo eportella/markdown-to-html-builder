@@ -8,18 +8,30 @@ public class UlBuildTest
     [Theory]
     [InlineData(
 @"
-- list item
+- list item 1
 ",
 "<ul></ul>")]
 [InlineData(
-@"- list item
-- list item
+@"- list item 1
+- list item 2
 ",
 "<ul></ul>")]
 [InlineData(
-@"- list item
-- list item
-- list item
+@"- list item 1
+- list item 2
+- list item 3",
+"<ul></ul>")]
+[InlineData(
+@"- list item 1
+- list item 2
+- list item 3
+",
+"<ul></ul>")]
+[InlineData(
+@"
+- list item 1
+- list item 2
+- list item 3
 ",
 "<ul></ul>")]
     public async Task Success(string informed, string expected)

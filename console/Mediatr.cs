@@ -633,7 +633,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
     static Regex UlRegex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        UlRegex = new Regex($"((- .+{Environment.NewLine})+)", RegexOptions.Multiline);
+        UlRegex = new Regex($"(- .+({Environment.NewLine}|))+", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
