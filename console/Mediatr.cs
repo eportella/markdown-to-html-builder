@@ -649,7 +649,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
 
             content = content
                 .Replace(
-                    match.Groups[0].Value,
+                    match.Groups[0].Value.Trim('\r','\n'),
                     $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[2].Value }, cancellationToken)}</ul>"
                 ).Trim('\r','\n');
             match = match.NextMatch();
