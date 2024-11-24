@@ -368,7 +368,7 @@ internal sealed class StringGetdRequest : IRequest<string?>
 {
     public FileInfo? FileInfo { get; init; }
 }
-internal sealed class StringGetdRequestHandler : IRequestHandler<StringGetdRequest, string?>
+internal sealed class StringGetRequestHandler : IRequestHandler<StringGetdRequest, string?>
 {
     public async Task<string?> Handle(StringGetdRequest request, CancellationToken cancellationToken)
     {
@@ -708,6 +708,36 @@ internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrSt
                 break;
 
             content = content.Replace(match.Groups[0].Value, "<br />");
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
+internal sealed class HtmlPStringBuildRequest : IRequest<string>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlPStringBuildRequestHandler()
+    {
+        Regex = new Regex($"(.+)(\n|)", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $"<p>{match.Groups[1].Value}</p>");
             match = match.NextMatch();
         } while (true);
 
