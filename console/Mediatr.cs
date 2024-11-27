@@ -282,18 +282,18 @@ internal sealed class SvgFormatRequestHandler : IRequestHandler<SvgFormatRequest
 }
 
 
-internal sealed class IdadeBuildRequest : IRequest<string?>
+internal sealed class AgeCalcBuildRequest : IRequest<string?>
 {
     public string? Content { get; init; }
 }
-internal sealed class IdadeBuildRequestHandler : IRequestHandler<IdadeBuildRequest, string?>
+internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildRequest, string?>
 {
     Regex Regex { get; }
-    public IdadeBuildRequestHandler()
+    public AgeCalcBuildRequestHandler()
     {
-        Regex = new Regex(@"<code.*?>\[IDADE\]:([\d]{4}\-[\d]{2}\-[\d]{2})\<\/code>", RegexOptions.Multiline);
+        Regex = new Regex(@"`\[age-calc\]:([\d]{4}\-[\d]{2}\-[\d]{2})\`", RegexOptions.Multiline);
     }
-    public async Task<string?> Handle(IdadeBuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Content == default)
@@ -315,7 +315,7 @@ internal sealed class IdadeBuildRequestHandler : IRequestHandler<IdadeBuildReque
         return content;
     }
 
-    internal static int Calculate(DateTime birthDate)
+    private static int Calculate(DateTime birthDate)
     {
         DateTime today = DateTime.Today;
 
@@ -358,7 +358,7 @@ internal sealed class BuildRequestHandler(IMediator mediator) : IRequestHandler<
             request.FileInfoTarget.Directory.Create();
         var content = await mediator.Send(new BlockquoteFormatRequest { FileInfo = request.FileInfoSource }, cancellationToken);
         content = await mediator.Send(new SvgFormatRequest { Content = content }, cancellationToken);
-        content = await mediator.Send(new IdadeBuildRequest { Content = content }, cancellationToken);
+        content = await mediator.Send(new AgeCalcBuildRequest { Content = content }, cancellationToken);
         using var writer = request.FileInfoTarget.CreateText();
         await writer.WriteAsync(content);
     }
