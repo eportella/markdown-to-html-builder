@@ -8,7 +8,7 @@ public class AgeCalcBuildTest
     {
         var arrange = new AgeCalcBuildRequest
         {
-            Content = informed
+            String = informed
         };
 
         var result = await new AgeCalcBuildRequestHandler()

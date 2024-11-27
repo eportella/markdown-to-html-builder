@@ -230,20 +230,20 @@ internal sealed class BlockquoteFormatRequestHandler : IRequestHandler<Blockquot
     }
 }
 
-internal sealed class SvgFormatRequest : IRequest<string?>
+internal sealed class SvgBuildRequest : IRequest<string?>
 {
-    public string? Content { get; init; }
+    public string? String { get; init; }
 }
-internal sealed class SvgFormatRequestHandler : IRequestHandler<SvgFormatRequest, string?>
+internal sealed class SvgBuildRequestHandler : IRequestHandler<SvgBuildRequest, string?>
 {
-    public async Task<string?> Handle(SvgFormatRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(SvgBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if (request.Content == default)
+        if (request.String == default)
             return default;
 
         return request
-            .Content
+            .String
             .Replace(
                 "[!NOTE]",
                 SvgCreate("#1f6feb", "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"))
@@ -277,14 +277,14 @@ internal sealed class SvgFormatRequestHandler : IRequestHandler<SvgFormatRequest
             )
         );
 
-        return svgElement.ToString();
+        return svgElement.ToString(SaveOptions.DisableFormatting);
     }
 }
 
 
 internal sealed class AgeCalcBuildRequest : IRequest<string?>
 {
-    public string? Content { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildRequest, string?>
 {
@@ -296,10 +296,10 @@ internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildR
     public async Task<string?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if (request.Content == default)
+        if (request.String == default)
             return default;
 
-        var content = request.Content;
+        var content = request.String;
         do
         {
             var match = Regex.Match(content);
@@ -357,8 +357,8 @@ internal sealed class BuildRequestHandler(IMediator mediator) : IRequestHandler<
         if (!request.FileInfoTarget!.Directory!.Exists)
             request.FileInfoTarget.Directory.Create();
         var content = await mediator.Send(new BlockquoteFormatRequest { FileInfo = request.FileInfoSource }, cancellationToken);
-        content = await mediator.Send(new SvgFormatRequest { Content = content }, cancellationToken);
-        content = await mediator.Send(new AgeCalcBuildRequest { Content = content }, cancellationToken);
+        content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         using var writer = request.FileInfoTarget.CreateText();
         await writer.WriteAsync(content);
     }
