@@ -237,37 +237,27 @@ internal sealed class BlockquoteBuildRequest : IRequest<string?>
 
 internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<BlockquoteBuildRequest, string?>
 {
+    static Regex Regex { get; }
+    static BlockquoteBuildRequestHandler()
+    {
+        Regex = new Regex(@"^> *(.+)$", RegexOptions.Multiline);
+    }
     public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.String == default)
             return default;
 
-        
-        return request
-            .String
-            .Replace(
-                "[!NOTE]",
-                @"<blockquote style=""border-color: #1f6feb;""><p style=""display:flex; align-items:center; column-gap:0.4em; font-weight:500;"">[!NOTE]</p></blockquote>"
-            )
-            .Replace(
-                "[!TIP]",
-                @"<blockquote style=""border-color: #3fb950;""><p style=""display:flex; align-items:center; column-gap:0.4em; font-weight:500;"">[!TIP]</p></blockquote>"
-            )
-            .Replace(
-                "[!IMPORTANT]",
-                @"<blockquote style=""border-color: #ab7df8;""><p style=""display:flex; align-items:center; column-gap:0.4em; font-weight:500;"">[!IMPORTANT]</p></blockquote>"
-            )
-            .Replace(
-                "[!WARNING]",
-                @"<blockquote style=""border-color: #d29922;""><p style=""display:flex; align-items:center; column-gap:0.4em; font-weight:500;"">[!WARNING]</p></blockquote>"
-            )
-            .Replace(
-                "[!CAUTION]",
-                @"<blockquote style=""border-color: #f85149;""><p style=""display:flex; align-items:center; column-gap:0.4em; font-weight:500;"">[!CAUTION]</p></blockquote>"
-            );
+        var content = request.@String!;
 
-        
+        var match = Regex.Match(content);
+
+        if (!match.Success)
+            return content;
+
+        content = content.Replace(match.Groups[0].Value, $"<blockquote><p>{match.Groups[1].Value}</p></blockquote>");
+
+        return content;
     }
 }
 
@@ -655,9 +645,9 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
 
             content = content
                 .Replace(
-                    match.Groups[0].Value.Trim('\r','\n'),
-                    $"<li>{match.Groups[1].Value.Trim('\r','\n')}</li>"
-                ).Trim('\r','\n');
+                    match.Groups[0].Value.Trim('\r', '\n'),
+                    $"<li>{match.Groups[1].Value.Trim('\r', '\n')}</li>"
+                ).Trim('\r', '\n');
             match = match.NextMatch();
         } while (true);
 
@@ -688,9 +678,9 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
 
             content = content
                 .Replace(
-                    match.Groups[0].Value.Trim('\r','\n'),
+                    match.Groups[0].Value.Trim('\r', '\n'),
                     $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[1].Value }, cancellationToken)}</ul>"
-                ).Trim('\r','\n');
+                ).Trim('\r', '\n');
             match = match.NextMatch();
         } while (true);
 
