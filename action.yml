@@ -4,6 +4,10 @@ author: 'Portella'
 runs:
   using: "composite"
   steps:
-    - name: dotnet restore
+    - name: Restore
       shell: bash
-      run: echo "Hi"
+      run: dotnet restore
+    - name: Restore
+      shell: bash
+      run: dotnet build
+      
