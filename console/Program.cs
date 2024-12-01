@@ -11,19 +11,19 @@ serviceCollection
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
 var mediator = serviceProvider.GetRequiredService<IMediator>();
-var sourceDirectoryInfo = await mediator.Send(new RootDirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[1] });
+var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[1] });
 
 await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }))
 {
     var content = await mediator.Send(new StringGetdRequest { FileInfo = markdownFileInfo });
     Console.WriteLine(content);
-    Console.WriteLine();
-    Console.WriteLine();
-
     content = await mediator.Send(new HtmlStringBuildRequest { String = content });
-
     Console.WriteLine(content);
-    Console.WriteLine();
-    Console.WriteLine();
-    Console.WriteLine();
+
+    var targetDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[2] });
+    if (!targetDirectoryInfo!.Exists)
+        targetDirectoryInfo.Create();
+    var fileInfo = new FileInfo($"{targetDirectoryInfo}{markdownFileInfo.Name}");
+    using var fileStrem = fileInfo!.CreateText();
+    await fileStrem.WriteAsync(content);
 }

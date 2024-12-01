@@ -47,13 +47,13 @@ internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : I
     }
 }
 
-internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo?>
+internal sealed class DirectoryInfoGetRequest : IRequest<DirectoryInfo?>
 {
     public string? Path { get; set; }
 }
-internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo?>
+internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<DirectoryInfoGetRequest, DirectoryInfo?>
 {
-    public async Task<DirectoryInfo?> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
+    public async Task<DirectoryInfo?> Handle(DirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         return new DirectoryInfo(request.Path!);
@@ -331,23 +331,6 @@ internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildR
             return age - 1;
 
         return age;
-    }
-}
-
-internal sealed class CssMoveRequest : IRequest
-{
-    public FileInfo? FileInfoSource { get; init; }
-    public FileInfo? FileInfoTarget { get; init; }
-}
-internal sealed class CssMoveRequestHandler : IRequestHandler<CssMoveRequest>
-{
-    public async Task Handle(CssMoveRequest request, CancellationToken cancellationToken)
-    {
-        if (!request.FileInfoTarget!.Directory!.Exists)
-            request.FileInfoTarget.Directory.Create();
-        using var writer = request.FileInfoTarget.OpenWrite();
-        using var fileStrem = request.FileInfoSource!.OpenText();
-        await fileStrem.BaseStream.CopyToAsync(writer, cancellationToken);
     }
 }
 
