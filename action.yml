@@ -4,6 +4,9 @@ author: 'Portella'
 runs:
   using: "composite"
   steps:
+  - name: Restore
+      shell: bash
+      run: ls
     - name: Restore
       shell: bash
       run: dotnet restore
