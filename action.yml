@@ -11,4 +11,4 @@ runs:
   steps:
     - name: Run
       shell: bash
-      run: echo ORIGIN_PATH=${{ inputs.origin-path }} >> $GITHUB_ENV; cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run $ORIGIN_PATH;    
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.origin-path }};    
