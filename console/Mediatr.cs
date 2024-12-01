@@ -434,9 +434,7 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String;
-        content = $"<body>{content}</body>";
-        return content;
+        return $"<body>{request.@String}</body>";
     }
 }
 
