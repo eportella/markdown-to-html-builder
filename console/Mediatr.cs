@@ -56,7 +56,7 @@ internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootD
     public async Task<DirectoryInfo?> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return new DirectoryInfo(Directory.GetCurrentDirectory()).Parent;
+        return new DirectoryInfo(Environment.GetCommandLineArgs()[1]);
     }
 }
 
@@ -69,7 +69,7 @@ internal sealed class JekyllDirectoryInfoGetRequestHandler(IMediator mediator) :
 
     public async Task<DirectoryInfo> Handle(JekyllDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
-        return (await mediator.Send(new RootDirectoryInfoGetRequest(), cancellationToken))!.GetDirectories("_jekyll")[0];
+        return (await mediator.Send(new RootDirectoryInfoGetRequest(), cancellationToken));
     }
 }
 
