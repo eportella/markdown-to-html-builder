@@ -351,25 +351,6 @@ internal sealed class CssMoveRequestHandler : IRequestHandler<CssMoveRequest>
     }
 }
 
-internal sealed class BuildRequest : IRequest
-{
-    public FileInfo? FileInfoSource { get; init; }
-    public FileInfo? FileInfoTarget { get; init; }
-}
-internal sealed class BuildRequestHandler(IMediator mediator) : IRequestHandler<BuildRequest>
-{
-    public async Task Handle(BuildRequest request, CancellationToken cancellationToken)
-    {
-        if (!request.FileInfoTarget!.Directory!.Exists)
-            request.FileInfoTarget.Directory.Create();
-        var content = await mediator.Send(new BlockquoteFormatRequest { FileInfo = request.FileInfoSource }, cancellationToken);
-        content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
-        using var writer = request.FileInfoTarget.CreateText();
-        await writer.WriteAsync(content);
-    }
-}
-
 internal sealed class StringGetdRequest : IRequest<string?>
 {
     public FileInfo? FileInfo { get; init; }
