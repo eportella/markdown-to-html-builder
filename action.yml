@@ -12,10 +12,10 @@ runs:
       run: dotnet restore $GITHUB_ACTION_PATH
     - name: Build
       shell: bash
-      run: dotnet build $GITHUB_ACTION_PATH/console.csproj
+      run: dotnet build $GITHUB_ACTION_PATH/console/console.csproj
     - name: Run
       shell: bash
-      run: dotnet run $GITHUB_ACTION_PATH/console.csproj
+      run: dotnet run $GITHUB_ACTION_PATH/console/console.csproj
     - name: DEBUG
       shell: bash
       run: ls $GITHUB_ACTION_PATH
