@@ -18,10 +18,18 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     var content = await mediator.Send(new StringGetdRequest { FileInfo = markdownFileInfo });
     content = await mediator.Send(new HtmlStringBuildRequest { String = content });
     
-    var targetDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[2] });
+    var t = sourceDirectoryInfo.FullName.Replace(sourceDirectoryInfo.Name, string.Empty).Replace(Environment.GetCommandLineArgs()[1], string.Empty);
+    var targetDirectoryInfo = await mediator
+        .Send(new DirectoryInfoGetRequest 
+        { 
+            Path = string.IsNullOrWhiteSpace(t) ? 
+                Environment.GetCommandLineArgs()[2] : 
+                $"{Environment.GetCommandLineArgs()[2]}{Path.PathSeparator}{t}" 
+        });
+
     if (!targetDirectoryInfo!.Exists)
         targetDirectoryInfo.Create();
-    var fileInfo = new FileInfo($"{targetDirectoryInfo}{Environment.GetCommandLineArgs()[3]}");
+    var fileInfo = new FileInfo($"{targetDirectoryInfo}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}");
     using var fileStrem = fileInfo!.CreateText();
     await fileStrem.WriteAsync(content);
     Console.WriteLine(fileInfo.FullName);
