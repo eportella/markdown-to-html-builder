@@ -2,8 +2,12 @@ name: 'Build HTML'
 description: 'A simple GitHub Action for producing build artifacts compatible with html'
 author: 'Portella'
 inputs:
-  origin-path:
-    description: 'origin to build'
+  source-path:
+    description: 'source of build'
+    required: false
+    default: ${GITHUB_WORKSPACE}
+  target-path:
+    description: 'target of build'
     required: false
     default: ${GITHUB_WORKSPACE}
 runs:
@@ -11,4 +15,4 @@ runs:
   steps:
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.origin-path }};    
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }};
