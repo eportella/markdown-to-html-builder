@@ -20,13 +20,13 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     Console.WriteLine($"SOURCE-PATH: {sourceDirectoryInfo.FullName}");
     Console.WriteLine($"MD-PATH: {markdownFileInfo.FullName}");
     var t = markdownFileInfo.FullName.Replace(markdownFileInfo.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
-    Console.WriteLine($"PART-PATH: {markdownFileInfo.FullName}");
+    Console.WriteLine($"PART-PATH: {t}");
     var targetDirectoryInfo = await mediator
         .Send(new DirectoryInfoGetRequest 
         { 
             Path = string.IsNullOrWhiteSpace(t) ? 
                 Environment.GetCommandLineArgs()[2] : 
-                $"{Environment.GetCommandLineArgs()[2]}{Path.PathSeparator}{t}" 
+                $"{Environment.GetCommandLineArgs()[2]}{Path.DirectorySeparatorChar}{t}" 
         });
 
     if (!targetDirectoryInfo!.Exists)
