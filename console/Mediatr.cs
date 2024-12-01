@@ -737,9 +737,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
     {
         var content = request.String;
-        content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
@@ -749,6 +746,9 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBrStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
 
         return content;
     }
