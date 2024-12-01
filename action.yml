@@ -10,7 +10,10 @@ runs:
     - name: Restore
       shell: bash
       run: dotnet restore $GITHUB_ACTION_PATH
-    - name: Restore
+    - name: Build
       shell: bash
-      run: dotnet build
+      run: dotnet build $GITHUB_ACTION_PATH
+    - name: Run
+      shell: bash
+      run: dotnet run $GITHUB_ACTION_PATH
       
