@@ -2,9 +2,9 @@ name: 'Build HTML'
 description: 'A simple GitHub Action for producing build artifacts compatible with html'
 author: 'Portella'
 inputs:
-  origin-path:  # id of input
+  origin-path:
     description: 'origin to build'
-    required: true
+    required: false
     default: $PWD
 runs:
   using: "composite"
