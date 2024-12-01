@@ -7,6 +7,7 @@ public class ABuildTest
     [InlineData("[link]()", "<a href=\"\">link</a>")]
     [InlineData("[link](/)", "<a href=\"/\">link</a>")]
     [InlineData("[link](https://site.domain.xx)", "<a href=\"https://site.domain.xx\">link</a>")]
+    [InlineData("[link](https://site.domain.xx/README.md)", "<a href=\"https://site.domain.xx/\">link</a>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlAStringBuildRequest
