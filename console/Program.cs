@@ -18,4 +18,12 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     var content = await mediator.Send(new StringGetdRequest { FileInfo = markdownFileInfo });
     Console.WriteLine(content);
     Console.WriteLine();
+    Console.WriteLine();
+    
+    await mediator.Send(new HtmlStringBuildRequest { String = content });
+
+    Console.WriteLine(content);
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine();
 }

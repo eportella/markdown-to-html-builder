@@ -729,23 +729,23 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
 
 internal sealed class HtmlStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlStringBuildRequest, string?>
 {
     public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
-
-        content = await mediator.Send(new HtmlH1StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlH2StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlH3StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlH4StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlH5StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlH6StringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlUlStringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlAStringBuildRequest { @String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBrStringBuildRequest { @String = content }, cancellationToken);
+        var content = request.String;
+        content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH4StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH5StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlH6StringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlBrStringBuildRequest { String = content }, cancellationToken);
 
         return content;
     }
