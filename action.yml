@@ -4,7 +4,7 @@ author: 'Portella'
 runs:
   using: "composite"
   steps:
-  - name: Restore
+    - name: Restore
       shell: bash
       run: ls
     - name: Restore
