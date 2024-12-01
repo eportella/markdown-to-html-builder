@@ -6,4 +6,4 @@ runs:
   steps:
     - name: Move to console
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run;    
+      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run ./;    
