@@ -17,8 +17,10 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
 {
     var content = await mediator.Send(new StringGetdRequest { FileInfo = markdownFileInfo });
     content = await mediator.Send(new HtmlStringBuildRequest { String = content });
-    
-    var t = sourceDirectoryInfo.FullName.Replace(sourceDirectoryInfo.Name, string.Empty).Replace(Environment.GetCommandLineArgs()[1], string.Empty);
+    Console.WriteLine($"SOURCE-PATH: {sourceDirectoryInfo.FullName}");
+    Console.WriteLine($"MD-PATH: {markdownFileInfo.FullName}");
+    var t = markdownFileInfo.FullName.Replace(markdownFileInfo.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
+    Console.WriteLine($"PART-PATH: {markdownFileInfo.FullName}");
     var targetDirectoryInfo = await mediator
         .Send(new DirectoryInfoGetRequest 
         { 
@@ -32,5 +34,5 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     var fileInfo = new FileInfo($"{targetDirectoryInfo}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}");
     using var fileStrem = fileInfo!.CreateText();
     await fileStrem.WriteAsync(content);
-    Console.WriteLine(fileInfo.FullName);
+    Console.WriteLine($"HTML-PATH: {fileInfo.FullName}");
 }
