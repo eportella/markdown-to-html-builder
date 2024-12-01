@@ -1,0 +1,3 @@
+name: 'Build HTML'
+description: 'A simple GitHub Action for producing build artifacts compatible with html'
+author: 'Portella'
