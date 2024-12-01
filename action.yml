@@ -5,13 +5,10 @@ inputs:
   origin-path:  # id of input
     description: 'origin to build'
     required: true
-    default: ./
+    default: pwd
 runs:
   using: "composite"
   steps:
-    - name: log
-      shell: bash
-      run: ls ${{ inputs.origin-path }}  
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run $ORIGIN_PATH;    
+      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run ${{ inputs.origin-path }};    
