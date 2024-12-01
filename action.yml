@@ -1,12 +1,17 @@
 name: 'Build HTML'
 description: 'A simple GitHub Action for producing build artifacts compatible with html'
 author: 'Portella'
+inputs:
+  origin-path:  # id of input
+    description: 'origin to build'
+    required: true
+    default: ./
 runs:
   using: "composite"
   steps:
-    - name: Move to console
+    - name: log
       shell: bash
-      run: echo ORIGIN_PATH=./ >> $GITHUB_ENV;  
+      run: ls ${{ input.origin-path }}  
     - name: Run
       shell: bash
       run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run $ORIGIN_PATH;    
