@@ -416,14 +416,11 @@ internal sealed class HtmlBuildRequest : IRequest<string?>
     public string? @String { get; init; }
 }
 
-internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest, string?>
+internal sealed class HtmlBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlBuildRequest, string?>
 {
     public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
-        var content = request.@String;
-        content = $"<html>{content}</html>";
-        return content;
+        return $"<html>{await mediator.Send(new BodyBuildRequest { String = request.@String }, cancellationToken)}</html>";
     }
 }
 
