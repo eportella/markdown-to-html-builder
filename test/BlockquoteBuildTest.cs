@@ -12,7 +12,7 @@ public class BlockquoteBuildBuildTest
     [InlineData(">     [!CAUTION]", @"<blockquote><p>[!CAUTION]</p></blockquote>")]
     [InlineData(">paragraph 1\n>paragraph 1.1", @"<blockquote><p>paragraph 1</p><p>paragraph 1.1</p></blockquote>")]
     [InlineData("> paragraph 1 \n>   paragraph 1.1       ", @"<blockquote><p>paragraph 1</p><p>paragraph 1.1</p></blockquote>")]
-    [InlineData(">paragraph 1\n>paragraph 1.1\n\n>paragraph 2", @"<blockquote><p>paragraph 1</p><p>paragraph 1.1</p>\n\n</blockquote><blockquote><p>paragraph 2</p></blockquote>")]
+    [InlineData(">paragraph 1\n>paragraph 1.1\n\n>paragraph 2", @"<blockquote><p>paragraph 1</p><p>paragraph 1.1</p></blockquote><blockquote><p>paragraph 2</p></blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BlockquoteBuildRequest
