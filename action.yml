@@ -4,9 +4,12 @@ author: 'Portella'
 runs:
   using: "composite"
   steps:
-    - name: DEBUG
+    - name: Move to console
       shell: bash
       run: cd $GITHUB_ACTION_PATH/console
+    - name: DEBUG
+      shell: bash
+      run: ls
     - name: Restore
       shell: bash
       run: dotnet restore
