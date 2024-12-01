@@ -6,16 +6,16 @@ runs:
   steps:
     - name: DEBUG
       shell: bash
-      run: ls $GITHUB_ACTION_PATH
+      run: cd $GITHUB_ACTION_PATH/console
     - name: Restore
       shell: bash
-      run: dotnet restore $GITHUB_ACTION_PATH
+      run: dotnet restore
     - name: Build
       shell: bash
-      run: dotnet build $GITHUB_ACTION_PATH/console/console.csproj
+      run: dotnet build ./console.csproj
     - name: Run
       shell: bash
-      run: dotnet run --project ./$GITHUB_ACTION_PATH/console/console.csproj
+      run: dotnet run --project ./console.csproj
     - name: DEBUG
       shell: bash
       run: ls $GITHUB_ACTION_PATH
