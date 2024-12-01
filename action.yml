@@ -5,7 +5,7 @@ inputs:
   origin-path:
     description: 'origin to build'
     required: false
-    default: $PWD
+    default: ${GITHUB_WORKSPACE}
 runs:
   using: "composite"
   steps:
