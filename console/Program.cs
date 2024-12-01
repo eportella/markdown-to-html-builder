@@ -19,8 +19,8 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     Console.WriteLine(content);
     Console.WriteLine();
     Console.WriteLine();
-    
-    await mediator.Send(new HtmlStringBuildRequest { String = content });
+
+    content = await mediator.Send(new HtmlStringBuildRequest { String = content });
 
     Console.WriteLine(content);
     Console.WriteLine();
