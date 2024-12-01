@@ -7,18 +7,8 @@ runs:
     - name: Move to console
       shell: bash
       run: cd $GITHUB_ACTION_PATH/console
-    - name: DEBUG
-      shell: bash
       run: ls
-    - name: Restore
-      shell: bash
       run: dotnet restore
-    - name: Build
-      shell: bash
       run: dotnet build ./console.csproj
-    - name: Run
-      shell: bash
       run: dotnet run --project ./console.csproj
-    - name: DEBUG
-      shell: bash
-      run: ls $GITHUB_ACTION_PATH
+    
