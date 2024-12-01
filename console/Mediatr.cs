@@ -5,20 +5,18 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using HtmlAgilityPack;
 using MediatR;
-
-internal sealed class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
-    public LoggingPipelineBehavior(
-    )
+    public TimeElapsedPipelineBehavior()
     {
         Stopwatch = new Stopwatch();
     }
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         Stopwatch.Start();
-        
+
         var response = await next();
         Stopwatch.Stop();
         Console.WriteLine($"{typeof(TRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
@@ -26,11 +24,11 @@ internal sealed class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBe
     }
 }
 
-internal sealed class StreamLoggingPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
+internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
         where TRequest : IStreamRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
-    public StreamLoggingPipelineBehavior(
+    public TimeElapsedStreamPipelineBehavior(
     )
     {
         Stopwatch = new Stopwatch();
@@ -49,44 +47,16 @@ internal sealed class StreamLoggingPipelineBehavior<TRequest, TResponse> : IStre
     }
 }
 
-internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo>
+internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo?>
 {
-
+    public string? Path { get; set; }
 }
-internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo>
+internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo?>
 {
-    public async Task<DirectoryInfo> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
+    public async Task<DirectoryInfo?> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return new DirectoryInfo(Environment.GetCommandLineArgs()[1]);
-    }
-}
-
-internal sealed class JekyllDirectoryInfoGetRequest : IRequest<DirectoryInfo>
-{
-
-}
-internal sealed class JekyllDirectoryInfoGetRequestHandler(IMediator mediator) : IRequestHandler<JekyllDirectoryInfoGetRequest, DirectoryInfo>
-{
-    
-    public async Task<DirectoryInfo> Handle(JekyllDirectoryInfoGetRequest request, CancellationToken cancellationToken)
-    {
-        return (await mediator.Send(new RootDirectoryInfoGetRequest(), cancellationToken));
-    }
-}
-
-internal sealed class CssFileGetStreamRequest : IStreamRequest<FileInfo>
-{
-    public DirectoryInfo? DirectoryInfo { get; init; }
-}
-internal sealed class CssFileGetStreamHandler : IStreamRequestHandler<CssFileGetStreamRequest, FileInfo>
-{
-    public async IAsyncEnumerable<FileInfo> Handle(CssFileGetStreamRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        foreach (var item in request.DirectoryInfo!.EnumerateFiles("*.css", new EnumerationOptions() { RecurseSubdirectories = true }))
-            yield return item;
-
-        await Task.Yield();
+        return new DirectoryInfo(request.Path!);
     }
 }
 
@@ -232,20 +202,54 @@ internal sealed class BlockquoteFormatRequestHandler : IRequestHandler<Blockquot
     }
 }
 
-internal sealed class SvgFormatRequest : IRequest<string?>
+internal sealed class BlockquoteBuildRequest : IRequest<string?>
 {
-    public string? Content { get; init; }
+    public string? String { get; init; }
 }
-internal sealed class SvgFormatRequestHandler : IRequestHandler<SvgFormatRequest, string?>
+
+internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<BlockquoteBuildRequest, string?>
 {
-    public async Task<string?> Handle(SvgFormatRequest request, CancellationToken cancellationToken)
+    static Regex Regex { get; }
+    static BlockquoteBuildRequestHandler()
+    {
+        Regex = new Regex(@"^(> *(.+)(\n|))+$", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if (request.Content == default)
+        if (request.String == default)
+            return default;
+
+        var content = request.@String!;
+
+        do
+        {
+            var match = Regex.Match(content);
+
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $"<blockquote>{string.Join("", match.Groups[2].Captures.Select(c => $"<p>{c.Value.Trim()}</p>"))}</blockquote>");
+        } while (true);
+
+        return content;
+    }
+}
+
+internal sealed class SvgBuildRequest : IRequest<string?>
+{
+    public string? String { get; init; }
+}
+internal sealed class SvgBuildRequestHandler : IRequestHandler<SvgBuildRequest, string?>
+{
+    public async Task<string?> Handle(SvgBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        if (request.String == default)
             return default;
 
         return request
-            .Content
+            .String
             .Replace(
                 "[!NOTE]",
                 SvgCreate("#1f6feb", "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"))
@@ -279,29 +283,29 @@ internal sealed class SvgFormatRequestHandler : IRequestHandler<SvgFormatRequest
             )
         );
 
-        return svgElement.ToString();
+        return svgElement.ToString(SaveOptions.DisableFormatting);
     }
 }
 
 
-internal sealed class IdadeBuildRequest : IRequest<string?>
+internal sealed class AgeCalcBuildRequest : IRequest<string?>
 {
-    public string? Content { get; init; }
+    public string? String { get; init; }
 }
-internal sealed class IdadeBuildRequestHandler : IRequestHandler<IdadeBuildRequest, string?>
+internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildRequest, string?>
 {
     Regex Regex { get; }
-    public IdadeBuildRequestHandler()
+    public AgeCalcBuildRequestHandler()
     {
-        Regex = new Regex(@"<code.*?>\[IDADE\]:([\d]{4}\-[\d]{2}\-[\d]{2})\<\/code>", RegexOptions.Multiline);
+        Regex = new Regex(@"`\[age-calc\]:([\d]{4}\-[\d]{2}\-[\d]{2})\`", RegexOptions.Multiline);
     }
-    public async Task<string?> Handle(IdadeBuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if (request.Content == default)
+        if (request.String == default)
             return default;
 
-        var content = request.Content;
+        var content = request.String;
         do
         {
             var match = Regex.Match(content);
@@ -317,7 +321,7 @@ internal sealed class IdadeBuildRequestHandler : IRequestHandler<IdadeBuildReque
         return content;
     }
 
-    internal static int Calculate(DateTime birthDate)
+    private static int Calculate(DateTime birthDate)
     {
         DateTime today = DateTime.Today;
 
@@ -359,8 +363,8 @@ internal sealed class BuildRequestHandler(IMediator mediator) : IRequestHandler<
         if (!request.FileInfoTarget!.Directory!.Exists)
             request.FileInfoTarget.Directory.Create();
         var content = await mediator.Send(new BlockquoteFormatRequest { FileInfo = request.FileInfoSource }, cancellationToken);
-        content = await mediator.Send(new SvgFormatRequest { Content = content }, cancellationToken);
-        content = await mediator.Send(new IdadeBuildRequest { Content = content }, cancellationToken);
+        content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         using var writer = request.FileInfoTarget.CreateText();
         await writer.WriteAsync(content);
     }
@@ -370,12 +374,39 @@ internal sealed class StringGetdRequest : IRequest<string?>
 {
     public FileInfo? FileInfo { get; init; }
 }
-internal sealed class StringGetdRequestHandler(IMediator mediator) : IRequestHandler<StringGetdRequest, string?>
+internal sealed class StringGetRequestHandler : IRequestHandler<StringGetdRequest, string?>
 {
     public async Task<string?> Handle(StringGetdRequest request, CancellationToken cancellationToken)
     {
-        using var reader = request.FileInfo.OpenText();
+        using var reader = request.FileInfo!.OpenText();
         return await reader.ReadToEndAsync();
+    }
+}
+
+internal sealed class HtmlBuildRequest : IRequest<string?>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class HtmlBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlBuildRequest, string?>
+{
+    public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
+    {
+        return $"<html>{await mediator.Send(new BodyBuildRequest { String = request.@String }, cancellationToken)}</html>";
+    }
+}
+
+internal sealed class BodyBuildRequest : IRequest<string?>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest, string?>
+{
+    public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        return $"<body>{request.@String}</body>";
     }
 }
 
@@ -384,7 +415,7 @@ internal sealed class HtmlH1StringBuildRequest : IRequest<string>
     public string? @String { get; init; }
 }
 
-internal sealed class HtmlH1StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH1StringBuildRequest, string?>
+internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
@@ -393,8 +424,9 @@ internal sealed class HtmlH1StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
-        
+        await Task.Yield();
+        var content = request.@String!;
+
         var match = Regex.Match(content);
         do
         {
@@ -404,7 +436,7 @@ internal sealed class HtmlH1StringBuildRequestHandler(IMediator mediator) : IReq
             content = content.Replace(match.Groups[0].Value, $"<h1>{match.Groups[1].Value}</h1>");
 
             match = match.NextMatch();
-        } while(true);
+        } while (true);
 
         return content;
     }
@@ -414,7 +446,7 @@ internal sealed class HtmlH2StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH2StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH2StringBuildRequest, string?>
+internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH2StringBuildRequestHandler()
@@ -423,7 +455,8 @@ internal sealed class HtmlH2StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -443,15 +476,17 @@ internal sealed class HtmlH3StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH3StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH3StringBuildRequest, string?>
+internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3StringBuildRequest, string?>
 {
     static Regex Regex { get; }
-    static HtmlH3StringBuildRequestHandler(){
+    static HtmlH3StringBuildRequestHandler()
+    {
         Regex = new Regex(@"^### (.+)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -471,7 +506,7 @@ internal sealed class HtmlH4StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH4StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH4StringBuildRequest, string?>
+internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH4StringBuildRequestHandler()
@@ -480,7 +515,8 @@ internal sealed class HtmlH4StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -500,7 +536,7 @@ internal sealed class HtmlH5StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH5StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH5StringBuildRequest, string?>
+internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH5StringBuildRequestHandler()
@@ -509,7 +545,8 @@ internal sealed class HtmlH5StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -529,7 +566,7 @@ internal sealed class HtmlH6StringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlH6StringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlH6StringBuildRequest, string?>
+internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6StringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlH6StringBuildRequestHandler()
@@ -538,7 +575,8 @@ internal sealed class HtmlH6StringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -554,6 +592,39 @@ internal sealed class HtmlH6StringBuildRequestHandler(IMediator mediator) : IReq
     }
 }
 
+internal sealed class HtmlLiStringBuildRequest : IRequest<string>
+{
+    public string? @String { get; init; }
+}
+internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlLiStringBuildRequestHandler()
+    {
+        Regex = new Regex("^- (.+)$", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content
+                .Replace(
+                    match.Groups[0].Value.Trim('\r', '\n'),
+                    $"<li>{match.Groups[1].Value.Trim('\r', '\n')}</li>"
+                ).Trim('\r', '\n');
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
 internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
@@ -561,15 +632,14 @@ internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
     static Regex UlRegex { get; }
-    static Regex LiRegex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        UlRegex = new Regex($"{Environment.NewLine}((- .+{Environment.NewLine})+)", RegexOptions.Multiline);
-        LiRegex = new Regex("^- (.+)$");
+        UlRegex = new Regex($"(- .+({Environment.NewLine}|))+", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = UlRegex.Match(content);
         do
         {
@@ -578,9 +648,9 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
 
             content = content
                 .Replace(
-                    match.Groups[0].Value,
-                    $"<ul>{string.Join(string.Empty, match.Groups[2].Captures.Select(li => $"<li>{LiRegex.Replace(li.Value, "$1")}</li>"))}</ul>"
-                );
+                    match.Groups[0].Value.Trim('\r', '\n'),
+                    $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[1].Value }, cancellationToken)}</ul>"
+                ).Trim('\r', '\n');
             match = match.NextMatch();
         } while (true);
 
@@ -592,23 +662,24 @@ internal sealed class HtmlAStringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlAStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlAStringBuildRequest, string?>
+internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlAStringBuildRequestHandler()
     {
-        Regex = new Regex(" \\[(.*?)\\]\\((.*?)\\)", RegexOptions.Multiline);
+        Regex = new Regex("\\[(.*?)\\]\\((.*?)\\)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $@" <a href=""{match.Groups[2].Value}"">{match.Groups[1].Value}</a>");
+            content = content.Replace(match.Groups[0].Value, $@"<a href=""{match.Groups[2].Value}"">{match.Groups[1].Value}</a>");
             match = match.NextMatch();
         } while (true);
 
@@ -620,7 +691,7 @@ internal sealed class HtmlBrStringBuildRequest : IRequest<string>
 {
     public string? @String { get; init; }
 }
-internal sealed class HtmlBrStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlBrStringBuildRequest, string?>
+internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrStringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlBrStringBuildRequestHandler()
@@ -629,7 +700,8 @@ internal sealed class HtmlBrStringBuildRequestHandler(IMediator mediator) : IReq
     }
     public async Task<string?> Handle(HtmlBrStringBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = request.@String;
+        await Task.Yield();
+        var content = request.@String!;
         var match = Regex.Match(content);
         do
         {
@@ -637,6 +709,36 @@ internal sealed class HtmlBrStringBuildRequestHandler(IMediator mediator) : IReq
                 break;
 
             content = content.Replace(match.Groups[0].Value, "<br />");
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
+internal sealed class HtmlPStringBuildRequest : IRequest<string>
+{
+    public string? @String { get; init; }
+}
+
+internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlPStringBuildRequestHandler()
+    {
+        Regex = new Regex($"(.+)(\n|)", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.@String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $"<p>{match.Groups[1].Value}</p>");
             match = match.NextMatch();
         } while (true);
 
@@ -653,7 +755,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
     {
         var content = request.@String;
-        
+
         content = await mediator.Send(new HtmlH1StringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { @String = content }, cancellationToken);
@@ -663,27 +765,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { @String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBrStringBuildRequest { @String = content }, cancellationToken);
-        
-        return content;
-    }
-}
 
-internal sealed class LogRequest : IRequest
-{
-    public FileInfo? FileInfo { get; init; }
-}
-internal sealed class LogRequestHandler(IMediator mediator) : IRequestHandler<LogRequest>
-{
-    public async Task Handle(LogRequest request, CancellationToken cancellationToken)
-    {
-        Console.WriteLine();
-        Console.WriteLine($"LOG->'{request.FileInfo.FullName}'");
-        
-        var content = await mediator.Send(new StringGetdRequest { FileInfo = request.FileInfo }, cancellationToken);
-        Console.WriteLine(content);
-        Console.WriteLine();
-        content = await mediator.Send(new HtmlStringBuildRequest { @String = content}, cancellationToken );
-        Console.WriteLine(content);
-        Console.WriteLine();
+        return content;
     }
 }
