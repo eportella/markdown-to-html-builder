@@ -5,4 +5,5 @@ runs:
   using: "composite"
   steps:
     - name: dotnet restore
+      shell: bash
       run: echo "Hi"
