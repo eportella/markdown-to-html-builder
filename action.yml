@@ -11,7 +11,7 @@ runs:
   steps:
     - name: log
       shell: bash
-      run: ls ${{ input.origin-path }}  
+      run: ls ${{ inputs.origin-path }}  
     - name: Run
       shell: bash
       run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run $ORIGIN_PATH;    
