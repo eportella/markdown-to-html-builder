@@ -5,7 +5,7 @@ inputs:
   origin-path:  # id of input
     description: 'origin to build'
     required: true
-    default: $pwd
+    default: $PWD
 runs:
   using: "composite"
   steps:
