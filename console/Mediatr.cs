@@ -220,7 +220,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
         if (request.String == default)
             return default;
 
-        var content = request.@String!;
+        var content = request.String!;
 
         do
         {
@@ -366,20 +366,21 @@ internal sealed class StringGetRequestHandler : IRequestHandler<StringGetdReques
 
 internal sealed class HtmlBuildRequest : IRequest<string?>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 
-internal sealed class HtmlBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlBuildRequest, string?>
+internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest, string?>
 {
     public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
-        return $"<html>{await mediator.Send(new BodyBuildRequest { String = request.@String }, cancellationToken)}</html>";
+        await Task.Yield();
+        return $"<html>{request.String}</html>";
     }
 }
 
 internal sealed class BodyBuildRequest : IRequest<string?>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 
 internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest, string?>
@@ -387,13 +388,13 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $"<body>{request.@String}</body>";
+        return $"<body>{request.String}</body>";
     }
 }
 
 internal sealed class HtmlH1StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 
 internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1StringBuildRequest, string?>
@@ -406,7 +407,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
 
         var match = Regex.Match(content);
         do
@@ -425,7 +426,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
 
 internal sealed class HtmlH2StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2StringBuildRequest, string?>
 {
@@ -437,7 +438,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -455,7 +456,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
 
 internal sealed class HtmlH3StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3StringBuildRequest, string?>
 {
@@ -467,7 +468,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -485,7 +486,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
 
 internal sealed class HtmlH4StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4StringBuildRequest, string?>
 {
@@ -497,7 +498,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -515,7 +516,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
 
 internal sealed class HtmlH5StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5StringBuildRequest, string?>
 {
@@ -527,7 +528,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -545,7 +546,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
 
 internal sealed class HtmlH6StringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6StringBuildRequest, string?>
 {
@@ -557,7 +558,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -575,7 +576,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
 
 internal sealed class HtmlLiStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiStringBuildRequest, string?>
 {
@@ -587,7 +588,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -608,7 +609,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
 
 internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
@@ -620,7 +621,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = UlRegex.Match(content);
         do
         {
@@ -641,7 +642,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
 
 internal sealed class HtmlAStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStringBuildRequest, string?>
 {
@@ -653,7 +654,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
     public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -670,7 +671,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
 
 internal sealed class HtmlBrStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrStringBuildRequest, string?>
 {
@@ -682,7 +683,7 @@ internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrSt
     public async Task<string?> Handle(HtmlBrStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -699,7 +700,7 @@ internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrSt
 
 internal sealed class HtmlPStringBuildRequest : IRequest<string>
 {
-    public string? @String { get; init; }
+    public string? String { get; init; }
 }
 
 internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStringBuildRequest, string?>
@@ -712,7 +713,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.@String!;
+        var content = request.String!;
         var match = Regex.Match(content);
         do
         {
@@ -737,6 +738,8 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     {
         var content = request.String;
         content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
