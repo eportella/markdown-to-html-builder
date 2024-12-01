@@ -10,9 +10,13 @@ inputs:
     description: 'target of build'
     required: false
     default: ${GITHUB_WORKSPACE}
+  target-file-name:
+    description: 'target file name of build'
+    required: false
+    default: index.html
 runs:
   using: "composite"
   steps:
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }};
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }};

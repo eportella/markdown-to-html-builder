@@ -23,7 +23,7 @@ await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInf
     var targetDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[2] });
     if (!targetDirectoryInfo!.Exists)
         targetDirectoryInfo.Create();
-    var fileInfo = new FileInfo($"{targetDirectoryInfo}{markdownFileInfo.Name}");
+    var fileInfo = new FileInfo($"{targetDirectoryInfo}{Environment.GetCommandLineArgs()[3]}");
     using var fileStrem = fileInfo!.CreateText();
     await fileStrem.WriteAsync(content);
 }
