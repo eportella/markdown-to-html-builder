@@ -6,4 +6,7 @@ runs:
   steps:
     - name: Move to console
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run ./;    
+      run: echo ORIGIN_PATH=./ >> $GITHUB_ENV;  
+    - name: Run
+      shell: bash
+      run: cd $GITHUB_ACTION_PATH/console; ls; dotnet restore; dotnet build; dotnet run $ORIGIN_PATH;    
