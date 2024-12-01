@@ -49,42 +49,14 @@ internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : I
 
 internal sealed class RootDirectoryInfoGetRequest : IRequest<DirectoryInfo?>
 {
-
+    public string? Path { get; set; }
 }
 internal sealed class RootDirectoryInfoGetRequestHandler : IRequestHandler<RootDirectoryInfoGetRequest, DirectoryInfo?>
 {
     public async Task<DirectoryInfo?> Handle(RootDirectoryInfoGetRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return new DirectoryInfo(Environment.GetCommandLineArgs()[1]);
-    }
-}
-
-internal sealed class JekyllDirectoryInfoGetRequest : IRequest<DirectoryInfo>
-{
-
-}
-internal sealed class JekyllDirectoryInfoGetRequestHandler(IMediator mediator) : IRequestHandler<JekyllDirectoryInfoGetRequest, DirectoryInfo>
-{
-
-    public async Task<DirectoryInfo> Handle(JekyllDirectoryInfoGetRequest request, CancellationToken cancellationToken)
-    {
-        return (await mediator.Send(new RootDirectoryInfoGetRequest(), cancellationToken));
-    }
-}
-
-internal sealed class CssFileGetStreamRequest : IStreamRequest<FileInfo>
-{
-    public DirectoryInfo? DirectoryInfo { get; init; }
-}
-internal sealed class CssFileGetStreamHandler : IStreamRequestHandler<CssFileGetStreamRequest, FileInfo>
-{
-    public async IAsyncEnumerable<FileInfo> Handle(CssFileGetStreamRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        foreach (var item in request.DirectoryInfo!.EnumerateFiles("*.css", new EnumerationOptions() { RecurseSubdirectories = true }))
-            yield return item;
-
-        await Task.Yield();
+        return new DirectoryInfo(request.Path!);
     }
 }
 
@@ -795,25 +767,5 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlBrStringBuildRequest { @String = content }, cancellationToken);
 
         return content;
-    }
-}
-
-internal sealed class LogRequest : IRequest
-{
-    public FileInfo? FileInfo { get; init; }
-}
-internal sealed class LogRequestHandler(IMediator mediator) : IRequestHandler<LogRequest>
-{
-    public async Task Handle(LogRequest request, CancellationToken cancellationToken)
-    {
-        Console.WriteLine();
-        Console.WriteLine($"LOG->'{request.FileInfo!.FullName}'");
-
-        var content = await mediator.Send(new StringGetdRequest { FileInfo = request.FileInfo }, cancellationToken);
-        Console.WriteLine(content);
-        Console.WriteLine();
-        content = await mediator.Send(new HtmlStringBuildRequest { @String = content }, cancellationToken);
-        Console.WriteLine(content);
-        Console.WriteLine();
     }
 }
