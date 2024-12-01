@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+Console.WriteLine(Environment.GetCommandLineArgs()[0]);
 var serviceCollection = new ServiceCollection();
 serviceCollection
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>))
