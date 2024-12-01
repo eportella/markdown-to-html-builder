@@ -347,6 +347,26 @@ internal sealed class StringGetRequestHandler : IRequestHandler<StringGetdReques
     }
 }
 
+internal sealed class MarkdownFileInfoBuildRequest : IRequest
+{
+    public FileInfo? Source { get; init; }
+    public FileInfo? Target { get; init; }
+}
+internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) : IRequestHandler<MarkdownFileInfoBuildRequest>
+{
+    public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
+    {
+        var content = await mediator.Send(new StringGetdRequest { FileInfo = request.Source });
+    content = await mediator.Send(new HtmlStringBuildRequest { String = content });
+
+    if (!request.Target.Directory!.Exists)
+        request.Target.Directory.Create();
+    var fileInfo = request.Target;
+    using var fileStrem = fileInfo!.CreateText();
+    await fileStrem.WriteAsync(content);
+    }
+}
+
 internal sealed class HtmlBuildRequest : IRequest<string?>
 {
     public string? String { get; init; }

@@ -13,26 +13,23 @@ var serviceProvider = serviceCollection.BuildServiceProvider();
 var mediator = serviceProvider.GetRequiredService<IMediator>();
 var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[1] });
 
-await foreach (var markdownFileInfo in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }))
+await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }))
 {
-    var content = await mediator.Send(new StringGetdRequest { FileInfo = markdownFileInfo });
-    content = await mediator.Send(new HtmlStringBuildRequest { String = content });
-    Console.WriteLine($"SOURCE-PATH: {sourceDirectoryInfo.FullName}");
-    Console.WriteLine($"MD-PATH: {markdownFileInfo.FullName}");
-    var t = markdownFileInfo.FullName.Replace(markdownFileInfo.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
-    Console.WriteLine($"PART-PATH: {t}");
-    var targetDirectoryInfo = await mediator
-        .Send(new DirectoryInfoGetRequest 
-        { 
-            Path = string.IsNullOrWhiteSpace(t) ? 
-                Environment.GetCommandLineArgs()[2] : 
-                $"{Environment.GetCommandLineArgs()[2]}{Path.DirectorySeparatorChar}{t}" 
-        });
+    var partial = source.FullName.Replace(source.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
 
-    if (!targetDirectoryInfo!.Exists)
-        targetDirectoryInfo.Create();
-    var fileInfo = new FileInfo($"{targetDirectoryInfo}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}");
-    using var fileStrem = fileInfo!.CreateText();
-    await fileStrem.WriteAsync(content);
-    Console.WriteLine($"HTML-PATH: {fileInfo.FullName}");
+    var target = await mediator
+                .Send(new DirectoryInfoGetRequest 
+                { 
+                    Path = string.IsNullOrWhiteSpace(partial) ? 
+                        Environment.GetCommandLineArgs()[2] : 
+                        $"{Environment.GetCommandLineArgs()[2]}{Path.DirectorySeparatorChar}{partial}" 
+                });
+    
+    await mediator
+        .Send(new MarkdownFileInfoBuildRequest
+        {
+            Source = source,
+            Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}"), 
+        });
+    
 }
