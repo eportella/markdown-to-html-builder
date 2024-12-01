@@ -4,9 +4,9 @@ author: 'Portella'
 runs:
   using: "composite"
   steps:
-    - name: Restore
+    - name: DEBUG
       shell: bash
-      run: ls
+      run: ls $GITHUB_ACTION_PATH
     - name: Restore
       shell: bash
       run: dotnet restore $GITHUB_ACTION_PATH
@@ -16,4 +16,6 @@ runs:
     - name: Run
       shell: bash
       run: dotnet run $GITHUB_ACTION_PATH
-      
+    - name: DEBUG
+      shell: bash
+      run: ls $GITHUB_ACTION_PATH
