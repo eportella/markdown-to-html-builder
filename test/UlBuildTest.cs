@@ -6,14 +6,18 @@ namespace test;
 public class UlBuildTest
 {
     [Theory]
+        [InlineData(
+@"- list item 1",
+@"<ul></ul>")]
     [InlineData(
 @"
 - list item 1",
-"<ul></ul>")]
+@"
+<ul></ul>")]
     [InlineData(
 @"- list item 1
 - list item 2",
-"<ul></ul>")]
+@"<ul></ul>")]
     [InlineData(
 @"- list item 1
 - list item 2
@@ -22,36 +26,45 @@ public class UlBuildTest
     [InlineData(
 @"- list item 1
 ",
-"<ul></ul>")]
+@"<ul></ul>
+")]
     [InlineData(
 @"- list item 1
 - list item 2
 ",
-"<ul></ul>")]
+@"<ul></ul>
+")]
     [InlineData(
 @"- list item 1
 - list item 2
 - list item 3
 ",
-"<ul></ul>")]
+@"<ul></ul>
+")]
     [InlineData(
 @"
 - list item 1
 ",
-"<ul></ul>")]
+@"
+<ul></ul>
+")]
     [InlineData(
 @"
 - list item 1
 - list item 2
 ",
-"<ul></ul>")]
+@"
+<ul></ul>
+")]
     [InlineData(
 @"
 - list item 1
 - list item 2
 - list item 3
 ",
-"<ul></ul>")]
+@"
+<ul></ul>
+")]
     public async Task Success(string informed, string expected)
     {
         var mediator = Mock.Of<IMediator>();
