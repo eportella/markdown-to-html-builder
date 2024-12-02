@@ -391,7 +391,7 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $"<body>{request.String}</body>";
+        return $@"<body><h1><a href=""{Environment.GetCommandLineArgs()[5]}""/></h1>{request.String}</body>";
     }
 }
 
