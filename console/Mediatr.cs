@@ -740,7 +740,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     static Regex Regex { get; }
     static HtmlPStringBuildRequestHandler()
     {
-        Regex = new Regex($"(.+)(\n|)", RegexOptions.Multiline);
+        Regex = new Regex($"^([^#>])(.+)(\n+|)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -752,7 +752,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $"<p>{match.Groups[1].Value}</p>");
+            Regex.Replace(content, $"<p>{match.Groups[0].Value}</p>");
             match = match.NextMatch();
         } while (true);
 
@@ -806,12 +806,13 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     {
         if(request.String == default)
             return default;
-            
+
         var content = request.String.Replace("\r\n", "\n");
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
