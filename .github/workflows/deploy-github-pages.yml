@@ -22,12 +22,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pages
+        id: setup
         uses: actions/configure-pages@v5
       - name: Build with portella
         uses: /eportella/markdown-to-html-builder@main
         with:
           source-path: ${GITHUB_WORKSPACE}
           target-path: ${GITHUB_WORKSPACE}/_site
+          source-url-base: ${{ setup.outputs.base_url }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
   deploy:
