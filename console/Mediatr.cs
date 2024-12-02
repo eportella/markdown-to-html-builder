@@ -652,7 +652,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
     static Regex Regex { get; }
     static HtmlAStringBuildRequestHandler()
     {
-        Regex = new Regex(@"\[(.*?)\]\((.*?)(README.MD|)\)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        Regex = new Regex(@"\[([^\^].*?)\]\((.*?)(README.MD|)\)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
     }
     public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
     {
