@@ -229,7 +229,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $"<blockquote>{match.Groups[2].Value}</blockquote>");
+            content = content.Replace(match.Groups[0].Value, $"<blockquote>{string.Join("", match.Groups[2].Captures.Select(c => c.Value))}</blockquote>");
         } while (true);
 
         return content;
@@ -391,7 +391,7 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $@"<body><h1><a href=""/""/>{ Environment.GetCommandLineArgs()[4] }</a></h1>{request.String}</body>";
+        return $@"<body><h1><a href=""/""/>{Environment.GetCommandLineArgs()[4]}</a></h1>{request.String}</body>";
     }
 }
 
