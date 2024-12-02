@@ -384,6 +384,8 @@ internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest
 
 internal sealed class BodyBuildRequest : IRequest<string?>
 {
+    public string? Url { get; init; }
+    public string? Title { get; init; }
     public string? String { get; init; }
 }
 
@@ -392,7 +394,7 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $@"<body><h1><a href=""{Environment.GetCommandLineArgs()[5]}""/>{Environment.GetCommandLineArgs()[4]}</a></h1>{request.String}</body>";
+        return $@"<body><h1><a href=""{request.Url}""/>{request.Title}</a></h1>{request.String}</body>";
     }
 }
 
@@ -755,7 +757,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title= Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
 
         return content;
