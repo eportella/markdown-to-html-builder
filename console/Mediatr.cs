@@ -369,6 +369,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
 
 internal sealed class HtmlBuildRequest : IRequest<string?>
 {
+    public string? Title { get; init; }
     public string? String { get; init; }
 }
 
@@ -377,7 +378,7 @@ internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest
     public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $"<html><title>{Environment.GetCommandLineArgs()[4]}</title>{request.String}</html>";
+        return $"<html><title>{request.Title}</title>{request.String}</html>";
     }
 }
 
@@ -745,10 +746,10 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        
-        if(request.String == default)
+
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<p>$2</p>$3");
     }
 }
@@ -816,7 +817,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
 
         return content;
     }
