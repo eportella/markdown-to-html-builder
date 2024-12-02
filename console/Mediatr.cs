@@ -411,9 +411,10 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        content = Regex.Replace(content, $"<h1>$2</h1>$3");
-        return content;
+        if(request.String == default)
+            return request.String;
+        
+        return Regex.Replace(request.String, $"<h1>$2</h1>$3");
     }
 }
 
