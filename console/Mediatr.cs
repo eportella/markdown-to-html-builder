@@ -782,7 +782,7 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $"<cite>{match.Groups[1].Value} {match.Groups[2].Value}</cite>");
+            content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups[1].Value}"">{match.Groups[1].Value} {match.Groups[2].Value}</cite>");
             match = match.NextMatch();
         } while (true);
 
