@@ -3,6 +3,7 @@ namespace test;
 public class H1BuildTest
 {
     [Theory]
+    [InlineData(default, default)]
     [InlineData("# Headding", "<h1>Headding</h1>")]
     [InlineData("# #", "<h1>#</h1>")]
     [InlineData("# #Headding", "<h1>#Headding</h1>")]
