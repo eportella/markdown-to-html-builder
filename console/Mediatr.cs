@@ -601,8 +601,8 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
             content = content
                 .Replace(
                     match.Groups[1].Value,
-                    $"<li>{match.Groups[2].Value.Trim('\r', '\n')}</li>"
-                ).Trim('\r', '\n');
+                    $"<li>{match.Groups[2].Value}</li>"
+                );
             match = match.NextMatch();
         } while (true);
 
@@ -730,35 +730,6 @@ internal sealed class HtmlBStringBuildRequestHandler : IRequestHandler<HtmlBStri
     }
 }
 
-internal sealed class HtmlBrStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlBrStringBuildRequestHandler : IRequestHandler<HtmlBrStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlBrStringBuildRequestHandler()
-    {
-        Regex = new Regex($"({Environment.NewLine})+", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlBrStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
-
-            content = content.Replace(match.Groups[0].Value, "<br />");
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
-    }
-}
-
 internal sealed class HtmlPStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -809,7 +780,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlH6StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBrStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { String = content }, cancellationToken);
