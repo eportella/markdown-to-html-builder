@@ -377,7 +377,7 @@ internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest
     public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $"<html>{request.String}</html>";
+        return $"<html><title>{Environment.GetCommandLineArgs()[4]}</title>{request.String}</html>";
     }
 }
 
