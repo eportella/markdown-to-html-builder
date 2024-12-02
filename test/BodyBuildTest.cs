@@ -3,14 +3,26 @@ namespace test;
 public class BodyBuildTest
 {
     [Theory]
-    [InlineData(default, "<body></body>")]
-    [InlineData("", "<body></body>")]
-    [InlineData("a", "<body>a</body>")]
-    [InlineData("a\nB\nc\nD\n", "<body>a\nB\nc\nD\n</body>")]
-    public async Task Success(string informed, string expected)
+    [InlineData(default, default, default, @"<body><h1><a href=""""/></a></h1></body>")]
+    [InlineData("", "", "", @"<body><h1><a href=""""/></a></h1></body>")]
+    [InlineData("a", "b", "c", @"<body><h1><a href=""b""/>c</a></h1>a</body>")]
+    [InlineData(@"
+a
+B
+c
+D
+", "b", "c", @"<body><h1><a href=""b""/>c</a></h1>
+a
+B
+c
+D
+</body>")]
+    public async Task Success(string informed, string url, string title, string expected)
     {
         var arrange = new BodyBuildRequest
         {
+            Url = url,
+            Title = title,
             String = informed
         };
 
