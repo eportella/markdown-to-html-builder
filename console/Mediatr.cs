@@ -212,7 +212,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
     static Regex Regex { get; }
     static BlockquoteBuildRequestHandler()
     {
-        Regex = new Regex(@"^(> *(.+)(\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex(@"(^> *(.*(\n|)))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
     {
@@ -229,7 +229,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, $"<blockquote>{string.Join("", match.Groups[2].Captures.Select(c => $"<p>{c.Value.Trim()}</p>"))}</blockquote>");
+            content = content.Replace(match.Groups[0].Value, $"<blockquote>{match.Groups[2].Value}</blockquote>");
         } while (true);
 
         return content;
