@@ -752,7 +752,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
             if (!match.Success)
                 break;
 
-            Regex.Replace(content, $"<p>{match.Groups[0].Value}</p>");
+            content = Regex.Replace(content, $"<p>{match.Groups[0].Value}</p>");
             match = match.NextMatch();
         } while (true);
 
