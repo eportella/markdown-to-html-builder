@@ -391,7 +391,7 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
     public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return $@"<body><h1><a href=""/""/>{Environment.GetCommandLineArgs()[4]}</a></h1>{request.String}</body>";
+        return $@"<body><h1><a href=""{Environment.GetCommandLineArgs()[5]}""/>{Environment.GetCommandLineArgs()[4]}</a></h1>{request.String}</body>";
     }
 }
 
@@ -417,8 +417,8 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
         {
             if (!match.Success)
                 break;
-
-            content = content.Replace(match.Groups[2].Value, $"<h1>{match.Groups[3].Value}</h1>");
+                
+            content = Regex.Replace(content, $"<h1>{match.Groups[3].Value}</h1>");
 
             match = match.NextMatch();
         } while (true);
@@ -448,7 +448,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[2].Value, $"<h2>{match.Groups[3].Value}</h2>");
+            content = Regex.Replace(content, $"<h2>{match.Groups[3].Value}</h2>");
 
             match = match.NextMatch();
         } while (true);
@@ -478,7 +478,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[2].Value, $"<h3>{match.Groups[3].Value}</h3>");
+            content = Regex.Replace(content, $"<h3>{match.Groups[3].Value}</h3>");
 
             match = match.NextMatch();
         } while (true);
@@ -508,7 +508,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[2].Value, $"<h4>{match.Groups[3].Value}</h4>");
+            content = Regex.Replace(content, $"<h4>{match.Groups[3].Value}</h4>");
 
             match = match.NextMatch();
         } while (true);
@@ -538,7 +538,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[2].Value, $"<h5>{match.Groups[3].Value}</h5>");
+            content = Regex.Replace(content, $"<h5>{match.Groups[3].Value}</h5>");
 
             match = match.NextMatch();
         } while (true);
@@ -568,7 +568,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[2].Value, $"<h6>{match.Groups[3].Value}</h6>");
+            content = Regex.Replace(content, $"<h6>{match.Groups[3].Value}</h6>");
 
             match = match.NextMatch();
         } while (true);
