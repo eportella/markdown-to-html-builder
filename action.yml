@@ -14,6 +14,9 @@ inputs:
     description: 'target file name of build'
     required: false
     default: index.html
+  source-url-base:
+    description: 'source of url base'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -22,4 +25,4 @@ runs:
       run: env | sort
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }};
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }} ${{ inpust.source-url-base }};
