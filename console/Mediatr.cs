@@ -411,9 +411,9 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h1>$2</h1>$3");
     }
 }
@@ -432,9 +432,9 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h2>$2</h2>$3");
     }
 }
@@ -453,9 +453,9 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h3>$2</h3>$3");
     }
 }
@@ -474,9 +474,9 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h4>$2</h4>$3");
     }
 }
@@ -495,9 +495,9 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h5>$2</h5>$3");
     }
 }
@@ -516,9 +516,9 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if(request.String == default)
+        if (request.String == default)
             return request.String;
-        
+
         return Regex.Replace(request.String, $"<h6>$2</h6>$3");
     }
 }
@@ -562,30 +562,23 @@ internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 }
 internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
-    static Regex UlRegex { get; }
+    static Regex Regex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        UlRegex = new Regex($"(^- +.+(\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex($"(^- +.+?(\r\n|\n|))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = UlRegex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
+        if (request.String == default)
+            return request.String;
+        var match = Regex.Match(request.String);
 
-            content = content
-                .Replace(
-                    match.Groups[0].Value,
-                    $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[0].Value }, cancellationToken)}</ul>"
-                );
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
+        return Regex
+            .Replace(
+                request.String,
+                $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[0].Value }, cancellationToken)}</ul>{match.Groups[2].Value}"
+            );
     }
 }
 
