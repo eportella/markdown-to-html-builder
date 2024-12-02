@@ -749,6 +749,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         var content = request.String.Replace("\r\n", "\n");
         content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
