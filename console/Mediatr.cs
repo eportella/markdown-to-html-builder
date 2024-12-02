@@ -760,6 +760,36 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     }
 }
 
+internal sealed class HtmlCiteStringBuildRequest : IRequest<string>
+{
+    public string? String { get; init; }
+}
+
+internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCiteStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlCiteStringBuildRequestHandler()
+    {
+        Regex = new Regex(@"^\[\^(\d+)\]: +(.*)", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlCiteStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $"<cite>{match.Groups[1].Value} {match.Groups[2].Value}</cite>");
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
 internal sealed class HtmlStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -772,6 +802,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
