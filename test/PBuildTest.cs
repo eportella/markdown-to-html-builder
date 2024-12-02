@@ -4,7 +4,17 @@ public class PBuildTest
 {
     [Theory]
     [InlineData("a", "<p>a</p>")]
-    [InlineData("a\nB\nc\nD\n", "<p>a</p><p>B</p><p>c</p><p>D</p>")]
+    [InlineData(@"
+a
+B
+c
+D
+", @"
+<p>a</p>
+<p>B</p>
+<p>c</p>
+<p>D</p>
+")]
     [InlineData(@"
 # markdown-to-html-builder
 ## markdown-to-html-builder
