@@ -406,24 +406,13 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *# (.+?)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^(|>) *# (.*?)(\r|)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         var content = request.String!;
-
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
-
-            content = Regex.Replace(content, $"<h1>{match.Groups[2].Value}</h1>");
-
-            match = match.NextMatch();
-        } while (true);
-
+        content = Regex.Replace(content, $"<h1>$2</h1>$3");
         return content;
     }
 }
