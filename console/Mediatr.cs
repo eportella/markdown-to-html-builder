@@ -672,6 +672,64 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
     }
 }
 
+internal sealed class HtmlIStringBuildRequest : IRequest<string>
+{
+    public string? String { get; init; }
+}
+internal sealed class HtmlIStringBuildRequestHandler : IRequestHandler<HtmlIStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlIStringBuildRequestHandler()
+    {
+        Regex = new Regex(@"\*{1}([^\*| ].+?)\*{1}", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlIStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $@"<i>{match.Groups[1].Value}</i>");
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
+internal sealed class HtmlBStringBuildRequest : IRequest<string>
+{
+    public string? String { get; init; }
+}
+internal sealed class HtmlBStringBuildRequestHandler : IRequestHandler<HtmlBStringBuildRequest, string?>
+{
+    static Regex Regex { get; }
+    static HtmlBStringBuildRequestHandler()
+    {
+        Regex = new Regex(@"\*{2}([^\*| ].+?)\*{2}", RegexOptions.Multiline);
+    }
+    public async Task<string?> Handle(HtmlBStringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        var content = request.String!;
+        var match = Regex.Match(content);
+        do
+        {
+            if (!match.Success)
+                break;
+
+            content = content.Replace(match.Groups[0].Value, $@"<b>{match.Groups[1].Value}</b>");
+            match = match.NextMatch();
+        } while (true);
+
+        return content;
+    }
+}
+
 internal sealed class HtmlBrStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -741,6 +799,8 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     {
         var content = request.String;
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH1StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH2StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH3StringBuildRequest { String = content }, cancellationToken);
