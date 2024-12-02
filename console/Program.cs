@@ -3,8 +3,6 @@ using MediatR;
 using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("test")]
 
-Console.WriteLine(Environment.GetCommandLineArgs()[5]);
-
 var serviceCollection = new ServiceCollection();
 serviceCollection
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeElapsedPipelineBehavior<,>))
