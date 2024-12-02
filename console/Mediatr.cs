@@ -357,13 +357,13 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         var content = await mediator.Send(new StringGetdRequest { FileInfo = request.Source });
-    content = await mediator.Send(new HtmlStringBuildRequest { String = content });
+        content = await mediator.Send(new HtmlStringBuildRequest { String = content });
 
-    if (!request.Target.Directory!.Exists)
-        request.Target.Directory.Create();
-    var fileInfo = request.Target;
-    using var fileStrem = fileInfo!.CreateText();
-    await fileStrem.WriteAsync(content);
+        if (!request.Target.Directory!.Exists)
+            request.Target.Directory.Create();
+        var fileInfo = request.Target;
+        using var fileStrem = fileInfo!.CreateText();
+        await fileStrem.WriteAsync(content);
     }
 }
 
@@ -784,11 +784,11 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
 
             content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups[1].Value}"">{match.Groups[1].Value} {match.Groups[2].Value}</cite>");
 
-            var citedMatch = Regex.Match(content, @"\[\^{match.Groups[0].Value}]");
+            var citedMatch = Regex.Match(content, @"\[\^{match.Groups[0].Value}]", RegexOptions.Multiline);
 
-            content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups[1].Value}"">{match.Groups[1].Value}</cite>");
+            if (citedMatch.Success)
+                content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups[1].Value}"">{match.Groups[1].Value}</cite>");
 
-            
             match = match.NextMatch();
         } while (true);
 
