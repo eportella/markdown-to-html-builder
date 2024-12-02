@@ -686,7 +686,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     static Regex Regex { get; }
     static HtmlPStringBuildRequestHandler()
     {
-        Regex = new Regex($"^((?![#><\\-\r])(.+?)((\r|)))$", RegexOptions.Multiline);
+        Regex = new Regex($"^((?!# *?)(?!> *?)(?!\\- *?)(?!\\[^\\d+\\])(?!\r))(.+?)((\r|))$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
