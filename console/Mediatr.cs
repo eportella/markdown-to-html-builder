@@ -417,7 +417,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
         {
             if (!match.Success)
                 break;
-                
+
             content = Regex.Replace(content, $"<h1>{match.Groups[2].Value}</h1>");
 
             match = match.NextMatch();
@@ -630,7 +630,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
         {
             if (!match.Success)
                 break;
-            
+
             content = content
                 .Replace(
                     match.Groups[0].Value,
@@ -740,23 +740,16 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     static Regex Regex { get; }
     static HtmlPStringBuildRequestHandler()
     {
-        Regex = new Regex($"^([^#><])(.+)(\n+|)$", RegexOptions.Multiline);
+        Regex = new Regex($"^([^#><])(.+?)((\r|))$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
-
-            content = Regex.Replace(content, $"<p>$0</p>");
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
+        
+        if(request.String == default)
+            return request.String;
+        
+        return Regex.Replace(request.String, $"<p>$1$2</p>$3");
     }
 }
 
@@ -804,7 +797,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
 {
     public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
     {
-        if(request.String == default)
+        if (request.String == default)
             return default;
 
         var content = request.String.Replace("\r\n", "\n");
