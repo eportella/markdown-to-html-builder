@@ -22,4 +22,4 @@ runs:
       run: env | sort
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }} ${{ steps.deployment.outputs.page_url }};
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }};
