@@ -740,7 +740,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     static Regex Regex { get; }
     static HtmlPStringBuildRequestHandler()
     {
-        Regex = new Regex($"^([^#>])(.+)(\n+|)$", RegexOptions.Multiline);
+        Regex = new Regex($"^([^#><])(.+)(\n+|)$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -752,7 +752,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
             if (!match.Success)
                 break;
 
-            content = Regex.Replace(content, $"<p>{match.Groups[0].Value}</p>");
+            content = Regex.Replace(content, $"<p>$0</p>");
             match = match.NextMatch();
         } while (true);
 
