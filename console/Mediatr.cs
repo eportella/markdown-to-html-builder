@@ -783,6 +783,12 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
                 break;
 
             content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups[1].Value}"">{match.Groups[1].Value} {match.Groups[2].Value}</cite>");
+
+            var citedMatch = Regex.Match(content, @"\[\^{match.Groups[0].Value}]");
+
+            content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups[1].Value}"">{match.Groups[1].Value}</cite>");
+
+            
             match = match.NextMatch();
         } while (true);
 
