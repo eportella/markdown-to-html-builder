@@ -619,7 +619,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
     static Regex UlRegex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        UlRegex = new Regex($"(- +.+(\n|))+", RegexOptions.Multiline);
+        UlRegex = new Regex($"(^(|>)- +.+(\n|))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -633,9 +633,9 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
 
             content = content
                 .Replace(
-                    match.Groups[0].Value.Trim('\r', '\n'),
+                    match.Groups[0].Value,
                     $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[0].Value }, cancellationToken)}</ul>"
-                ).Trim('\r', '\n');
+                );
             match = match.NextMatch();
         } while (true);
 
