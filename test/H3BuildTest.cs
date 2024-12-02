@@ -3,10 +3,24 @@ namespace test;
 public class H3BuildTest
 {
     [Theory]
+    [InlineData(default, default)]
     [InlineData("### Headding", "<h3>Headding</h3>")]
     [InlineData("### #", "<h3>#</h3>")]
     [InlineData("### #Headding", "<h3>#Headding</h3>")]
     [InlineData("### # Headding", "<h3># Headding</h3>")]
+    [InlineData(@"
+# tilte
+## tilte
+### tilte
+#### tilte
+##### tilte
+###### tilte", @"
+# tilte
+## tilte
+<h3>tilte</h3>
+#### tilte
+##### tilte
+###### tilte")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH3StringBuildRequest
