@@ -782,12 +782,12 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
             if (!match.Success)
                 break;
 
-            content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups[1].Value}""><a href=""#cited-{match.Groups[1].Value}"">{match.Groups[1].Value}</a> {match.Groups[2].Value}</cite>");
+            content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups[1].Value}""><a href=""#cited-{match.Groups[1].Value}"">({match.Groups[1].Value})</a>. {match.Groups[2].Value}</cite>");
 
             var citedMatch = Regex.Match(content, @$"\[\^{match.Groups[1].Value}\]", RegexOptions.Multiline);
 
             if (citedMatch.Success)
-                content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups[1].Value}""><a href=""#cite-{match.Groups[1].Value}"">{match.Groups[1].Value}</a></cite>");
+                content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups[1].Value}""> <a href=""#cite-{match.Groups[1].Value}"">({match.Groups[1].Value})</a></cite>");
 
             match = match.NextMatch();
         } while (true);
