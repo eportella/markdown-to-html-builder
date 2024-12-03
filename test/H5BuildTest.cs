@@ -19,8 +19,8 @@ public class H5BuildTest
 ## tilte
 ### tilte
 #### tilte
-<h5>tilte</h5>
-###### tilte")]
+<h5>tilte
+</h5>###### tilte")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH5StringBuildRequest
