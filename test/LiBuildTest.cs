@@ -10,6 +10,11 @@ public class LiBuildTest
 @"
 <li>list item
 </li>")]
+[InlineData(
+@"<ul>- list item
+</ul>",
+@"<li>list item
+</li>")]
     [InlineData(
 @"
 - Conheça a minha [trajetória](trajetoria/README.md).

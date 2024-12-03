@@ -543,7 +543,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
         if (request.String == default)
             return request.String;
         return Regex.Replace(
-            request.String,
+            Regex.Replace(request.String, @"^<ul>(?'content'(.*(\r?\n|))+?)</ul>$", @"${content}"),
             match =>
             {
                 var stringBuilder = new StringBuilder();
@@ -572,12 +572,12 @@ internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
 }
-internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
+internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        Regex = new Regex($"(^ *- +.+?(\r\n|\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex($"(?'content'(^ *- +.+?(\r?\n|))+$)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -589,7 +589,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
         return Regex
             .Replace(
                 request.String,
-                $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[0].Value }, cancellationToken)}</ul>{match.Groups[2].Value}"
+                "<ul>${content}</ul>"
             );
     }
 }
@@ -766,6 +766,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlH5StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlH6StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlLiStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
