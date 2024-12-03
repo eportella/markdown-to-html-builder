@@ -753,6 +753,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
 
         var content = request.String.Replace("\r\n", "\n");
         content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
+        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
@@ -766,7 +767,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlH6StringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
 
