@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using HtmlAgilityPack;
@@ -534,27 +535,40 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex("^(- +(.+))$", RegexOptions.Multiline);
+        Regex = new Regex(@"^-( +(.+?)(\r\n|\r|\n|))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
+        if (request.String == default)
+            return request.String;
+        return Regex.Replace(
+            request.String,
+            match =>
+            {
+                var stringBuilder = new StringBuilder();
 
-            content = content
-                .Replace(
-                    match.Groups[1].Value,
-                    $"<li>{match.Groups[2].Value}</li>"
-                );
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
+                foreach (var capture in match.Groups[1].Captures)
+                {
+                    if (capture is Group)
+                    {
+                        var group = (Group)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+                    if (capture is Capture)
+                    {
+                        var group = (Capture)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+                    var t = capture;
+                }
+                return Regex.Replace(
+                    stringBuilder.ToString(),
+                    @"^ *(.+(\r|\n)*)+$",
+                    match => $"<li>{string.Join(string.Empty, match.Groups[1].Captures.Select(s => s.Value))}</li>");
+            });
     }
 }
 
@@ -567,7 +581,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
     static Regex Regex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        Regex = new Regex($"(^- +.+?(\r\n|\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex($"(^ *- +.+?(\r\n|\n|))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -757,7 +771,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title= Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
+        content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
 
         return content;
