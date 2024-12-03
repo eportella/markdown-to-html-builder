@@ -409,7 +409,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *# (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *# (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -417,7 +417,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h1>$2</h1>$3");
+        return Regex.Replace(request.String, "<h1>${content}</h1>");
     }
 }
 
