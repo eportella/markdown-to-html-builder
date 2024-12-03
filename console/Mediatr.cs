@@ -430,7 +430,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     static Regex Regex { get; }
     static HtmlH2StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *## (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *## (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -438,7 +438,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h2>$2</h2>$3");
+        return Regex.Replace(request.String, "<h2>${content}</h2>");
     }
 }
 
@@ -451,7 +451,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     static Regex Regex { get; }
     static HtmlH3StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *### (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -459,7 +459,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h3>$2</h3>$3");
+        return Regex.Replace(request.String, "<h3>${content}</h3>");
     }
 }
 
@@ -472,7 +472,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     static Regex Regex { get; }
     static HtmlH4StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *#### (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *#### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -480,7 +480,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h4>$2</h4>$3");
+        return Regex.Replace(request.String, "<h4>${content}</h4>");
     }
 }
 
@@ -493,7 +493,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     static Regex Regex { get; }
     static HtmlH5StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *##### (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *##### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -501,7 +501,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h5>$2</h5>$3");
+        return Regex.Replace(request.String, "<h5>${content}</h5>");
     }
 }
 
@@ -514,7 +514,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     static Regex Regex { get; }
     static HtmlH6StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(|>) *###### (.*?)(\r|)$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *###### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -522,7 +522,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<h6>$2</h6>$3");
+        return Regex.Replace(request.String, "<h6>${content}</h6>");
     }
 }
 

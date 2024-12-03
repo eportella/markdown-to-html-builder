@@ -16,8 +16,8 @@ public class H2BuildTest
 ##### tilte
 ###### tilte", @"
 # tilte
-<h2>tilte</h2>
-### tilte
+<h2>tilte
+</h2>### tilte
 #### tilte
 ##### tilte
 ###### tilte")]

@@ -17,8 +17,8 @@ public class H3BuildTest
 ###### tilte", @"
 # tilte
 ## tilte
-<h3>tilte</h3>
-#### tilte
+<h3>tilte
+</h3>#### tilte
 ##### tilte
 ###### tilte")]
     public async Task Success(string informed, string expected)
