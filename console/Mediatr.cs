@@ -695,7 +695,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
     static Regex Regex { get; }
     static HtmlPStringBuildRequestHandler()
     {
-        Regex = new Regex($"^((?!# *?)(?!> *?)(?!\\- *?)(?!([ ]{4})+\\- *?)(?!\\[\\^\\d+\\])(?!\r))(.+?)((\r|))$", RegexOptions.Multiline);
+        Regex = new Regex(@"^((?!# *?)(?!> *?)(?!\- *?)(?!([ ]{4})+\- *?)(?!\[\^\d+\])(?!\r?\n))(.+(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -704,7 +704,7 @@ internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStri
         if (request.String == default)
             return request.String;
 
-        return Regex.Replace(request.String, $"<p>$2</p>$3");
+        return Regex.Replace(request.String, $"<p>$3</p>");
     }
 }
 
