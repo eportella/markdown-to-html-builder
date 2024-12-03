@@ -751,7 +751,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         if (request.String == default)
             return default;
 
-        var content = request.String.Replace("\r\n", "\n");
+        var content = request.String;
         content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
@@ -770,6 +770,24 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
+
+        return content;
+    }
+}
+
+internal sealed class StructuralBuildRequest : IRequest<string>
+{
+    public string? String { get; init; }
+}
+internal sealed class StructuralBuildRequestHandler : IRequestHandler<StructuralBuildRequest, string?>
+{
+    public async Task<string?> Handle(StructuralBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        if (request.String == default)
+            return default;
+
+        var content = request.String;
 
         return content;
     }
