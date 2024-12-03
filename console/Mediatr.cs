@@ -535,7 +535,7 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex(@"^-( +(.+?)(\r\n|\r|\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex(@"^- *((.*(\r?\n|)+(?!\-))+(\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -562,12 +562,8 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
                         stringBuilder.Append(group.Value);
                         continue;
                     }
-                    var t = capture;
                 }
-                return Regex.Replace(
-                    stringBuilder.ToString(),
-                    @"^ *(.+(\r|\n)*)+$",
-                    match => $"<li>{string.Join(string.Empty, match.Groups[1].Captures.Select(s => s.Value))}</li>");
+                return $"<li>{stringBuilder}</li>";
             });
     }
 }
