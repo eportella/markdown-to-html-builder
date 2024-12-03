@@ -572,12 +572,12 @@ internal sealed class HtmlUlStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
 }
-internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlUlStringBuildRequest, string?>
+internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlStringBuildRequest, string?>
 {
     static Regex Regex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        Regex = new Regex($"(^ *- +.+?(\r?\n|))+$", RegexOptions.Multiline);
+        Regex = new Regex($"(?'content'(^ *- +.+?(\r?\n|))+$)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -589,7 +589,7 @@ internal sealed class HtmlUlStringBuildRequestHandler(IMediator mediator) : IReq
         return Regex
             .Replace(
                 request.String,
-                $"<ul>{await mediator.Send(new HtmlLiStringBuildRequest { String = match.Groups[0].Value }, cancellationToken)}</ul>"
+                "<ul>${content}</ul>"
             );
     }
 }
