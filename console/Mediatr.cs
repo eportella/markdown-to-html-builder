@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using HtmlAgilityPack;
@@ -534,15 +535,40 @@ internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiSt
     static Regex Regex { get; }
     static HtmlLiStringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(- +(.*?)(\r\n|\r|\n|))$", RegexOptions.Multiline);
+        Regex = new Regex(@"^-( +(.+?)(\r\n|\r|\n|))+$", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.String == default)
             return request.String;
+        return Regex.Replace(
+            request.String,
+            match =>
+            {
+                var stringBuilder = new StringBuilder();
 
-        return Regex.Replace(request.String, "<li>$2</li>$3");
+                foreach (var capture in match.Groups[1].Captures)
+                {
+                    if (capture is Group)
+                    {
+                        var group = (Group)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+                    if (capture is Capture)
+                    {
+                        var group = (Capture)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+                    var t = capture;
+                }
+                return Regex.Replace(
+                    stringBuilder.ToString(),
+                    @"^ *(.+(\r|\n)*)+$",
+                    match => $"<li>{string.Join(string.Empty, match.Groups[1].Captures.Select(s => s.Value))}</li>");
+            });
     }
 }
 
