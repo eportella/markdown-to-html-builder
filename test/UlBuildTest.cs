@@ -26,36 +26,31 @@ public class UlBuildTest
     [InlineData(
 @"- list item 1
 ",
-@"<ul></ul>
-")]
+@"<ul></ul>")]
     [InlineData(
 @"- list item 1
 - list item 2
 ",
-@"<ul></ul>
-")]
+@"<ul></ul>")]
     [InlineData(
 @"- list item 1
 - list item 2
 - list item 3
 ",
-@"<ul></ul>
-")]
+@"<ul></ul>")]
     [InlineData(
 @"
 - list item 1
 ",
 @"
-<ul></ul>
-")]
+<ul></ul>")]
     [InlineData(
 @"
 - list item 1
 - list item 2
 ",
 @"
-<ul></ul>
-")]
+<ul></ul>")]
     [InlineData(
 @"
 - list item 1
@@ -63,8 +58,7 @@ public class UlBuildTest
 - list item 3
 ",
 @"
-<ul></ul>
-")]
+<ul></ul>")]
 [InlineData(
 @"
 - Fui constituida em 24/06/2016 por [Ewerton](https://github.com/eportella).
@@ -81,8 +75,7 @@ public class UlBuildTest
 - Hoje estou no <span id=""portella-idade"">`tempo atual`</span>º ano da minha tragetória.
 ",
 @"
-<ul></ul>
-")]
+<ul></ul>")]
     public async Task Success(string informed, string expected)
     {
         var mediator = Mock.Of<IMediator>();
