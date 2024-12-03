@@ -577,7 +577,7 @@ internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlSt
     static Regex Regex { get; }
     static HtmlUlStringBuildRequestHandler()
     {
-        Regex = new Regex($"(?'content'(^ *- +.+?(\r?\n|))+$)", RegexOptions.Multiline);
+        Regex = new Regex($"^(</.+>|>|)(?'content'( *- +.+?(\r?\n|))+$)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
     {
