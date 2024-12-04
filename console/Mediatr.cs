@@ -709,19 +709,13 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
 
         var content = Regex.Replace(
             request.String,
-            match =>
-            {
-                return @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>";
-            }
+            match => @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>"
         );
 
         content = Regex.Replace(
             content, 
             @$"\[\^(?'cite'\d+)\]", 
-            match =>
-            {
-                return @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>";
-            },
+            match => @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>",
             RegexOptions.Multiline
         );
 
