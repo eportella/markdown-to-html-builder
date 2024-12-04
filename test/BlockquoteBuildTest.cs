@@ -60,6 +60,19 @@ Por exemplo, se você tem uma nova funcionalidade que ainda não quer que todos 
 - **Gerenciamento**: Ajuda a gerenciar como e quando as novas funcionalidades são apresentadas aos usuários.
 
 No geral, os *feature toggles* aumentam a agilidade e a segurança nas implementações.</blockquote>")]
+    [InlineData(
+@"<h2>Minha trajetória
+
+</h2>>[!TIP]
+>Conheça também a trajetória do [Ewerton](https://eportella.github.io/trajetoria/)
+
+-", 
+@"<h2>Minha trajetória
+
+</h2><blockquote>[!TIP]
+Conheça também a trajetória do [Ewerton](https://eportella.github.io/trajetoria/)
+
+</blockquote>-")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BlockquoteBuildRequest
