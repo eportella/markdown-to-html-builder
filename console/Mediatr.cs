@@ -602,7 +602,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
             return request.String;
 
         return Regex.Replace(
-            request.String, 
+            request.String,
             match => $@"<a href=""{match.Groups["href"].Value}"">{match.Groups["content"].Value}</a>"
         );
     }
@@ -704,22 +704,26 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
     public async Task<string?> Handle(HtmlCiteStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
+        if (request.String == default)
+            return request.String;
 
-            content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>");
+        var content = Regex.Replace(
+            request.String,
+            match =>
+            {
+                return @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>";
+            }
+        );
 
-            var citedMatch = Regex.Match(content, @$"\[\^{match.Groups["cite"].Value}\]", RegexOptions.Multiline);
-
-            if (citedMatch.Success)
-                content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>");
-
-            match = match.NextMatch();
-        } while (true);
+        content = Regex.Replace(
+            content, 
+            @$"\[\^(?'cite'\d+)\]", 
+            match =>
+            {
+                return @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>";
+            },
+            RegexOptions.Multiline
+        );
 
         return content;
     }
