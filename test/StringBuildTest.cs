@@ -108,6 +108,36 @@ default)]
 </li><li>a
 </li><li>a
 </li></ul>")]
+    [InlineData(
+@">",
+@"<blockquote></blockquote>")]
+    [InlineData(
+@"> ",
+@"<blockquote></blockquote>")]
+    [InlineData(
+@">
+>
+",
+@"<blockquote>
+
+</blockquote>")]
+    [InlineData(
+@"> a",
+@"<blockquote>a</blockquote>")]
+    [InlineData(
+@"> a
+>b",
+@"<blockquote>a
+b</blockquote>")]
+    [InlineData(
+@"> a
+>a
+>a
+",
+@"<blockquote>a
+a
+a
+</blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new StringBuildRequest

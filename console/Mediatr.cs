@@ -793,6 +793,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             { "H5", @"^##### *(?'content'((?!#+).*))$" },
             { "H6", @"^###### *(?'content'((?!#+).*))$" },
             { "LI", @"^- *((.*(\r?\n|)+(?!\-))*(\r?\n|))" },
+            { "BLOCKQUOTE", @"^> *(.*(\r?\n|))" },
         };
     }
     public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
@@ -870,6 +871,39 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             }
             if (li.Length > 0)
                 content += $"<ul>{li}</ul>";
+        }
+        {
+            var blockquote = new StringBuilder();
+            var matched = false;
+            foreach (Match match in Regex.Matches(request.Source, PatternsTokens["BLOCKQUOTE"], RegexOptions.Multiline))
+            {
+                if (!match.Success)
+                    continue;
+                var stringBuilder = new StringBuilder();
+                foreach (var capture in match.Groups[1].Captures)
+                {
+                    if (capture is Group)
+                    {
+                        var group = (Group)capture;
+                        stringBuilder.Append(group.Value);
+                        matched = true;
+                        continue;
+                    }
+                    if (capture is Capture)
+                    {
+                        var group = (Capture)capture;
+                        stringBuilder.Append(group.Value);
+                        matched = true;
+                        continue;
+                    }
+
+                    throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
+                }
+                blockquote
+                    .Append(stringBuilder);
+            }
+            if (matched)
+                content += $"<blockquote>{blockquote}</blockquote>";
         }
         return content;
 
