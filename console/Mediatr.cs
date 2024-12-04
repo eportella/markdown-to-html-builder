@@ -399,7 +399,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *# (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *# (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -420,7 +420,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     static Regex Regex { get; }
     static HtmlH2StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *## (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *## (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -441,7 +441,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     static Regex Regex { get; }
     static HtmlH3StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -462,7 +462,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     static Regex Regex { get; }
     static HtmlH4StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *#### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *#### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -483,7 +483,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     static Regex Regex { get; }
     static HtmlH5StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *##### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *##### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -504,7 +504,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     static Regex Regex { get; }
     static HtmlH6StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *###### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *###### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -602,7 +602,7 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
             return request.String;
 
         return Regex.Replace(
-            request.String, 
+            request.String,
             match => $@"<a href=""{match.Groups["href"].Value}"">{match.Groups["content"].Value}</a>"
         );
     }
@@ -696,30 +696,28 @@ internal sealed class HtmlCiteStringBuildRequest : IRequest<string>
 
 internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCiteStringBuildRequest, string?>
 {
-    static Regex Regex { get; }
+    static Regex CiteRegex { get; }
+    static Regex CitedRegex { get; }
     static HtmlCiteStringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(</?.+>|)\[\^(?'cite'\d+)\]: +(?'content'.*)", RegexOptions.Multiline);
+        CiteRegex = new Regex(@"^(</?.+>|)\[\^(?'cite'\d+)\]: +(?'content'.*)", RegexOptions.Multiline);
+        CitedRegex = new Regex(@$"\[\^(?'cite'\d+)\]", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlCiteStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
+        if (request.String == default)
+            return request.String;
 
-            content = content.Replace(match.Groups[0].Value, @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>");
+        var content = CiteRegex.Replace(
+            request.String,
+            match => @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>"
+        );
 
-            var citedMatch = Regex.Match(content, @$"\[\^{match.Groups["cite"].Value}\]", RegexOptions.Multiline);
-
-            if (citedMatch.Success)
-                content = content.Replace(citedMatch.Groups[0].Value, @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>");
-
-            match = match.NextMatch();
-        } while (true);
+        content = CitedRegex.Replace(
+            content, 
+            match => @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>"
+        );
 
         return content;
     }

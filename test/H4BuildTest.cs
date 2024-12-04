@@ -21,6 +21,11 @@ public class H4BuildTest
 <h4>tilte
 </h4>##### tilte
 ###### tilte")]
+    [InlineData(@"#### title
+
+>blockquote", @"<h4>title
+
+</h4>>blockquote")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH4StringBuildRequest
