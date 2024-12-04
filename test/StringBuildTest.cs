@@ -81,6 +81,33 @@ default)]
     [InlineData(
 @"###### ab",
 @"<h6>ab</h6>")]
+    [InlineData(
+@"-",
+@"<ul><li></li></ul>")]
+    [InlineData(
+@"-
+-
+",
+@"<ul><li>
+</li><li>
+</li></ul>")]
+    [InlineData(
+@"- a",
+@"<ul><li>a</li></ul>")]
+    [InlineData(
+@"- a
+-b",
+@"<ul><li>a
+</li><li>b</li></ul>")]
+    [InlineData(
+@"- a
+-a
+-a
+",
+@"<ul><li>a
+</li><li>a
+</li><li>a
+</li></ul>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new StringBuildRequest

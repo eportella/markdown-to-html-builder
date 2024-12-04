@@ -792,6 +792,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             { "H4", @"^#### *(?'content'((?!#+).*))$" },
             { "H5", @"^##### *(?'content'((?!#+).*))$" },
             { "H6", @"^###### *(?'content'((?!#+).*))$" },
+            { "LI", @"^- *((.*(\r?\n|)+(?!\-))*(\r?\n|))" },
         };
     }
     public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
@@ -838,6 +839,39 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             content += $"<h6>{match.Groups["content"].Value}</h6>";
         }
 
+        {
+            var li = new StringBuilder();
+            foreach (Match match in Regex.Matches(request.Source, PatternsTokens["LI"], RegexOptions.Multiline))
+            {
+                if (!match.Success)
+                    continue;
+                var stringBuilder = new StringBuilder();
+                foreach (var capture in match.Groups[1].Captures)
+                {
+                    if (capture is Group)
+                    {
+                        var group = (Group)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+                    if (capture is Capture)
+                    {
+                        var group = (Capture)capture;
+                        stringBuilder.Append(group.Value);
+                        continue;
+                    }
+
+                    throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
+                }
+                li
+                    .Append("<li>")
+                    .Append(stringBuilder)
+                    .Append("</li>");
+            }
+            if (li.Length > 0)
+                content += $"<ul>{li}</ul>";
+        }
         return content;
+
     }
 }
