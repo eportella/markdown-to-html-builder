@@ -775,19 +775,68 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     }
 }
 
-internal sealed class StructuralBuildRequest : IRequest<string>
+internal sealed class StringBuildRequest : IRequest<string>
 {
-    public string? String { get; init; }
+    public string? Source { get; init; }
 }
-internal sealed class StructuralBuildRequestHandler : IRequestHandler<StructuralBuildRequest, string?>
+internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, string?>
 {
-    public async Task<string?> Handle(StructuralBuildRequest request, CancellationToken cancellationToken)
+    static IDictionary<string, string> PatternsTokens { get; set; }
+
+    static StringBuildRequestHandler()
+    {
+        PatternsTokens = new Dictionary<string, string>(){
+            { "H1", @"^# *(?'content'(?!#+).*)$" },
+            { "H2", @"^## *(?'content'((?!#+).*))$" },
+            { "H3", @"^### *(?'content'((?!#+).*))$" },
+            { "H4", @"^#### *(?'content'((?!#+).*))$" },
+            { "H5", @"^##### *(?'content'((?!#+).*))$" },
+            { "H6", @"^###### *(?'content'((?!#+).*))$" },
+        };
+    }
+    public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        if (request.String == default)
+        if (request.Source == default)
             return default;
 
-        var content = request.String;
+        var content = string.Empty;
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H1"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h1>{match.Groups["content"].Value}</h1>";
+        }
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H2"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h2>{match.Groups["content"].Value}</h2>";
+        }
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H3"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h3>{match.Groups["content"].Value}</h3>";
+        }
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H4"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h4>{match.Groups["content"].Value}</h4>";
+        }
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H5"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h5>{match.Groups["content"].Value}</h5>";
+        }
+        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H6"]))
+        {
+            if (!match.Success)
+                continue;
+            content += $"<h6>{match.Groups["content"].Value}</h6>";
+        }
 
         return content;
     }
