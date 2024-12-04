@@ -716,7 +716,7 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
 
         content = CitedRegex.Replace(
             content, 
-            match => @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>",
+            match => @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>"
         );
 
         return content;
