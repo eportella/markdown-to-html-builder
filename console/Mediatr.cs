@@ -775,137 +775,147 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
     }
 }
 
-internal sealed class StringBuildRequest : IRequest<string>
-{
-    public string? Source { get; init; }
-}
-internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, string?>
-{
-    static IDictionary<string, string> PatternsTokens { get; set; }
+// internal sealed class StringBuildRequest : IRequest<string>
+// {
+//     public string? Source { get; init; }
+// }
+// internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, string?>
+// {
+//     static IDictionary<string, string> PatternsTokens { get; set; }
 
-    static StringBuildRequestHandler()
-    {
-        PatternsTokens = new Dictionary<string, string>(){
-            { "H1", @"^# *(?'content'(?!#+).*)$" },
-            { "H2", @"^## *(?'content'((?!#+).*))$" },
-            { "H3", @"^### *(?'content'((?!#+).*))$" },
-            { "H4", @"^#### *(?'content'((?!#+).*))$" },
-            { "H5", @"^##### *(?'content'((?!#+).*))$" },
-            { "H6", @"^###### *(?'content'((?!#+).*))$" },
-            { "LI", @"^- *((.*(\r?\n|)+(?!\-))*(\r?\n|))" },
-            { "BLOCKQUOTE", @"^> *(.*(\r?\n|))" },
-        };
-    }
-    public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.Source == default)
-            return default;
+//     static StringBuildRequestHandler()
+//     {
+//         PatternsTokens = new Dictionary<string, string>(){
+//             { "H1", @"^# *(?'content'(?!#+).*)$" },
+//             { "H2", @"^## *(?'content'((?!#+).*))$" },
+//             { "H3", @"^### *(?'content'((?!#+).*))$" },
+//             { "H4", @"^#### *(?'content'((?!#+).*))$" },
+//             { "H5", @"^##### *(?'content'((?!#+).*))$" },
+//             { "H6", @"^###### *(?'content'((?!#+).*))$" },
+//             { "LI", @"^- *((.*(\r?\n|)+(?!\-))*(\r?\n|))" },
+//             { "BLOCKQUOTE", @"^> *(.*(\r?\n|))" },
+//             { "A", @"\[?'content'([^\^].*?)\]\((?'href'.*?)(README.MD|)\)" },
+//         };
+//     }
+//     public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
+//     {
+//         await Task.Yield();
+//         if (request.Source == default)
+//             return default;
 
-        var content = string.Empty;
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H1"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h1>{match.Groups["content"].Value}</h1>";
-        }
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H2"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h2>{match.Groups["content"].Value}</h2>";
-        }
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H3"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h3>{match.Groups["content"].Value}</h3>";
-        }
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H4"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h4>{match.Groups["content"].Value}</h4>";
-        }
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H5"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h5>{match.Groups["content"].Value}</h5>";
-        }
-        foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H6"]))
-        {
-            if (!match.Success)
-                continue;
-            content += $"<h6>{match.Groups["content"].Value}</h6>";
-        }
+//         var content = string.Empty;
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H1"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h1>{match.Groups["content"].Value}</h1>";
+//         }
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H2"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h2>{match.Groups["content"].Value}</h2>";
+//         }
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H3"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h3>{match.Groups["content"].Value}</h3>";
+//         }
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H4"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h4>{match.Groups["content"].Value}</h4>";
+//         }
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H5"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h5>{match.Groups["content"].Value}</h5>";
+//         }
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H6"]))
+//         {
+//             if (!match.Success)
+//                 continue;
+//             content += $"<h6>{match.Groups["content"].Value}</h6>";
+//         }
 
-        {
-            var li = new StringBuilder();
-            foreach (Match match in Regex.Matches(request.Source, PatternsTokens["LI"], RegexOptions.Multiline))
-            {
-                if (!match.Success)
-                    continue;
-                var stringBuilder = new StringBuilder();
-                foreach (var capture in match.Groups[1].Captures)
-                {
-                    if (capture is Group)
-                    {
-                        var group = (Group)capture;
-                        stringBuilder.Append(group.Value);
-                        continue;
-                    }
-                    if (capture is Capture)
-                    {
-                        var group = (Capture)capture;
-                        stringBuilder.Append(group.Value);
-                        continue;
-                    }
+//         {
+//             var li = new StringBuilder();
+//             foreach (Match match in Regex.Matches(request.Source, PatternsTokens["LI"], RegexOptions.Multiline))
+//             {
+//                 if (!match.Success)
+//                     continue;
+//                 var stringBuilder = new StringBuilder();
+//                 foreach (var capture in match.Groups[1].Captures)
+//                 {
+//                     if (capture is Group)
+//                     {
+//                         var group = (Group)capture;
+//                         stringBuilder.Append(group.Value);
+//                         continue;
+//                     }
+//                     if (capture is Capture)
+//                     {
+//                         var group = (Capture)capture;
+//                         stringBuilder.Append(group.Value);
+//                         continue;
+//                     }
 
-                    throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
-                }
-                li
-                    .Append("<li>")
-                    .Append(stringBuilder)
-                    .Append("</li>");
-            }
-            if (li.Length > 0)
-                content += $"<ul>{li}</ul>";
-        }
-        {
-            var blockquote = new StringBuilder();
-            var matched = false;
-            foreach (Match match in Regex.Matches(request.Source, PatternsTokens["BLOCKQUOTE"], RegexOptions.Multiline))
-            {
-                if (!match.Success)
-                    continue;
-                var stringBuilder = new StringBuilder();
-                foreach (var capture in match.Groups[1].Captures)
-                {
-                    if (capture is Group)
-                    {
-                        var group = (Group)capture;
-                        stringBuilder.Append(group.Value);
-                        matched = true;
-                        continue;
-                    }
-                    if (capture is Capture)
-                    {
-                        var group = (Capture)capture;
-                        stringBuilder.Append(group.Value);
-                        matched = true;
-                        continue;
-                    }
+//                     throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
+//                 }
+//                 li
+//                     .Append("<li>")
+//                     .Append(stringBuilder)
+//                     .Append("</li>");
+//             }
+//             if (li.Length > 0)
+//                 content += $"<ul>{li}</ul>";
+//         }
+//         {
+//             var blockquote = new StringBuilder();
+//             var matched = false;
+//             foreach (Match match in Regex.Matches(request.Source, PatternsTokens["BLOCKQUOTE"], RegexOptions.Multiline))
+//             {
+//                 if (!match.Success)
+//                     continue;
+//                 var stringBuilder = new StringBuilder();
+//                 foreach (var capture in match.Groups[1].Captures)
+//                 {
+//                     if (capture is Group)
+//                     {
+//                         var group = (Group)capture;
+//                         stringBuilder.Append(group.Value);
+//                         matched = true;
+//                         continue;
+//                     }
+//                     if (capture is Capture)
+//                     {
+//                         var group = (Capture)capture;
+//                         stringBuilder.Append(group.Value);
+//                         matched = true;
+//                         continue;
+//                     }
 
-                    throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
-                }
-                blockquote
-                    .Append(stringBuilder);
-            }
-            if (matched)
-                content += $"<blockquote>{blockquote}</blockquote>";
-        }
-        return content;
+//                     throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
+//                 }
+//                 blockquote
+//                     .Append(stringBuilder);
+//             }
+//             if (matched)
+//                 content += $"<blockquote>{blockquote}</blockquote>";
+//         }
 
-    }
-}
+//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["A"], RegexOptions.Multiline | RegexOptions.IgnoreCase))
+//         {
+//             if (!match.Success)
+//                 continue;
+            
+//             content += $@"<a href=""{match.Groups["content"].Value}"">{match.Groups["href"].Value}</a>";
+//         }
+
+//         return content;
+
+//     }
+// }
