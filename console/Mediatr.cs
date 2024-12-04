@@ -213,7 +213,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
     static Regex Regex { get; }
     static BlockquoteBuildRequestHandler()
     {
-        Regex = new Regex(@"(^> *(.*(\n|)))+$", RegexOptions.Multiline);
+        Regex = new Regex(@"(^(> *(?'content'.*(\r?\n|)))+(?'end'\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
     {
@@ -221,19 +221,9 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
         if (request.String == default)
             return default;
 
-        var content = request.String!;
-
-        do
-        {
-            var match = Regex.Match(content);
-
-            if (!match.Success)
-                break;
-
-            content = content.Replace(match.Groups[0].Value, $"<blockquote>{string.Join("", match.Groups[2].Captures.Select(c => c.Value))}</blockquote>");
-        } while (true);
-
-        return content;
+        return  Regex.Replace(
+            request.String, 
+            match => $"<blockquote>{string.Join("", match.Groups["content"].Captures.Select(c => c.Value))}{match.Groups["end"].Value}</blockquote>");
     }
 }
 
@@ -911,7 +901,7 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
 //         {
 //             if (!match.Success)
 //                 continue;
-            
+
 //             content += $@"<a href=""{match.Groups["content"].Value}"">{match.Groups["href"].Value}</a>";
 //         }
 
