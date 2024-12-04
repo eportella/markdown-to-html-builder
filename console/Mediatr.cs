@@ -696,10 +696,12 @@ internal sealed class HtmlCiteStringBuildRequest : IRequest<string>
 
 internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCiteStringBuildRequest, string?>
 {
-    static Regex Regex { get; }
+    static Regex CiteRegex { get; }
+    static Regex CitedRegex { get; }
     static HtmlCiteStringBuildRequestHandler()
     {
-        Regex = new Regex(@"^(</?.+>|)\[\^(?'cite'\d+)\]: +(?'content'.*)", RegexOptions.Multiline);
+        CiteRegex = new Regex(@"^(</?.+>|)\[\^(?'cite'\d+)\]: +(?'content'.*)", RegexOptions.Multiline);
+        CitedRegex = new Regex(@$"\[\^(?'cite'\d+)\]", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlCiteStringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -707,16 +709,14 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
         if (request.String == default)
             return request.String;
 
-        var content = Regex.Replace(
+        var content = CiteRegex.Replace(
             request.String,
             match => @$"<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>"
         );
 
-        content = Regex.Replace(
+        content = CitedRegex.Replace(
             content, 
-            @$"\[\^(?'cite'\d+)\]", 
             match => @$"<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>",
-            RegexOptions.Multiline
         );
 
         return content;
