@@ -221,8 +221,8 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
         if (request.String == default)
             return default;
 
-        return  Regex.Replace(
-            request.String, 
+        return Regex.Replace(
+            request.String,
             match => $"<blockquote>{string.Join("", match.Groups["content"].Captures.Select(c => c.Value))}{match.Groups["end"].Value}</blockquote>");
     }
 }
@@ -593,23 +593,18 @@ internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStri
     static Regex Regex { get; }
     static HtmlAStringBuildRequestHandler()
     {
-        Regex = new Regex(@"\[([^\^].*?)\]\((.*?)(README.MD|)\)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        Regex = new Regex(@"\[(?'content'[^\^].*?)\]\((?'href'.*?)(README.MD|)\)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
     }
     public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
+        if (request.String == default)
+            return request.String;
 
-            content = content.Replace(match.Groups[0].Value, $@"<a href=""{match.Groups[2].Value}"">{match.Groups[1].Value}</a>");
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
+        return Regex.Replace(
+            request.String, 
+            match => $@"<a href=""{match.Groups["href"].Value}"">{match.Groups["content"].Value}</a>"
+        );
     }
 }
 
