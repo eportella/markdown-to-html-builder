@@ -213,7 +213,7 @@ internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<Blockquote
     static Regex Regex { get; }
     static BlockquoteBuildRequestHandler()
     {
-        Regex = new Regex(@"(^(> *(?'content'.*(\r?\n|)))+(?'end'\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"(^(</?.+>|)(> *(?'content'.*(\r?\n|)))+(?'end'\r?\n|))", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
     {
