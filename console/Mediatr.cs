@@ -399,7 +399,7 @@ internal sealed class HtmlH1StringBuildRequestHandler : IRequestHandler<HtmlH1St
     static Regex Regex { get; }
     static HtmlH1StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *# (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *# (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH1StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -420,7 +420,7 @@ internal sealed class HtmlH2StringBuildRequestHandler : IRequestHandler<HtmlH2St
     static Regex Regex { get; }
     static HtmlH2StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *## (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *## (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH2StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -441,7 +441,7 @@ internal sealed class HtmlH3StringBuildRequestHandler : IRequestHandler<HtmlH3St
     static Regex Regex { get; }
     static HtmlH3StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH3StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -462,7 +462,7 @@ internal sealed class HtmlH4StringBuildRequestHandler : IRequestHandler<HtmlH4St
     static Regex Regex { get; }
     static HtmlH4StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *#### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *#### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH4StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -483,7 +483,7 @@ internal sealed class HtmlH5StringBuildRequestHandler : IRequestHandler<HtmlH5St
     static Regex Regex { get; }
     static HtmlH5StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *##### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *##### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH5StringBuildRequest request, CancellationToken cancellationToken)
     {
@@ -504,7 +504,7 @@ internal sealed class HtmlH6StringBuildRequestHandler : IRequestHandler<HtmlH6St
     static Regex Regex { get; }
     static HtmlH6StringBuildRequestHandler()
     {
-        Regex = new Regex(@"^((</.+>)?>?) *###### (?'content'(.*)(\r?\n|))", RegexOptions.Multiline);
+        Regex = new Regex(@"^((</.+>)?>?) *###### (?'content'(.*)(\r?\n|)+)", RegexOptions.Multiline);
     }
     public async Task<string?> Handle(HtmlH6StringBuildRequest request, CancellationToken cancellationToken)
     {

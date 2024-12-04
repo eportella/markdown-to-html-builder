@@ -21,6 +21,11 @@ public class H3BuildTest
 </h3>#### tilte
 ##### tilte
 ###### tilte")]
+    [InlineData(@"### title
+
+>blockquote", @"<h3>title
+
+</h3>>blockquote")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH3StringBuildRequest

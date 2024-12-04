@@ -21,6 +21,11 @@ public class H5BuildTest
 #### tilte
 <h5>tilte
 </h5>###### tilte")]
+    [InlineData(@"##### title
+
+>blockquote", @"<h5>title
+
+</h5>>blockquote")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new HtmlH5StringBuildRequest
