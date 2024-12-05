@@ -657,15 +657,15 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         {
             return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
         });
+        
+        target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
+        {
+            return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
+        });
 
         target = Regex.Replace(target, @$"({A})", (match) =>
         {
             return $@"<a href=""{match.Groups["A_HREF"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
-        });
-
-        target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
-        {
-            return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
         });
 
         return target;
