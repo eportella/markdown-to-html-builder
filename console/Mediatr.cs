@@ -254,53 +254,6 @@ internal sealed class SvgBuildRequestHandler : IRequestHandler<SvgBuildRequest, 
     }
 }
 
-
-internal sealed class AgeCalcBuildRequest : IRequest<string?>
-{
-    public string? String { get; init; }
-}
-internal sealed class AgeCalcBuildRequestHandler : IRequestHandler<AgeCalcBuildRequest, string?>
-{
-    Regex Regex { get; }
-    public AgeCalcBuildRequestHandler()
-    {
-        Regex = new Regex(@"`\[age-calc\]:([\d]{4}\-[\d]{2}\-[\d]{2})\`", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return default;
-
-        var content = request.String;
-        do
-        {
-            var match = Regex.Match(content);
-            if (!match.Success)
-                break;
-            content = content.Replace(
-                match.Groups[0].Value,
-                Calculate(DateTime.ParseExact(match.Groups[1].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString()
-            );
-
-        } while (true);
-
-        return content;
-    }
-
-    private static int Calculate(DateTime birthDate)
-    {
-        DateTime today = DateTime.Today;
-
-        int age = today.Year - birthDate.Year;
-
-        if (birthDate.Date > today.AddYears(-age).Date)
-            return age - 1;
-
-        return age;
-    }
-}
-
 internal sealed class StringGetdRequest : IRequest<string?>
 {
     public FileInfo? FileInfo { get; init; }
@@ -725,7 +678,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
 
         var content = request.String;
         content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
