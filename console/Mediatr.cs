@@ -927,7 +927,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
-    const string A = @"(?'A'\[(?'A_CONTENT'[^\^].*?)\]\((?'A_HREF'.*?)(README.MD|)\))";
+    const string A = @"(?'A'\[(?!.*(\[).*)(?'A_CONTENT'.*)\]\((?'A_HREF'.*)(README.MD|)\))";
     public async Task<StringBuildResponse> Handle(StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
