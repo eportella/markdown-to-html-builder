@@ -203,30 +203,6 @@ internal sealed class BlockquoteFormatRequestHandler : IRequestHandler<Blockquot
     }
 }
 
-internal sealed class BlockquoteBuildRequest : IRequest<string?>
-{
-    public string? String { get; init; }
-}
-
-internal sealed class BlockquoteBuildRequestHandler : IRequestHandler<BlockquoteBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static BlockquoteBuildRequestHandler()
-    {
-        Regex = new Regex(@"(^(?'start'</?.+>|)(> *(?'content'.*(\r?\n|)))+(?'end'\r?\n|))", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(BlockquoteBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return default;
-
-        return Regex.Replace(
-            request.String,
-            match => $"{match.Groups["start"].Value}<blockquote>{string.Join("", match.Groups["content"].Captures.Select(c => c.Value))}{match.Groups["end"].Value}</blockquote>");
-    }
-}
-
 internal sealed class SvgBuildRequest : IRequest<string?>
 {
     public string? String { get; init; }
@@ -749,7 +725,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
 
         var content = request.String;
         content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BlockquoteBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new AgeCalcBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
