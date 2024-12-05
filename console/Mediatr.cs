@@ -348,7 +348,18 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         var content = await mediator.Send(new StringGetdRequest { FileInfo = request.Source });
-        content = await mediator.Send(new HtmlStringBuildRequest { String = content });
+        // content = await mediator.Send(new HtmlStringBuildRequest
+        // {
+        //     Title = Environment.GetCommandLineArgs()[4],
+        //     Url = Environment.GetCommandLineArgs()[5],
+        //     String = content,
+        // });
+        content = (await mediator.Send(new StringBuildRequest
+        {
+            Title = Environment.GetCommandLineArgs()[4],
+            Url = Environment.GetCommandLineArgs()[5],
+            Source = content,
+        }))?.Target?.Html;
 
         if (!request.Target.Directory!.Exists)
             request.Target.Directory.Create();
@@ -715,7 +726,7 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
         );
 
         content = CitedRegex.Replace(
-            content, 
+            content,
             match => @$"{match.Groups["start"].Value}<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>"
         );
 
@@ -726,6 +737,8 @@ internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCi
 internal sealed class HtmlStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
+    public string? Url { get; init; }
+    public string? Title { get; init; }
 }
 internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlStringBuildRequest, string?>
 {
@@ -751,154 +764,485 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlLiStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BodyBuildRequest { Url = Environment.GetCommandLineArgs()[5], Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBuildRequest { Title = Environment.GetCommandLineArgs()[4], String = content }, cancellationToken);
+        content = await mediator.Send(new BodyBuildRequest { Url = request.Url, Title = request.Title, String = content }, cancellationToken);
+        content = await mediator.Send(new HtmlBuildRequest { Title = request.Title, String = content }, cancellationToken);
 
         return content;
     }
 }
 
-// internal sealed class StringBuildRequest : IRequest<string>
-// {
-//     public string? Source { get; init; }
-// }
-// internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, string?>
-// {
-//     static IDictionary<string, string> PatternsTokens { get; set; }
+internal sealed class StringBuildRequest : IRequest<StringBuildResponse>
+{
+    public string? Title { get; init; }
+    public string? Source { get; init; }
+    public string? Url { get; internal set; }
+}
+internal sealed class StringBuildResponse
+{
+    internal HtmlElement? Target { get; init; }
+}
+internal class HtmlElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    internal string? Source { get; init; }
+    public string? Html { get => $"<html><title>{Title}</title>{Children.Html()}</html>"; }
+    public string? Title { get; init; }
+}
+internal class BodyElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Html()}</body>"; }
+    public string? Title { get; init; }
+    public string? Url { get; init; }
+    internal string? Source { get; init; }
+}
+internal class PElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get; internal set; }
+    internal string? Source { get; init; }
+}
 
-//     static StringBuildRequestHandler()
-//     {
-//         PatternsTokens = new Dictionary<string, string>(){
-//             { "H1", @"^# *(?'content'(?!#+).*)$" },
-//             { "H2", @"^## *(?'content'((?!#+).*))$" },
-//             { "H3", @"^### *(?'content'((?!#+).*))$" },
-//             { "H4", @"^#### *(?'content'((?!#+).*))$" },
-//             { "H5", @"^##### *(?'content'((?!#+).*))$" },
-//             { "H6", @"^###### *(?'content'((?!#+).*))$" },
-//             { "LI", @"^- *((.*(\r?\n|)+(?!\-))*(\r?\n|))" },
-//             { "BLOCKQUOTE", @"^> *(.*(\r?\n|))" },
-//             { "A", @"\[?'content'([^\^].*?)\]\((?'href'.*?)(README.MD|)\)" },
-//         };
-//     }
-//     public async Task<string?> Handle(StringBuildRequest request, CancellationToken cancellationToken)
-//     {
-//         await Task.Yield();
-//         if (request.Source == default)
-//             return default;
+internal class H1Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h1>{Children.Html()}</h1>"; }
+    internal string? Source { get; init; }
+}
 
-//         var content = string.Empty;
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H1"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h1>{match.Groups["content"].Value}</h1>";
-//         }
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H2"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h2>{match.Groups["content"].Value}</h2>";
-//         }
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H3"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h3>{match.Groups["content"].Value}</h3>";
-//         }
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H4"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h4>{match.Groups["content"].Value}</h4>";
-//         }
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H5"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h5>{match.Groups["content"].Value}</h5>";
-//         }
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["H6"]))
-//         {
-//             if (!match.Success)
-//                 continue;
-//             content += $"<h6>{match.Groups["content"].Value}</h6>";
-//         }
+internal class H2Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h2>{Children.Html()}</h2>"; }
+    internal string? Source { get; init; }
+}
 
-//         {
-//             var li = new StringBuilder();
-//             foreach (Match match in Regex.Matches(request.Source, PatternsTokens["LI"], RegexOptions.Multiline))
-//             {
-//                 if (!match.Success)
-//                     continue;
-//                 var stringBuilder = new StringBuilder();
-//                 foreach (var capture in match.Groups[1].Captures)
-//                 {
-//                     if (capture is Group)
-//                     {
-//                         var group = (Group)capture;
-//                         stringBuilder.Append(group.Value);
-//                         continue;
-//                     }
-//                     if (capture is Capture)
-//                     {
-//                         var group = (Capture)capture;
-//                         stringBuilder.Append(group.Value);
-//                         continue;
-//                     }
+internal class H3Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h3>{Children.Html()}</h3>"; }
+    internal string? Source { get; init; }
+}
 
-//                     throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
-//                 }
-//                 li
-//                     .Append("<li>")
-//                     .Append(stringBuilder)
-//                     .Append("</li>");
-//             }
-//             if (li.Length > 0)
-//                 content += $"<ul>{li}</ul>";
-//         }
-//         {
-//             var blockquote = new StringBuilder();
-//             var matched = false;
-//             foreach (Match match in Regex.Matches(request.Source, PatternsTokens["BLOCKQUOTE"], RegexOptions.Multiline))
-//             {
-//                 if (!match.Success)
-//                     continue;
-//                 var stringBuilder = new StringBuilder();
-//                 foreach (var capture in match.Groups[1].Captures)
-//                 {
-//                     if (capture is Group)
-//                     {
-//                         var group = (Group)capture;
-//                         stringBuilder.Append(group.Value);
-//                         matched = true;
-//                         continue;
-//                     }
-//                     if (capture is Capture)
-//                     {
-//                         var group = (Capture)capture;
-//                         stringBuilder.Append(group.Value);
-//                         matched = true;
-//                         continue;
-//                     }
+internal class H4Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h4>{Children.Html()}</h4>"; }
+    internal string? Source { get; init; }
+}
 
-//                     throw new NotSupportedException($"capture-type: {capture?.GetType()?.FullName ?? "null"}.");
-//                 }
-//                 blockquote
-//                     .Append(stringBuilder);
-//             }
-//             if (matched)
-//                 content += $"<blockquote>{blockquote}</blockquote>";
-//         }
+internal class H5Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h5>{Children.Html()}</h5>"; }
+    internal string? Source { get; init; }
+}
 
-//         foreach (Match match in Regex.Matches(request.Source, PatternsTokens["A"], RegexOptions.Multiline | RegexOptions.IgnoreCase))
-//         {
-//             if (!match.Success)
-//                 continue;
+internal class H6Element : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<h6>{Children.Html()}</h6>"; }
+    internal string? Source { get; init; }
+}
 
-//             content += $@"<a href=""{match.Groups["content"].Value}"">{match.Groups["href"].Value}</a>";
-//         }
+internal class BlockquoteElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get; internal set; }
+    internal string? Source { get; init; }
+}
 
-//         return content;
+internal class UlElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<ul>{Children.Html()}</ul>"; }
+    internal string? Source { get; init; }
+}
 
-//     }
-// }
+internal class LIElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<li>{Children.Html()}</li>"; }
+    internal string? Source { get; init; }
+}
+
+internal class TextElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; init; }
+    public string? Html { get; init; }
+    internal string? Source { get; init; }
+}
+
+public interface IElement
+{
+    IElement? Parent { get; init; }
+    IElement[]? Children { get; }
+    string? Html { get; }
+}
+
+internal static class IElementExtensions
+{
+    internal static string? Html(this IElement[]? elements)
+    {
+        if (elements == default)
+            return default;
+
+        return string.Join(string.Empty, elements.HtmlEnumerable());
+    }
+
+    private static IEnumerable<string?> HtmlEnumerable(this IElement[] elements)
+    {
+        foreach (var element in elements)
+            yield return element.Html;
+    }
+}
+
+internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, StringBuildResponse>
+{
+    const string P = @"^(?'P'(?!(#|>| *-)).+(\r?\n|)*)";
+    const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
+    const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).+(\r?\n|)))";
+    const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).+(\r?\n|)))";
+    const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).+(\r?\n|)))";
+    const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).+(\r?\n|)))";
+    const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).+(\r?\n|)))";
+    const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'> *(?'BLOCKQUOTE_CONTENT'.*(\r?\n|)))+";
+    const string UL = @"^(?'UL'( *- *.+(\r?\n|))+(\r?\n|))";
+    const string LI = @"^- *(?'LI'(.*(\r?\n|)+(?!\-))+(\r?\n|))";
+    const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
+    const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
+    const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
+    const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
+    const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
+    const string A = @"(?'A'\[(?'A_CONTENT'[^\^].*?)\]\((?'A_HREF'.*?)(README.MD|)\))";
+    public async Task<StringBuildResponse> Handle(StringBuildRequest request, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        if (request.Source == default)
+            return new StringBuildResponse();
+
+        return new StringBuildResponse
+        {
+            Target = Build(request),
+        };
+    }
+
+    private HtmlElement Build(StringBuildRequest request)
+    {
+        var element = new HtmlElement
+        {
+            Title = request.Title,
+            Source = request.Source,
+            Parent = default,
+        };
+        element.Children = Build(element, request);
+        return element;
+    }
+
+    private IElement[] Build(HtmlElement html, StringBuildRequest request)
+    {
+        var body = new BodyElement
+        {
+            Title = request.Title,
+            Url = request.Url,
+            Source = request.Source,
+            Parent = html,
+        };
+        body.Children = Build(body, request.Source).ToArray();
+        return [body];
+    }
+
+    private static IEnumerable<IElement> Build(IElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(BlockquoteElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(LIElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(UlElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H1Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H2Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H3Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H4Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H5Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(H6Element? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(PElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static string? Build(string? source)
+    {
+        if (source == default)
+            return source;
+        var target = source;
+
+        target = Regex.Replace(target, @$"({BI})", (match) =>
+        {
+            return $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>";
+        });
+
+        target = Regex.Replace(target, @$"({B})", (match) =>
+        {
+            return $"<b>{match.Groups["B_CONTENT"].Value}</b>";
+        });
+
+        target = Regex.Replace(target, @$"({I})", (match) =>
+        {
+            return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
+        });
+
+        target = Regex.Replace(target, @$"({A})", (match) =>
+        {
+            return $@"<a href=""{match.Groups["A_HREF"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
+        });
+
+        target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
+        {
+            return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
+        });
+
+        return target;
+    }
+    private static int AgeCalculate(DateTime birthDate)
+    {
+        DateTime today = DateTime.Today;
+
+        int age = today.Year - birthDate.Year;
+
+        if (birthDate.Date > today.AddYears(-age).Date)
+            return age - 1;
+
+        return age;
+    }
+
+    private static IEnumerable<IElement> Build(IElement? parent, MatchCollection matches)
+    {
+        foreach (Match match in matches)
+        {
+            if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
+            {
+                var h1 = new H1Element
+                {
+                    Source = match.Groups["H1_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h1.Children = Build(h1, match.Groups["H1_CONTENT"].Value).ToArray();
+                yield return h1;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
+            {
+                var h2 = new H2Element
+                {
+                    Source = match.Groups["H2_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h2.Children = Build(h2, match.Groups["H2_CONTENT"].Value).ToArray();
+                yield return h2;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
+            {
+                var h3 = new H3Element
+                {
+                    Source = match.Groups["H3_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h3.Children = Build(h3, match.Groups["H3_CONTENT"].Value).ToArray();
+                yield return h3;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
+            {
+                var h4 = new H4Element
+                {
+                    Source = match.Groups["H4_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h4.Children = Build(h4, match.Groups["H4_CONTENT"].Value).ToArray();
+                yield return h4;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
+            {
+                var h5 = new H5Element
+                {
+                    Source = match.Groups["H5_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h5.Children = Build(h5, match.Groups["H5_CONTENT"].Value).ToArray();
+                yield return h5;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
+            {
+                var h6 = new H6Element
+                {
+                    Source = match.Groups["H6_CONTENT"].Value,
+                    Parent = parent,
+                };
+                h6.Children = Build(h6, match.Groups["H6_CONTENT"].Value).ToArray();
+                yield return h6;
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
+            {
+                var blockquote = new BlockquoteElement
+                {
+                    Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value)),
+                    Parent = parent,
+                    Children = default,
+                };
+                blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
+                blockquote.Html = $"<blockquote>{blockquote.Children.Html()}</blockquote>";
+                yield return blockquote;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
+            {
+                var ul = new UlElement
+                {
+                    Source = match.Groups["UL"].Value,
+                    Parent = parent,
+                };
+                ul.Children = Build(ul, match.Groups["UL"].Value).ToArray();
+                yield return ul;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
+            {
+                var li = new LIElement
+                {
+                    Source = match.Groups["LI"].Value,
+                    Parent = parent,
+                };
+                li.Children = Build(li, match.Groups["LI"].Value).ToArray();
+                yield return li;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(match.Groups["P"].Value))
+            {
+                var p = new PElement
+                {
+                    Source = match.Groups["P"].Value,
+                    Parent = parent,
+                    Html = $"<p>{Build(match.Groups["P"].Value)}</p>"
+                };
+                p.Children = Build(p, match.Groups["P"].Value).ToArray();
+                yield return p;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(match.Groups["TEXT"].Value))
+            {
+                var text = new TextElement
+                {
+                    Source = match.Groups["TEXT"].Value,
+                    Parent = parent,
+                    Children = default,
+                    Html = Build(match.Groups["TEXT"].Value),
+                };
+                yield return text;
+                continue;
+            }
+            var t = string.Empty;
+        }
+    }
+}
