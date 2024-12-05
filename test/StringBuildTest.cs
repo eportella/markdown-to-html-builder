@@ -265,6 +265,11 @@ c
 </p><p><b>bold</b>
 </p><p><i>italic</i>    
 </p><p>    <i>italic</i></p></body></html>")]
+    [InlineData(
+@"`[age-calc]:1985-06-28`[link](https://url)",
+@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>" + AGE_CURRENT + @"<a href=""https://url"">link</a></p></body></html>")]
+
+
     public async Task Success(string informed, string expected)
     {
         var arrange = new StringBuildRequest
