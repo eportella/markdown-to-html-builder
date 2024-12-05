@@ -297,37 +297,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
         await fileStrem.WriteAsync(content);
     }
 }
-
-internal sealed class HtmlBuildRequest : IRequest<string?>
-{
-    public string? Title { get; init; }
-    public string? String { get; init; }
-}
-
-internal sealed class HtmlBuildRequestHandler : IRequestHandler<HtmlBuildRequest, string?>
-{
-    public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        return $"<html><title>{request.Title}</title>{request.String}</html>";
-    }
-}
-
-internal sealed class BodyBuildRequest : IRequest<string?>
-{
-    public string? Url { get; init; }
-    public string? Title { get; init; }
-    public string? String { get; init; }
-}
-
-internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest, string?>
-{
-    public async Task<string?> Handle(BodyBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        return $@"<body><h1><a href=""{request.Url}""/>{request.Title}</a></h1>{request.String}</body>";
-    }
-}
 internal sealed class HtmlAStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -487,8 +456,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new BodyBuildRequest { Url = request.Url, Title = request.Title, String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBuildRequest { Title = request.Title, String = content }, cancellationToken);
 
         return content;
     }
