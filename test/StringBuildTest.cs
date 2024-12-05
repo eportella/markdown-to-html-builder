@@ -272,6 +272,10 @@ c
 @"multi link [link1](https://route-1/readme.md), [link2](https://route-2/readme.md) e [link3](https://route-3/readme.md) text, contnue text [link4](https://route-4/README.md).",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>multi link <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a> text, contnue text <a href=""https://route-4/"">link4</a>.</p></body></html>")]
 
+[InlineData(
+@"[^1]: multi link with cite [link1](https://route-1/readme.md), [link2](https://route-2/readme.md) e [link3](https://route-3/readme.md).",
+@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>[^1]: multi link with cite <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a>.</p></body></html>")]
+
     public async Task Success(string informed, string expected)
     {
         var arrange = new StringBuildRequest
