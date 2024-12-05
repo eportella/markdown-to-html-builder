@@ -328,74 +328,6 @@ internal sealed class BodyBuildRequestHandler : IRequestHandler<BodyBuildRequest
         return $@"<body><h1><a href=""{request.Url}""/>{request.Title}</a></h1>{request.String}</body>";
     }
 }
-internal sealed class HtmlLiStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlLiStringBuildRequestHandler : IRequestHandler<HtmlLiStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlLiStringBuildRequestHandler()
-    {
-        Regex = new Regex(@"^- *((.*(\r?\n|)+(?!\-))+(\r?\n|))", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlLiStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return request.String;
-        return Regex.Replace(
-            Regex.Replace(request.String, @"^<ul>(?'content'(.*(\r?\n|))+?)</ul>$", @"${content}"),
-            match =>
-            {
-                var stringBuilder = new StringBuilder();
-
-                foreach (var capture in match.Groups[1].Captures)
-                {
-                    if (capture is Group)
-                    {
-                        var group = (Group)capture;
-                        stringBuilder.Append(group.Value);
-                        continue;
-                    }
-                    if (capture is Capture)
-                    {
-                        var group = (Capture)capture;
-                        stringBuilder.Append(group.Value);
-                        continue;
-                    }
-                }
-                return $"<li>{stringBuilder}</li>";
-            });
-    }
-}
-
-internal sealed class HtmlUlStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlUlStringBuildRequestHandler : IRequestHandler<HtmlUlStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlUlStringBuildRequestHandler()
-    {
-        Regex = new Regex($"^(</.+>|>|)(?'content'( *- +.+?(\r?\n|))+$)", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlUlStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return request.String;
-        var match = Regex.Match(request.String);
-
-        return Regex
-            .Replace(
-                request.String,
-                "<ul>${content}</ul>"
-            );
-    }
-}
-
 internal sealed class HtmlAStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -554,8 +486,6 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
         content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlUlStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlLiStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new BodyBuildRequest { Url = request.Url, Title = request.Title, String = content }, cancellationToken);
         content = await mediator.Send(new HtmlBuildRequest { Title = request.Title, String = content }, cancellationToken);
