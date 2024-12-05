@@ -276,15 +276,14 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
 {
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = await mediator.Send(new StringGetdRequest { FileInfo = request.Source });
-        content = (await mediator.Send(new StringBuildRequest
+        var content = (await mediator.Send(new StringBuildRequest
         {
             Title = Environment.GetCommandLineArgs()[4],
             Url = Environment.GetCommandLineArgs()[5],
-            Source = content,
+            Source = await mediator.Send(new StringGetdRequest { FileInfo = request.Source }, cancellationToken),
         }))?.Target?.Html;
 
-        if (!request.Target.Directory!.Exists)
+        if (!request.Target!.Directory!.Exists)
             request.Target.Directory.Create();
         var fileInfo = request.Target;
         using var fileStrem = fileInfo!.CreateText();
