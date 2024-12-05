@@ -277,12 +277,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         var content = await mediator.Send(new StringGetdRequest { FileInfo = request.Source });
-        // content = await mediator.Send(new HtmlStringBuildRequest
-        // {
-        //     Title = Environment.GetCommandLineArgs()[4],
-        //     Url = Environment.GetCommandLineArgs()[5],
-        //     String = content,
-        // });
         content = (await mediator.Send(new StringBuildRequest
         {
             Title = Environment.GetCommandLineArgs()[4],
@@ -297,111 +291,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
         await fileStrem.WriteAsync(content);
     }
 }
-internal sealed class HtmlAStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlAStringBuildRequestHandler : IRequestHandler<HtmlAStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlAStringBuildRequestHandler()
-    {
-        Regex = new Regex(@"\[(?'content'[^\^].*?)\]\((?'href'.*?)(README.MD|)\)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-    }
-    public async Task<string?> Handle(HtmlAStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return request.String;
-
-        return Regex.Replace(
-            request.String,
-            match => $@"<a href=""{match.Groups["href"].Value}"">{match.Groups["content"].Value}</a>"
-        );
-    }
-}
-
-internal sealed class HtmlIStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlIStringBuildRequestHandler : IRequestHandler<HtmlIStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlIStringBuildRequestHandler()
-    {
-        Regex = new Regex(@"\*{1}([^\*| ].+?)\*{1}", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlIStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
-
-            content = content.Replace(match.Groups[0].Value, $@"<i>{match.Groups[1].Value}</i>");
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
-    }
-}
-
-internal sealed class HtmlBStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-internal sealed class HtmlBStringBuildRequestHandler : IRequestHandler<HtmlBStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlBStringBuildRequestHandler()
-    {
-        Regex = new Regex(@"\*{2}([^\*| ].+?)\*{2}", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlBStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        var content = request.String!;
-        var match = Regex.Match(content);
-        do
-        {
-            if (!match.Success)
-                break;
-
-            content = content.Replace(match.Groups[0].Value, $@"<b>{match.Groups[1].Value}</b>");
-            match = match.NextMatch();
-        } while (true);
-
-        return content;
-    }
-}
-
-internal sealed class HtmlPStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-
-internal sealed class HtmlPStringBuildRequestHandler : IRequestHandler<HtmlPStringBuildRequest, string?>
-{
-    static Regex Regex { get; }
-    static HtmlPStringBuildRequestHandler()
-    {
-        Regex = new Regex(@"^((?!# *?)(?!> *?)(?!\- *?)(?!([ ]{4})+\- *?)(?!\[\^\d+\])(?!\r?\n))(.+(\r?\n|)+)", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlPStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-
-        if (request.String == default)
-            return request.String;
-
-        return Regex.Replace(request.String, $"<p>$3</p>");
-    }
-}
-
 internal sealed class HtmlCiteStringBuildRequest : IRequest<string>
 {
     public string? String { get; init; }
@@ -450,13 +339,8 @@ internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IReque
             return default;
 
         var content = request.String;
-        content = await mediator.Send(new HtmlPStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new SvgBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlBStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlIStringBuildRequest { String = content }, cancellationToken);
         content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
-        content = await mediator.Send(new HtmlAStringBuildRequest { String = content }, cancellationToken);
-
         return content;
     }
 }
