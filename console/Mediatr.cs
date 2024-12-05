@@ -500,7 +500,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
-    const string A = @"(?'A'\[(?!.*(\[).*)(?'A_CONTENT'.*)\]\((?'A_HREF'.*)(README.MD|)\))";
+    const string A = @"(?'A'\[(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(readme.md|)\))";
     public async Task<StringBuildResponse> Handle(StringBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -657,7 +657,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         {
             return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
         });
-        
+
         target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
         {
             return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
@@ -666,7 +666,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         target = Regex.Replace(target, @$"({A})", (match) =>
         {
             return $@"<a href=""{match.Groups["A_HREF"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
-        });
+        }, RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
         return target;
     }
