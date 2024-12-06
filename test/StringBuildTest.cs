@@ -274,7 +274,63 @@ c
 
 [InlineData(
 @"[^1]: multi link with cite [link1](https://route-1/readme.md), [link2](https://route-2/readme.md) e [link3](https://route-3/readme.md).",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>[^1]: multi link with cite <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a>.</p></body></html>")]
+@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><br/><cite id=""cite-1""><a href=""#cited-1"">(1)</a>. multi link with cite <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a>.</cite></p></body></html>")]
+
+[InlineData(
+@"- li 1.0
+- li 1.1
+- li 1.2
+    - li 2.0
+    - li 2.1
+    - li 2.2
+
+- li 1.0
+- li 1.1
+- li 1.2
+    1. li 2.0
+    1. li 2.1
+    1. li 2.2
+
+1. li 1.0
+2. li 1.1
+3. li 1.2
+    - li 2.0
+    - li 2.1
+    - li 2.2
+
+1. li 1.0
+2. li 1.1
+3. li 1.2
+    1. li 2.0
+    9. li 2.1
+    8. li 2.2",
+@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><ul><li>li 1.0
+</li><li>li 1.1
+</li><li>li 1.2
+    - li 2.0
+    - li 2.1
+    - li 2.2
+
+</li></ul><ul><li>li 1.0
+</li><li>li 1.1
+</li><li>li 1.2
+    1. li 2.0
+    1. li 2.1
+    1. li 2.2
+
+</li></ul><ol><li>li 1.0
+</li><li>li 1.1
+</li><li>li 1.2
+    - li 2.0
+    - li 2.1
+    - li 2.2
+
+</li></ol><ol><li>li 1.0
+</li><li>li 1.1
+</li><li>li 1.2
+    1. li 2.0
+    9. li 2.1
+    8. li 2.2</li></ol></body></html>")]
 
     public async Task Success(string informed, string expected)
     {

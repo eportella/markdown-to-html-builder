@@ -283,10 +283,9 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).+(\r?\n|)))";
     const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).+(\r?\n|)))";
     const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'> *(?'BLOCKQUOTE_CONTENT'.*(\r?\n|)))+";
-    const string UL = @"^(?'UL'( *- *.+(\r?\n|))+(\r?\n|))";
-    const string UL_LI = @"^- *(?'UL_LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
-    const string OL = @"^(?'OL'( *\d+\. *.+(\r?\n|))+(\r?\n|))";
-    const string OL_LI = @"^(\d+\.) *(?'OL_LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
+    const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
+    const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
+    const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
@@ -342,7 +341,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL}|{OL})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -351,7 +350,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL}|{OL})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -359,6 +358,13 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     {
         if (source == default)
             yield break;
+
+        var matches = Regex.Matches(source, @$"{UL_OL_INNER}", RegexOptions.Multiline);
+        foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
+        {
+            var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
+            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.FirstOrDefault()?.Html);
+        }
 
         foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline)))
             yield return element;
@@ -369,7 +375,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({UL_LI})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -378,7 +384,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({OL_LI})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -525,7 +531,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         {
             return @$"<cite id=""cited-{match.Groups["CITED_INDEX"].Value}""> <a href=""#cite-{match.Groups["CITED_INDEX"].Value}"">({match.Groups["CITED_INDEX"].Value})</a></cite>";
         }, RegexOptions.Multiline);
-        
+
         return target;
     }
     private static int AgeCalculate(DateTime birthDate)
@@ -641,50 +647,44 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 continue;
             }
 
-            if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
             {
-                var ul = new UlElement
+                var content = match.Groups["UL_OL"].Value;
+                if (!string.IsNullOrWhiteSpace(content))
                 {
-                    Source = match.Groups["UL"].Value,
-                    Parent = parent,
-                };
-                ul.Children = Build(ul, match.Groups["UL"].Value).ToArray();
-                yield return ul;
-                continue;
+                    if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
+                    {
+                        var ul = new UlElement
+                        {
+                            Source = content,
+                            Parent = parent,
+                        };
+                        ul.Children = Build(ul, content).ToArray();
+                        yield return ul;
+                        continue;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
+                    {
+                        var ol = new OlElement
+                        {
+                            Source = content,
+                            Parent = parent,
+                        };
+                        ol.Children = Build(ol, content).ToArray();
+                        yield return ol;
+                        continue;
+                    }
+                }
             }
 
-            if (!string.IsNullOrWhiteSpace(match.Groups["UL_LI"].Value))
+            if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
             {
                 var li = new LIElement
                 {
-                    Source = match.Groups["UL_LI"].Value,
+                    Source = match.Groups["LI"].Value,
                     Parent = parent,
                 };
-                li.Children = Build(li, match.Groups["UL_LI"].Value).ToArray();
-                yield return li;
-                continue;
-            }
-
-            if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-            {
-                var ul = new OlElement
-                {
-                    Source = match.Groups["OL"].Value,
-                    Parent = parent,
-                };
-                ul.Children = Build(ul, match.Groups["OL"].Value).ToArray();
-                yield return ul;
-                continue;
-            }
-
-            if (!string.IsNullOrWhiteSpace(match.Groups["OL_LI"].Value))
-            {
-                var li = new LIElement
-                {
-                    Source = match.Groups["OL_LI"].Value,
-                    Parent = parent,
-                };
-                li.Children = Build(li, match.Groups["OL_LI"].Value).ToArray();
+                li.Children = Build(li, match.Groups["LI"].Value).ToArray();
                 yield return li;
                 continue;
             }
