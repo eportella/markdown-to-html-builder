@@ -284,8 +284,9 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).+(\r?\n|)))";
     const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'> *(?'BLOCKQUOTE_CONTENT'.*(\r?\n|)))+";
     const string UL = @"^(?'UL'( *- *.+(\r?\n|))+(\r?\n|))";
+    const string UL_LI = @"^- *(?'UL_LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string OL = @"^(?'OL'( *\d+\. *.+(\r?\n|))+(\r?\n|))";
-    const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
+    const string OL_LI = @"^(\d+\.) *(?'OL_LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
@@ -368,7 +369,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({UL_LI})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -377,7 +378,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({OL_LI})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -652,6 +653,18 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 continue;
             }
 
+            if (!string.IsNullOrWhiteSpace(match.Groups["UL_LI"].Value))
+            {
+                var li = new LIElement
+                {
+                    Source = match.Groups["UL_LI"].Value,
+                    Parent = parent,
+                };
+                li.Children = Build(li, match.Groups["UL_LI"].Value).ToArray();
+                yield return li;
+                continue;
+            }
+
             if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
             {
                 var ul = new OlElement
@@ -664,14 +677,14 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 continue;
             }
 
-            if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
+            if (!string.IsNullOrWhiteSpace(match.Groups["OL_LI"].Value))
             {
                 var li = new LIElement
                 {
-                    Source = match.Groups["LI"].Value,
+                    Source = match.Groups["OL_LI"].Value,
                     Parent = parent,
                 };
-                li.Children = Build(li, match.Groups["LI"].Value).ToArray();
+                li.Children = Build(li, match.Groups["OL_LI"].Value).ToArray();
                 yield return li;
                 continue;
             }
