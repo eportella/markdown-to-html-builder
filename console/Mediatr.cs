@@ -239,59 +239,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
         await fileStrem.WriteAsync(content);
     }
 }
-internal sealed class HtmlCiteStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-}
-
-internal sealed class HtmlCiteStringBuildRequestHandler : IRequestHandler<HtmlCiteStringBuildRequest, string?>
-{
-    static Regex CiteRegex { get; }
-    static Regex CitedRegex { get; }
-    static HtmlCiteStringBuildRequestHandler()
-    {
-        CiteRegex = new Regex(@"^(?'start'</?.+>|)\[\^(?'cite'\d+)\]: +(?'content'.*)", RegexOptions.Multiline);
-        CitedRegex = new Regex(@$"(?'start'</?.+>|)\[\^(?'cite'\d+)\]", RegexOptions.Multiline);
-    }
-    public async Task<string?> Handle(HtmlCiteStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        await Task.Yield();
-        if (request.String == default)
-            return request.String;
-
-        var content = CiteRegex.Replace(
-            request.String,
-            match => @$"{match.Groups["start"].Value}<br/><cite id=""cite-{match.Groups["cite"].Value}""><a href=""#cited-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a>. {match.Groups["content"].Value}</cite>"
-        );
-
-        content = CitedRegex.Replace(
-            content,
-            match => @$"{match.Groups["start"].Value}<cite id=""cited-{match.Groups["cite"].Value}""> <a href=""#cite-{match.Groups["cite"].Value}"">({match.Groups["cite"].Value})</a></cite>"
-        );
-
-        return content;
-    }
-}
-
-internal sealed class HtmlStringBuildRequest : IRequest<string>
-{
-    public string? String { get; init; }
-    public string? Url { get; init; }
-    public string? Title { get; init; }
-}
-internal sealed class HtmlStringBuildRequestHandler(IMediator mediator) : IRequestHandler<HtmlStringBuildRequest, string?>
-{
-    public async Task<string?> Handle(HtmlStringBuildRequest request, CancellationToken cancellationToken)
-    {
-        if (request.String == default)
-            return default;
-
-        var content = request.String;
-        content = await mediator.Send(new HtmlCiteStringBuildRequest { String = content }, cancellationToken);
-        return content;
-    }
-}
-
 internal sealed class StringBuildRequest : IRequest<StringBuildResponse>
 {
     public string? Title { get; init; }
