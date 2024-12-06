@@ -363,7 +363,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
             var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.FirstOrDefault()?.Html);
+            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.SingleOrDefault()?.Html);
         }
 
         foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline)))
