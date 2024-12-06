@@ -311,14 +311,14 @@ c
 </li><li>li 2.1
 </li><li>li 2.2
 
-</il></ul></li></ul><ul><li>li 1.0
+</li></ul></li></ul><ul><li>li 1.0
 </li><li>li 1.1
 </li><li>li 1.2
 <ol><li>li 2.0
 </li><li>li 2.1
 </li><li>li 2.2
 
-</il></ol></li></ul><ol><li>li 1.0
+</li></ol></li></ul><ol><li>li 1.0
 </li><li>li 1.1
 </li><li>li 1.2
 <ul><li>li 2.0
