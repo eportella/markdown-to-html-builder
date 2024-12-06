@@ -237,7 +237,7 @@ internal class LIElement : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<li>ARARA{Children.Html()}</li>"; }
+    public string? Html { get => $"<li>{Children.Html()}</li>"; }
     internal string? Source { get; init; }
 }
 
