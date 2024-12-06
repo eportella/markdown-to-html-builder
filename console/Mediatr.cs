@@ -225,6 +225,14 @@ internal class UlElement : IElement
     internal string? Source { get; init; }
 }
 
+internal class OlElement : IElement
+{
+    public IElement? Parent { get; init; }
+    public IElement[]? Children { get; internal set; }
+    public string? Html { get => $"<ol>{Children.Html()}</ol>"; }
+    internal string? Source { get; init; }
+}
+
 internal class LIElement : IElement
 {
     public IElement? Parent { get; init; }
@@ -276,7 +284,8 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).+(\r?\n|)))";
     const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'> *(?'BLOCKQUOTE_CONTENT'.*(\r?\n|)))+";
     const string UL = @"^(?'UL'( *- *.+(\r?\n|))+(\r?\n|))";
-    const string LI = @"^- *(?'LI'(.*(\r?\n|)+(?!\-))+(\r?\n|))";
+    const string OL = @"^(?'OL'( *\d+\. *.+(\r?\n|))+(\r?\n|))";
+    const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
@@ -332,7 +341,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL}|{OL})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -341,7 +350,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL})", RegexOptions.Multiline)))
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL}|{OL})", RegexOptions.Multiline)))
             yield return element;
     }
 
@@ -355,6 +364,15 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     }
 
     private static IEnumerable<IElement> Build(UlElement? parent, string? source)
+    {
+        if (source == default)
+            yield break;
+
+        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+            yield return element;
+    }
+
+    private static IEnumerable<IElement> Build(OlElement? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -630,6 +648,18 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                     Parent = parent,
                 };
                 ul.Children = Build(ul, match.Groups["UL"].Value).ToArray();
+                yield return ul;
+                continue;
+            }
+
+            if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
+            {
+                var ul = new OlElement
+                {
+                    Source = match.Groups["OL"].Value,
+                    Parent = parent,
+                };
+                ul.Children = Build(ul, match.Groups["OL"].Value).ToArray();
                 yield return ul;
                 continue;
             }
