@@ -28,4 +28,26 @@ paragraph 3 paragraph 3 paragraph 3 paragraph 3 paragraph 3.
     - li 2.1
     - li 2.2
 
+- li 1.0
+- li 1.1
+- li 1.2
+    1. li 2.0
+    1. li 2.1
+    1. li 2.2
+
+1. li 1.0
+2. li 1.1
+3. li 1.2
+    - li 2.0
+    - li 2.1
+    - li 2.2
+
+
+1. li 1.0
+2. li 1.1
+3. li 1.2
+    4. li 2.0
+    2. li 2.1
+    1. li 2.2
+
 paragrapfh
