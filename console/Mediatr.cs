@@ -275,7 +275,7 @@ internal static class IElementExtensions
 
 internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, StringBuildResponse>
 {
-    const string P = @"^(?'P'(?!(#|>| *-)).+(\r?\n|)*)";
+    const string P = @"^(?'P'(?!(#|>| *-| *\d+\.)).+(\r?\n|)*)";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
     const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).+(\r?\n|)))";
     const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).+(\r?\n|)))";
