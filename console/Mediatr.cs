@@ -671,7 +671,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 yield return text;
                 continue;
             }
-            var t = string.Empty;
+            var debug = string.Empty;
         }
     }
 }
