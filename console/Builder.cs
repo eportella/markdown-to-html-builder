@@ -154,7 +154,7 @@ internal class Html : IElement
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
     internal string? Source { get; init; }
-    public string? Built { get => $"<html><title>{Title}</title>{Children.Build()}</html>"; }
+    public string? Built { get => $@"<html><title>{Title}</title><meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">{Children.Build()}</html>"; }
     public string? Title { get; init; }
 }
 internal class Body : IElement
