@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -107,15 +108,40 @@ internal sealed class MarkdownFileInfoBuildRequest : IRequest
     public FileInfo? Source { get; init; }
     public FileInfo? Target { get; init; }
 }
-internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) : IRequestHandler<MarkdownFileInfoBuildRequest>
+internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, IHttpClientFactory factory) : IRequestHandler<MarkdownFileInfoBuildRequest>
 {
+    internal class User
+    {
+        public string? Name { get; set; }
+    }
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
+        string title = Environment.GetCommandLineArgs()[4];
+        try
+        {
+            using var client = factory.CreateClient();
+
+            var name = (
+                await client
+                    .GetFromJsonAsync<User>(
+                        $"https://api.github.com/users/{tilte}",
+                        cancellationToken
+                    )
+                )?
+                .Name;
+            Console.WriteLine("#NAME:->" + name);
+            title = name ?? title;
+        }
+        catch
+        {
+            title = Environment.GetCommandLineArgs()[4];
+        }
+
         var content = (
             await mediator
                 .Send(new BuildRequest
                 {
-                    Title = Environment.GetCommandLineArgs()[4],
+                    Title = title,
                     Url = Environment.GetCommandLineArgs()[5],
                     Source = await mediator
                             .Send(new FileInfoTextReadRequest
