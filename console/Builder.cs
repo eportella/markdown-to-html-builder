@@ -121,7 +121,8 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
         try
         {
             using var client = factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", Environment.GetCommandLineArgs()[6]);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Environment.GetCommandLineArgs()[6]);
+            client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
 
             var name = (
                 await client
