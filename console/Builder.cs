@@ -117,6 +117,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         string owner = Environment.GetCommandLineArgs()[4];
+        Console.WriteLine("TTT"+ Environment.GetCommandLineArgs()[6]);
         try
         {
             using var client = factory.CreateClient();
