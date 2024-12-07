@@ -334,19 +334,19 @@ c
 
     public async Task Success(string informed, string expected)
     {
-        var arrange = new StringBuildRequest
+        var arrange = new BuildRequest
         {
             Title = "--title--",
             Url = "--url--",
             Source = informed
         };
 
-        var result = await new StringBuildRequestHandler()
+        var result = await new BuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
             );
 
-        Assert.Equal(expected, result.Target?.Html);
+        Assert.Equal(expected, result.Target?.Built);
     }
 }
