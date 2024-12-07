@@ -132,9 +132,9 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
             Console.WriteLine("#NAME:->" + name);
             owner = name ?? owner;
         }
-        catch
+        catch (Exception e)
         {
-            
+            Console.WriteLine(e);
         }
 
         var content = (
