@@ -30,7 +30,6 @@ jobs:
           source-path: ${GITHUB_WORKSPACE}
           target-path: ${GITHUB_WORKSPACE}/_site
           source-url-base: ${{ steps.setup.outputs.base_url }}
-          token: AraraDeFora
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
