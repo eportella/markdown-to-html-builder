@@ -126,7 +126,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
 
             foreach (var i in client.DefaultRequestHeaders)
             {
-                Console.WriteLine(i.Key + ": " + i.Value);
+                Console.WriteLine(i.Key + ": " + string.Join("|", i.Value));
             }
 
             var name = (
