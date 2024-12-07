@@ -732,9 +732,9 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     {
                         Source = content,
                         Parent = parent,
-                        Built = $"<p>{Build(content)}</p>"
                     };
                     p.Children = Build(p, content).ToArray();
+                    p.Built = $"<p>{p.Children.Build()}</p>";
                     yield return p;
                     continue;
                 }
