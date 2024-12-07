@@ -311,6 +311,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
+    const string BR = @"(?'BR'\\(\r?\n))$";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     const string A = @"(?'A'\[(?!\^)(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(readme.md|)\))";
     const string SVG_NOTE = @"(?'SVG_NOTE'\[!NOTE\])";
@@ -487,25 +488,30 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             return source;
         var target = source;
 
+        target = Regex.Replace(target, @$"({BR})", (match) =>
+        {
+            return $"<br />";
+        }, RegexOptions.Multiline);
+
         target = Regex.Replace(target, @$"({BI})", (match) =>
         {
             return $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>";
-        });
+        }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({B})", (match) =>
         {
             return $"<b>{match.Groups["B_CONTENT"].Value}</b>";
-        });
+        }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({I})", (match) =>
         {
             return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
-        });
+        }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
         {
             return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
-        });
+        }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({A})", (match) =>
         {
