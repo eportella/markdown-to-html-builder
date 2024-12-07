@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using HtmlAgilityPack;
 using MediatR;
 internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -524,12 +523,15 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
 
         target = Regex.Replace(target, @$"({CITE})", (match) =>
         {
-            return @$"<br/><cite id=""cite-{match.Groups["CITE_INDEX"].Value}""><a href=""#cited-{match.Groups["CITE_INDEX"].Value}"">({match.Groups["CITE_INDEX"].Value})</a>. {match.Groups["CITE_CONTENT"].Value}</cite>";
+            var index = match.Groups["CITE_INDEX"].Value;
+            var content = match.Groups["CITE_CONTENT"].Value;
+            return @$"<br/><cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {content}</cite>";
         }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({CITED})", (match) =>
         {
-            return @$"<cite id=""cited-{match.Groups["CITED_INDEX"].Value}""> <a href=""#cite-{match.Groups["CITED_INDEX"].Value}"">({match.Groups["CITED_INDEX"].Value})</a></cite>";
+            var index = match.Groups["CITED_INDEX"].Value;
+            return @$"<cite id=""cited-{index}""> <a href=""#cite-{index}"">({index})</a></cite>";
         }, RegexOptions.Multiline);
 
         return target;
@@ -569,67 +571,73 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         {
             if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
             {
+                var content = match.Groups["H1_CONTENT"].Value;
                 var h1 = new H1Element
                 {
-                    Source = match.Groups["H1_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h1.Children = Build(h1, match.Groups["H1_CONTENT"].Value).ToArray();
+                h1.Children = Build(h1, content).ToArray();
                 yield return h1;
                 continue;
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
             {
+                var content = match.Groups["H2_CONTENT"].Value;
                 var h2 = new H2Element
                 {
-                    Source = match.Groups["H2_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h2.Children = Build(h2, match.Groups["H2_CONTENT"].Value).ToArray();
+                h2.Children = Build(h2, content).ToArray();
                 yield return h2;
                 continue;
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
             {
+                var content = match.Groups["H3_CONTENT"].Value;
                 var h3 = new H3Element
                 {
-                    Source = match.Groups["H3_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h3.Children = Build(h3, match.Groups["H3_CONTENT"].Value).ToArray();
+                h3.Children = Build(h3, content).ToArray();
                 yield return h3;
                 continue;
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
             {
+                var content = match.Groups["H4_CONTENT"].Value;
                 var h4 = new H4Element
                 {
-                    Source = match.Groups["H4_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h4.Children = Build(h4, match.Groups["H4_CONTENT"].Value).ToArray();
+                h4.Children = Build(h4, content).ToArray();
                 yield return h4;
                 continue;
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
             {
+                var content = match.Groups["H5_CONTENT"].Value;
                 var h5 = new H5Element
                 {
-                    Source = match.Groups["H5_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h5.Children = Build(h5, match.Groups["H5_CONTENT"].Value).ToArray();
+                h5.Children = Build(h5, content).ToArray();
                 yield return h5;
                 continue;
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
             {
+                var content = match.Groups["H6_CONTENT"].Value;
                 var h6 = new H6Element
                 {
-                    Source = match.Groups["H6_CONTENT"].Value,
+                    Source = content,
                     Parent = parent,
                 };
-                h6.Children = Build(h6, match.Groups["H6_CONTENT"].Value).ToArray();
+                h6.Children = Build(h6, content).ToArray();
                 yield return h6;
                 continue;
             }
@@ -677,42 +685,50 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
             {
-                var li = new LIElement
+                var content = match.Groups["LI"].Value;
+                if (!string.IsNullOrWhiteSpace(content))
                 {
-                    Source = match.Groups["LI"].Value,
-                    Parent = parent,
-                };
-                li.Children = Build(li, match.Groups["LI"].Value).ToArray();
-                yield return li;
-                continue;
+                    var li = new LIElement
+                    {
+                        Source = content,
+                        Parent = parent,
+                    };
+                    li.Children = Build(li, content).ToArray();
+                    yield return li;
+                    continue;
+                }
             }
 
-            if (!string.IsNullOrWhiteSpace(match.Groups["P"].Value))
             {
-                var p = new PElement
+                var content = match.Groups["P"].Value;
+                if (!string.IsNullOrWhiteSpace(content))
                 {
-                    Source = match.Groups["P"].Value,
-                    Parent = parent,
-                    Html = $"<p>{Build(match.Groups["P"].Value)}</p>"
-                };
-                p.Children = Build(p, match.Groups["P"].Value).ToArray();
-                yield return p;
-                continue;
+                    var p = new PElement
+                    {
+                        Source = content,
+                        Parent = parent,
+                        Html = $"<p>{Build(content)}</p>"
+                    };
+                    p.Children = Build(p, content).ToArray();
+                    yield return p;
+                    continue;
+                }
             }
-
-            if (!string.IsNullOrWhiteSpace(match.Groups["TEXT"].Value))
             {
-                var text = new TextElement
+                var content = match.Groups["TEXT"].Value;
+                if (!string.IsNullOrWhiteSpace(content))
                 {
-                    Source = match.Groups["TEXT"].Value,
-                    Parent = parent,
-                    Children = default,
-                    Html = Build(match.Groups["TEXT"].Value),
-                };
-                yield return text;
-                continue;
+                    var text = new TextElement
+                    {
+                        Source = content,
+                        Parent = parent,
+                        Children = default,
+                        Html = Build(content),
+                    };
+                    yield return text;
+                    continue;
+                }
             }
             var debug = string.Empty;
         }
