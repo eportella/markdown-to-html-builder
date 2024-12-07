@@ -20,7 +20,7 @@ inputs:
   token:
     description: 'GitHub token'
     required: true
-    default: ${{ github.token }}
+    default: ${GITHUB_TOKEN}
 runs:
   using: "composite"
   steps:
