@@ -89,13 +89,13 @@ internal sealed class MarkdownFileInfoGetStreamHandler : IStreamRequestHandler<M
     }
 }
 
-internal sealed class StringGetdRequest : IRequest<string?>
+internal sealed class FileInfoTextReadRequest : IRequest<string?>
 {
     public FileInfo? FileInfo { get; init; }
 }
-internal sealed class StringGetRequestHandler : IRequestHandler<StringGetdRequest, string?>
+internal sealed class StringGetRequestHandler : IRequestHandler<FileInfoTextReadRequest, string?>
 {
-    public async Task<string?> Handle(StringGetdRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(FileInfoTextReadRequest request, CancellationToken cancellationToken)
     {
         using var reader = request.FileInfo!.OpenText();
         return await reader.ReadToEndAsync();
@@ -111,140 +111,154 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
 {
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = (await mediator.Send(new StringBuildRequest
-        {
-            Title = Environment.GetCommandLineArgs()[4],
-            Url = Environment.GetCommandLineArgs()[5],
-            Source = await mediator.Send(new StringGetdRequest { FileInfo = request.Source }, cancellationToken),
-        }))?.Target?.Html;
+        var content = (
+            await mediator
+                .Send(new BuildRequest
+                    {
+                        Title = Environment.GetCommandLineArgs()[4],
+                        Url = Environment.GetCommandLineArgs()[5],
+                        Source = await mediator
+                            .Send(new FileInfoTextReadRequest 
+                                { 
+                                    FileInfo = request.Source 
+                                }, 
+                                cancellationToken
+                            ),
+                    }, 
+                    cancellationToken
+                )
+            )?
+            .Target?
+            .Built;
 
         if (!request.Target!.Directory!.Exists)
             request.Target.Directory.Create();
+
         var fileInfo = request.Target;
         using var fileStrem = fileInfo!.CreateText();
         await fileStrem.WriteAsync(content);
     }
 }
-internal sealed class StringBuildRequest : IRequest<StringBuildResponse>
+internal sealed class BuildRequest : IRequest<BuildResponse>
 {
     public string? Title { get; init; }
     public string? Source { get; init; }
     public string? Url { get; internal set; }
 }
-internal sealed class StringBuildResponse
+internal sealed class BuildResponse
 {
-    internal HtmlElement? Target { get; init; }
+    internal Html? Target { get; init; }
 }
-internal class HtmlElement : IElement
+internal class Html : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
     internal string? Source { get; init; }
-    public string? Html { get => $"<html><title>{Title}</title>{Children.Html()}</html>"; }
+    public string? Built { get => $"<html><title>{Title}</title>{Children.Build()}</html>"; }
     public string? Title { get; init; }
 }
-internal class BodyElement : IElement
+internal class Body : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Html()}</body>"; }
+    public string? Built { get => @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}</body>"; }
     public string? Title { get; init; }
     public string? Url { get; init; }
     internal string? Source { get; init; }
 }
-internal class PElement : IElement
+internal class P : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get; internal set; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
-internal class H1Element : IElement
+internal class H1 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h1>{Children.Html()}</h1>"; }
+    public string? Built { get => $"<h1>{Children.Build()}</h1>"; }
     internal string? Source { get; init; }
 }
 
-internal class H2Element : IElement
+internal class H2 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h2>{Children.Html()}</h2>"; }
+    public string? Built { get => $"<h2>{Children.Build()}</h2>"; }
     internal string? Source { get; init; }
 }
 
-internal class H3Element : IElement
+internal class H3 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h3>{Children.Html()}</h3>"; }
+    public string? Built { get => $"<h3>{Children.Build()}</h3>"; }
     internal string? Source { get; init; }
 }
 
-internal class H4Element : IElement
+internal class H4 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h4>{Children.Html()}</h4>"; }
+    public string? Built { get => $"<h4>{Children.Build()}</h4>"; }
     internal string? Source { get; init; }
 }
 
-internal class H5Element : IElement
+internal class H5 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h5>{Children.Html()}</h5>"; }
+    public string? Built { get => $"<h5>{Children.Build()}</h5>"; }
     internal string? Source { get; init; }
 }
 
-internal class H6Element : IElement
+internal class H6 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<h6>{Children.Html()}</h6>"; }
+    public string? Built { get => $"<h6>{Children.Build()}</h6>"; }
     internal string? Source { get; init; }
 }
 
-internal class BlockquoteElement : IElement
+internal class Blockquote : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get; internal set; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
-internal class UlElement : IElement
+internal class Ul : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<ul>{Children.Html()}</ul>"; }
+    public string? Built { get => $"<ul>{Children.Build()}</ul>"; }
     internal string? Source { get; init; }
 }
 
-internal class OlElement : IElement
+internal class Ol : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<ol>{Children.Html()}</ol>"; }
+    public string? Built { get => $"<ol>{Children.Build()}</ol>"; }
     internal string? Source { get; init; }
 }
 
-internal class LIElement : IElement
+internal class LI : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Html { get => $"<li>{Children.Html()}</li>"; }
+    public string? Built { get => $"<li>{Children.Build()}</li>"; }
     internal string? Source { get; init; }
 }
 
-internal class TextElement : IElement
+internal class Text : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; init; }
-    public string? Html { get; init; }
+    public string? Built { get; init; }
     internal string? Source { get; init; }
 }
 
@@ -252,27 +266,27 @@ public interface IElement
 {
     IElement? Parent { get; init; }
     IElement[]? Children { get; }
-    string? Html { get; }
+    string? Built { get; }
 }
 
 internal static class IElementExtensions
 {
-    internal static string? Html(this IElement[]? elements)
+    internal static string? Build(this IElement[]? elements)
     {
         if (elements == default)
             return default;
 
-        return string.Join(string.Empty, elements.HtmlEnumerable());
+        return string.Join(string.Empty, elements.BuiltEnumerable());
     }
 
-    private static IEnumerable<string?> HtmlEnumerable(this IElement[] elements)
+    private static IEnumerable<string?> BuiltEnumerable(this IElement[] elements)
     {
         foreach (var element in elements)
-            yield return element.Html;
+            yield return element.Built;
     }
 }
 
-internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildRequest, StringBuildResponse>
+internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'(?!(#|>| *-| *\d+\.)).+(\r?\n|)*)";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -298,21 +312,21 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
     const string SVG_CAUTION = @"(?'SVG_CAUTION'\[!CAUTION\])";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
-    public async Task<StringBuildResponse> Handle(StringBuildRequest request, CancellationToken cancellationToken)
+    public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
-            return new StringBuildResponse();
+            return new BuildResponse();
 
-        return new StringBuildResponse
+        return new BuildResponse
         {
             Target = Build(request),
         };
     }
 
-    private HtmlElement Build(StringBuildRequest request)
+    private Html Build(BuildRequest request)
     {
-        var element = new HtmlElement
+        var element = new Html
         {
             Title = request.Title,
             Source = request.Source,
@@ -322,9 +336,9 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         return element;
     }
 
-    private IElement[] Build(HtmlElement html, StringBuildRequest request)
+    private static IElement[] Build(Html html, BuildRequest request)
     {
-        var body = new BodyElement
+        var body = new Body
         {
             Title = request.Title,
             Url = request.Url,
@@ -344,7 +358,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(BlockquoteElement? parent, string? source)
+    private static IEnumerable<IElement> Build(Blockquote? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -353,7 +367,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(LIElement? parent, string? source)
+    private static IEnumerable<IElement> Build(LI? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -362,14 +376,14 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
         foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
             var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.SingleOrDefault()?.Html);
+            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.SingleOrDefault()?.Built);
         }
 
         foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline)))
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(UlElement? parent, string? source)
+    private static IEnumerable<IElement> Build(Ul? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -378,7 +392,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(OlElement? parent, string? source)
+    private static IEnumerable<IElement> Build(Ol? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -387,7 +401,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H1Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H1? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -396,7 +410,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H2Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H2? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -405,7 +419,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H3Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H3? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -414,7 +428,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H4Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H4? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -423,7 +437,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H5Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H5? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -432,7 +446,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H6Element? parent, string? source)
+    private static IEnumerable<IElement> Build(H6? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -441,7 +455,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(PElement? parent, string? source)
+    private static IEnumerable<IElement> Build(P? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -572,7 +586,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
             {
                 var content = match.Groups["H1_CONTENT"].Value;
-                var h1 = new H1Element
+                var h1 = new H1
                 {
                     Source = content,
                     Parent = parent,
@@ -584,7 +598,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
             {
                 var content = match.Groups["H2_CONTENT"].Value;
-                var h2 = new H2Element
+                var h2 = new H2
                 {
                     Source = content,
                     Parent = parent,
@@ -596,7 +610,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
             {
                 var content = match.Groups["H3_CONTENT"].Value;
-                var h3 = new H3Element
+                var h3 = new H3
                 {
                     Source = content,
                     Parent = parent,
@@ -608,7 +622,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
             {
                 var content = match.Groups["H4_CONTENT"].Value;
-                var h4 = new H4Element
+                var h4 = new H4
                 {
                     Source = content,
                     Parent = parent,
@@ -620,7 +634,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
             {
                 var content = match.Groups["H5_CONTENT"].Value;
-                var h5 = new H5Element
+                var h5 = new H5
                 {
                     Source = content,
                     Parent = parent,
@@ -632,7 +646,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
             {
                 var content = match.Groups["H6_CONTENT"].Value;
-                var h6 = new H6Element
+                var h6 = new H6
                 {
                     Source = content,
                     Parent = parent,
@@ -643,14 +657,14 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
             }
             if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
             {
-                var blockquote = new BlockquoteElement
+                var blockquote = new Blockquote
                 {
                     Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value)),
                     Parent = parent,
                     Children = default,
                 };
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
-                blockquote.Html = $"<blockquote>{blockquote.Children.Html()}</blockquote>";
+                blockquote.Built = $"<blockquote>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
             }
@@ -661,7 +675,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 {
                     if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
                     {
-                        var ul = new UlElement
+                        var ul = new Ul
                         {
                             Source = content,
                             Parent = parent,
@@ -673,7 +687,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
 
                     if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
                     {
-                        var ol = new OlElement
+                        var ol = new Ol
                         {
                             Source = content,
                             Parent = parent,
@@ -689,7 +703,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 var content = match.Groups["LI"].Value;
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    var li = new LIElement
+                    var li = new LI
                     {
                         Source = content,
                         Parent = parent,
@@ -704,11 +718,11 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 var content = match.Groups["P"].Value;
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    var p = new PElement
+                    var p = new P
                     {
                         Source = content,
                         Parent = parent,
-                        Html = $"<p>{Build(content)}</p>"
+                        Built = $"<p>{Build(content)}</p>"
                     };
                     p.Children = Build(p, content).ToArray();
                     yield return p;
@@ -719,12 +733,12 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
                 var content = match.Groups["TEXT"].Value;
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    var text = new TextElement
+                    var text = new Text
                     {
                         Source = content,
                         Parent = parent,
                         Children = default,
-                        Html = Build(content),
+                        Built = Build(content),
                     };
                     yield return text;
                     continue;
