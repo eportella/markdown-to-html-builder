@@ -539,7 +539,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         {
             var index = match.Groups["CITE_INDEX"].Value;
             var content = match.Groups["CITE_CONTENT"].Value;
-            return @$"<br/><cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {content}</cite>";
+            return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {content}</cite>";
         }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({CITED})", (match) =>
