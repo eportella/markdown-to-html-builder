@@ -121,7 +121,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
         try
         {
             using var client = factory.CreateClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Environment.GetCommandLineArgs()[6]}");
+            client.DefaultRequestHeaders.Add("Arara", $"{Environment.GetCommandLineArgs()[6]}");
             client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
 
             foreach (var i in client.DefaultRequestHeaders)
