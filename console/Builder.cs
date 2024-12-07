@@ -154,14 +154,14 @@ internal class Html : IElement
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
     internal string? Source { get; init; }
-    public string? Built { get => $@"<html><head><title>{Title}</title><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>body {{ display:flex; justify-content:center; }} body > div {{ display:flex; flex-direction:column; max-width: 1024px; }}</style></head>{Children.Build()}</html>"; }
+    public string? Built { get => $@"<html><head><title>{Title}</title><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 0 auto; }}</style></head>{Children.Build()}</html>"; }
     public string? Title { get; init; }
 }
 internal class Body : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => @$"<body><div><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}<div></body>"; }
+    public string? Built { get => @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}</body>"; }
     public string? Title { get; init; }
     public string? Url { get; init; }
     internal string? Source { get; init; }
