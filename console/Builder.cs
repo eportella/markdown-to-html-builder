@@ -108,15 +108,41 @@ internal sealed class MarkdownFileInfoBuildRequest : IRequest
     public FileInfo? Source { get; init; }
     public FileInfo? Target { get; init; }
 }
-internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) : IRequestHandler<MarkdownFileInfoBuildRequest>
+internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, IHttpClientFactory factory) : IRequestHandler<MarkdownFileInfoBuildRequest>
 {
+    internal class User
+    {
+        public string? Name { get; set; }
+    }
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
+        string owner = Environment.GetCommandLineArgs()[4];
+        try
+        {
+            using var client = factory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Baerer", Environment.GetCommandLineArgs()[6]);
+
+            var name = (
+                await client
+                    .GetFromJsonAsync<User>(
+                        $"https://api.github.com/users/{owner}",
+                        cancellationToken
+                    )
+                )?
+                .Name;
+            Console.WriteLine("#NAME:->" + name);
+            owner = name ?? owner;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
         var content = (
             await mediator
                 .Send(new BuildRequest
                 {
-                    Title = Environment.GetCommandLineArgs()[4],
+                    Title = owner,
                     Url = Environment.GetCommandLineArgs()[5],
                     Source = await mediator
                             .Send(new FileInfoTextReadRequest
