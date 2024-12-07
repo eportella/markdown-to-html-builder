@@ -288,7 +288,7 @@ internal static class IElementExtensions
 
 internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildResponse>
 {
-    const string P = @"^(?'P'(?!(#|>| *-| *\d+\.)).+(\r?\n|)*)";
+    const string P = @"^(?'P'(?!(#|>| *-| *\d+\.)|\[^\d+\]).+(\r?\n|)*)";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
     const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).+(\r?\n|)))";
     const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).+(\r?\n|)))";
@@ -539,7 +539,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         {
             var index = match.Groups["CITE_INDEX"].Value;
             var content = match.Groups["CITE_CONTENT"].Value;
-            return @$"<br/><cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {content}</cite>";
+            return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {content}</cite>";
         }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({CITED})", (match) =>
