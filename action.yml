@@ -20,7 +20,7 @@ inputs:
   token:
     description: 'GitHub token'
     required: true
-    default: AraraDeDentro
+    default: ${{ github.token }}
 runs:
   using: "composite"
   steps:
