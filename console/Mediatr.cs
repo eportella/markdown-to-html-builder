@@ -524,7 +524,7 @@ internal sealed class StringBuildRequestHandler : IRequestHandler<StringBuildReq
 
         target = Regex.Replace(target, @$"({CITE})", (match) =>
         {
-            return @$"<br/><cite id=""cite-{match.Groups["CITE_INDEX"].Value}""><a href=""#cited-{match.Groups["CITE_INDEX"].Value}"">({match.Groups["CITE_INDEX"].Value})</a>. {match.Groups["CITE_CONTENT"].Value}</cite>";
+            return @$"<cite id=""cite-{match.Groups["CITE_INDEX"].Value}""><a href=""#cited-{match.Groups["CITE_INDEX"].Value}"">({match.Groups["CITE_INDEX"].Value})</a>. {match.Groups["CITE_CONTENT"].Value}</cite>";
         }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({CITED})", (match) =>
