@@ -20,7 +20,7 @@ inputs:
   token:
     description: 'GitHub token'
     required: true
-    default: ${GITHUB_TOKEN}
+    default: arara de dentro
 runs:
   using: "composite"
   steps:
