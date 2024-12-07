@@ -749,8 +749,8 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                         Source = content,
                         Parent = parent,
                     };
-                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
                     cite.Children = Build(cite, content).ToArray();
+                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
                     yield return cite;
                     continue;
                 }
