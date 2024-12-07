@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -117,17 +118,12 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         string owner = Environment.GetCommandLineArgs()[4];
-        Console.WriteLine("TTT" + Environment.GetCommandLineArgs()[6]);
+        Console.WriteLine("#TTT" + new string(Environment.GetCommandLineArgs()[6].Select(s=> (char)((int)s+1)).ToArray()));
         try
         {
             using var client = factory.CreateClient();
-            client.DefaultRequestHeaders.Add("Arara", $"{Environment.GetCommandLineArgs()[6]}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", $"Bearer {Environment.GetCommandLineArgs()[6]}");
             client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
-
-            foreach (var i in client.DefaultRequestHeaders)
-            {
-                Console.WriteLine(i.Key + ": " + string.Join("|", i.Value));
-            }
 
             var name = (
                 await client
