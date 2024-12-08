@@ -156,7 +156,7 @@ internal class Html : IElement
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
     internal string? Source { get; init; }
-    public string? Built { get => $@"<html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8; X-Content-Type-Options=nosniff"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{Children.Build()}</html>"; }
+    public string? Built { get => $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8; X-Content-Type-Options=nosniff"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{Children.Build()}</html>"; }
     public string? Title { get; init; }
 }
 internal class Body : IElement
