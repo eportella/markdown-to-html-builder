@@ -17,13 +17,9 @@ inputs:
   source-url-base:
     description: 'source of url base'
     required: false
-  token:
-    description: 'GitHub token'
-    required: true
-    default: ${{ github.token }}
 runs:
   using: "composite"
   steps:
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }} ${{ inputs.source-url-base }} ${{ inputs.token }};
+      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }} ${{ inputs.source-url-base }};
