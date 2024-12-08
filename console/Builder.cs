@@ -118,12 +118,10 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, I
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
         string owner = Environment.GetCommandLineArgs()[4];
-        Console.WriteLine("#TTT" + new string(Environment.GetCommandLineArgs()[6].Select(s=> (char)((int)s+1)).ToArray()));
         try
         {
             using var client = factory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", $"Bearer {Environment.GetCommandLineArgs()[6]}");
-            client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("repository-owner", owner));
 
             var name = (
                 await client
