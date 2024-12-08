@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using System.Globalization;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -106,45 +104,21 @@ internal sealed class StringGetRequestHandler : IRequestHandler<FileInfoTextRead
 
 internal sealed class MarkdownFileInfoBuildRequest : IRequest
 {
+    public string? Title { get; init; }
+    public string? Url { get; init; }
     public FileInfo? Source { get; init; }
     public FileInfo? Target { get; init; }
 }
-internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator, IHttpClientFactory factory) : IRequestHandler<MarkdownFileInfoBuildRequest>
+internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) : IRequestHandler<MarkdownFileInfoBuildRequest>
 {
-    internal class User
-    {
-        public string? Name { get; set; }
-    }
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
-        string owner = Environment.GetCommandLineArgs()[4];
-        try
-        {
-            using var client = factory.CreateClient();
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("repository-owner", owner));
-
-            var name = (
-                await client
-                    .GetFromJsonAsync<User>(
-                        $"https://api.github.com/users/{owner}",
-                        cancellationToken
-                    )
-                )?
-                .Name;
-            Console.WriteLine("#NAME:->" + name);
-            owner = name ?? owner;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-
         var content = (
             await mediator
                 .Send(new BuildRequest
                 {
-                    Title = owner,
-                    Url = Environment.GetCommandLineArgs()[5],
+                    Title = request.Title,
+                    Url = request.Url,
                     Source = await mediator
                             .Send(new FileInfoTextReadRequest
                             {
