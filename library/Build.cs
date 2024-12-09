@@ -40,88 +40,90 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
     const string STYLE = @"
-:root
-{
-    --color-note-a0: #1f6feb;
-    --color-note-a10: #4e7dee;
-    --color-note-a20: #6c8cf1;
-    --color-note-a30: #859cf3;
-    --color-note-a40: #9bacf6;
-    --color-note-a50: #b0bcf8;
 
-    --color-tip-a0: #3fb950;
-    --color-tip-a10: #5bc164;
-    --color-tip-a20: #73c977;
-    --color-tip-a30: #89d18a;
-    --color-tip-a40: #9ed99d;
-    --color-tip-a50: #b2e1b0;
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-note-a0: #1f6feb;
+        --color-note-a10: #4e7dee;
+        --color-note-a20: #6c8cf1;
+        --color-note-a30: #859cf3;
+        --color-note-a40: #9bacf6;
+        --color-note-a50: #b0bcf8;
 
-    --color-important-a0: #ab7df8;
-    --color-important-a10: #b68bf9;
-    --color-important-a20: #c099fa;
-    --color-important-a30: #caa8fb;
-    --color-important-a40: #d3b6fc;
-    --color-important-a50: #dcc4fd;
+        --color-tip-a0: #3fb950;
+        --color-tip-a10: #5bc164;
+        --color-tip-a20: #73c977;
+        --color-tip-a30: #89d18a;
+        --color-tip-a40: #9ed99d;
+        --color-tip-a50: #b2e1b0;
 
-    --color-warning-a0: #d29922;
-    --color-warning-a10: #d9a440;
-    --color-warning-a20: #e0af59;
-    --color-warning-a30: #e6ba71;
-    --color-warning-a40: #ecc588;
-    --color-warning-a50: #f1d0a0;
+        --color-important-a0: #ab7df8;
+        --color-important-a10: #b68bf9;
+        --color-important-a20: #c099fa;
+        --color-important-a30: #caa8fb;
+        --color-important-a40: #d3b6fc;
+        --color-important-a50: #dcc4fd;
 
-    --color-caution-a0: #f85149;
-    --color-caution-a10: #fc685b;
-    --color-caution-a20: #ff7e6e;
-    --color-caution-a30: #ff9182;
-    --color-caution-a40: #ffa496;
-    --color-caution-a50: #ffb7aa;
+        --color-warning-a0: #d29922;
+        --color-warning-a10: #d9a440;
+        --color-warning-a20: #e0af59;
+        --color-warning-a30: #e6ba71;
+        --color-warning-a40: #ecc588;
+        --color-warning-a50: #f1d0a0;
 
-    --color-surface-a0: #121212;
-    --color-surface-a10: #282828;
-    --color-surface-a20: #3f3f3f;
-    --color-surface-a30: #575757;
-    --color-surface-a40: #717171;
-    --color-surface-a50: #8b8b8b;
-    --color-surface-a150: #e7e7e7;
-    --color-surface-a200: #f4f4f4;
+        --color-caution-a0: #f85149;
+        --color-caution-a10: #fc685b;
+        --color-caution-a20: #ff7e6e;
+        --color-caution-a30: #ff9182;
+        --color-caution-a40: #ffa496;
+        --color-caution-a50: #ffb7aa;
 
-    --color-note-surface-a0: #232c4b;
-    --color-note-surface-a10: #39405d;
-    --color-note-surface-a20: #505570;
-    --color-note-surface-a30: #676b83;
-    --color-note-surface-a40: #7f8297;
-    --color-note-surface-a50: #979aab;
+        --color-surface-a0: #121212;
+        --color-surface-a10: #282828;
+        --color-surface-a20: #3f3f3f;
+        --color-surface-a30: #575757;
+        --color-surface-a40: #717171;
+        --color-surface-a50: #8b8b8b;
+        --color-surface-a150: #e7e7e7;
+        --color-surface-a200: #f4f4f4;
 
-    --color-tip-surface-a0: #243f25;
-    --color-tip-surface-a10: #3a523a;
-    --color-tip-surface-a20: #506650;
-    --color-tip-surface-a30: #677a66;
-    --color-tip-surface-a40: #7f8f7e;
-    --color-tip-surface-a50: #97a496;
+        --color-note-surface-a0: #232c4b;
+        --color-note-surface-a10: #39405d;
+        --color-note-surface-a20: #505570;
+        --color-note-surface-a30: #676b83;
+        --color-note-surface-a40: #7f8297;
+        --color-note-surface-a50: #979aab;
 
-    --color-important-surface-a0: #3c304e;
-    --color-important-surface-a10: #4f4460;
-    --color-important-surface-a20: #645972;
-    --color-important-surface-a30: #786f85;
-    --color-important-surface-a40: #8d8598;
-    --color-important-surface-a50: #a39cac;
+        --color-tip-surface-a0: #243f25;
+        --color-tip-surface-a10: #3a523a;
+        --color-tip-surface-a20: #506650;
+        --color-tip-surface-a30: #677a66;
+        --color-tip-surface-a40: #7f8f7e;
+        --color-tip-surface-a50: #97a496;
 
-    --color-warning-surface-a0: #46361c;
-    --color-warning-surface-a10: #594932;
-    --color-warning-surface-a20: #6d5e48;
-    --color-warning-surface-a30: #817360;
-    --color-warning-surface-a40: #958978;
-    --color-warning-surface-a50: #a99f92;
+        --color-important-surface-a0: #3c304e;
+        --color-important-surface-a10: #4f4460;
+        --color-important-surface-a20: #645972;
+        --color-important-surface-a30: #786f85;
+        --color-important-surface-a40: #8d8598;
+        --color-important-surface-a50: #a39cac;
 
-    --color-caution-surface-a0: #512722;
-    --color-caution-surface-a10: #643c37;
-    --color-caution-surface-a20: #77524d;
-    --color-caution-surface-a30: #8a6964;
-    --color-caution-surface-a40: #9d807c;
-    --color-caution-surface-a50: #b19894;
+        --color-warning-surface-a0: #46361c;
+        --color-warning-surface-a10: #594932;
+        --color-warning-surface-a20: #6d5e48;
+        --color-warning-surface-a30: #817360;
+        --color-warning-surface-a40: #958978;
+        --color-warning-surface-a50: #a99f92;
 
-    --color-background-opacity: 0.1;
+        --color-caution-surface-a0: #512722;
+        --color-caution-surface-a10: #643c37;
+        --color-caution-surface-a20: #77524d;
+        --color-caution-surface-a30: #8a6964;
+        --color-caution-surface-a40: #9d807c;
+        --color-caution-surface-a50: #b19894;
+
+        --color-background-opacity: 0.1;
+    }
 }
 
 html 
