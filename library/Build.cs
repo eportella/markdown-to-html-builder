@@ -43,84 +43,71 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-note-a0: #1f6feb;
-        --color-note-a10: #4e7dee;
-        --color-note-a20: #6c8cf1;
-        --color-note-a30: #859cf3;
-        --color-note-a40: #9bacf6;
-        --color-note-a50: #b0bcf8;
+        --color-note-a0: #121929;
+        --color-note-a10: #132440;
+        --color-note-a20: #172f55;
+        --color-note-a30: #193d75;
+        --color-note-a40: #1b4fa0;
+        --color-note-a50: #1d61cb; //# AQUI
+        --color-note-a60: #4387e0;
+        --color-note-a70: #6eacf3;
+        --color-note-a80: #98c7f8;
+        --color-note-a90: #c0e0fa;
 
-        --color-tip-a0: #3fb950;
-        --color-tip-a10: #5bc164;
-        --color-tip-a20: #73c977;
-        --color-tip-a30: #89d18a;
-        --color-tip-a40: #9ed99d;
-        --color-tip-a50: #b2e1b0;
+        --color-tip-a0: #152217;
+        --color-tip-a10: #1a341e;
+        --color-tip-a20: #214626;
+        --color-tip-a30: #275e2f;
+        --color-tip-a40: #307f3b;
+        --color-tip-a50: #39a047;
+        --color-tip-a60: #5bb564;
+        --color-tip-a70: #86ca8a;
+        --color-tip-a80: #b3dab4;
+        --color-tip-a90: #dbe9db;
 
-        --color-important-a0: #ab7df8;
-        --color-important-a10: #b68bf9;
-        --color-important-a20: #c099fa;
-        --color-important-a30: #caa8fb;
-        --color-important-a40: #d3b6fc;
-        --color-important-a50: #dcc4fd;
+        --color-important-a0: #201b2b;
+        --color-important-a10: #302743;
+        --color-important-a20: #413458;
+        --color-important-a30: #58437b;
+        --color-important-a40: #7658a8;
+        --color-important-a50: #946dd6;
+        --color-important-a60: #b999e8;
+        --color-important-a70: #dbc8f3;
+        --color-important-a80: #f0e9f8;
+        --color-important-a90: #f2ecfa;
 
-        --color-warning-a0: #d29922;
-        --color-warning-a10: #d9a440;
-        --color-warning-a20: #e0af59;
-        --color-warning-a30: #e6ba71;
-        --color-warning-a40: #ecc588;
-        --color-warning-a50: #f1d0a0;
+        --color-warning-a0: #251e12;
+        --color-warning-a10: #3a2d14;
+        --color-warning-a20: #4d3c18;
+        --color-warning-a30: #6a501a;
+        --color-warning-a40: #906a1d;
+        --color-warning-a50: #b68520;
+        --color-warning-a60: #caa342;
+        --color-warning-a70: #e0c36c;
+        --color-warning-a80: #f0de9a;
+        --color-warning-a90: #faf1c8;
 
-        --color-caution-a0: #f85149;
-        --color-caution-a10: #fc685b;
-        --color-caution-a20: #ff7e6e;
-        --color-caution-a30: #ff9182;
-        --color-caution-a40: #ffa496;
-        --color-caution-a50: #ffb7aa;
+        --color-caution-a0: #2b1616;
+        --color-caution-a10: #431c1c;
+        --color-caution-a20: #582624;
+        --color-caution-a30: #7b2f2c;
+        --color-caution-a40: #a83c36;
+        --color-caution-a50: #d64841;
+        --color-caution-a60: #e8736a;
+        --color-caution-a70: #f3a095;
+        --color-caution-a80: #f8c7bf;
+        --color-caution-a90: #faece9;
 
-        --color-surface-a0: #121212;
-        --color-surface-a10: #282828;
-        --color-surface-a20: #3f3f3f;
-        --color-surface-a30: #575757;
-        --color-surface-a40: #717171;
-        --color-surface-a50: #8b8b8b;
-        --color-surface-a150: #e7e7e7;
-        --color-surface-a200: #f4f4f4;
-
-        --color-note-surface-a0: #232c4b;
-        --color-note-surface-a10: #39405d;
-        --color-note-surface-a20: #505570;
-        --color-note-surface-a30: #676b83;
-        --color-note-surface-a40: #7f8297;
-        --color-note-surface-a50: #979aab;
-
-        --color-tip-surface-a0: #243f25;
-        --color-tip-surface-a10: #3a523a;
-        --color-tip-surface-a20: #506650;
-        --color-tip-surface-a30: #677a66;
-        --color-tip-surface-a40: #7f8f7e;
-        --color-tip-surface-a50: #97a496;
-
-        --color-important-surface-a0: #3c304e;
-        --color-important-surface-a10: #4f4460;
-        --color-important-surface-a20: #645972;
-        --color-important-surface-a30: #786f85;
-        --color-important-surface-a40: #8d8598;
-        --color-important-surface-a50: #a39cac;
-
-        --color-warning-surface-a0: #46361c;
-        --color-warning-surface-a10: #594932;
-        --color-warning-surface-a20: #6d5e48;
-        --color-warning-surface-a30: #817360;
-        --color-warning-surface-a40: #958978;
-        --color-warning-surface-a50: #a99f92;
-
-        --color-caution-surface-a0: #512722;
-        --color-caution-surface-a10: #643c37;
-        --color-caution-surface-a20: #77524d;
-        --color-caution-surface-a30: #8a6964;
-        --color-caution-surface-a40: #9d807c;
-        --color-caution-surface-a50: #b19894;
+        --color-surface-a0: #232323;
+        --color-surface-a10: #363636;
+        --color-surface-a20: #484848;
+        --color-surface-a30: #626262;
+        --color-surface-a40: #858585;
+        --color-surface-a50: #a8a8a8;
+        --color-surface-a60: #bcbcbc;
+        --color-surface-a70: #d1d1d1;
+        --color-surface-a80: #e2e2e2;
+        --color-surface-a90: #f1f1f1;
 
         --color-background-opacity: 0.1;
     }
@@ -128,84 +115,71 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
 
 @media (prefers-color-scheme: light) {
     :root {
-        --color-note-a0: #1f6feb;
-        --color-note-a10: #4e7dee;
-        --color-note-a20: #6c8cf1;
-        --color-note-a30: #859cf3;
-        --color-note-a40: #9bacf6;
-        --color-note-a50: #b0bcf8;
+        --color-note-a0: #edf7ff;
+        --color-note-a10: #c4e4ff;
+        --color-note-a20: #9ccdff;
+        --color-note-a30: #73b4ff;
+        --color-note-a40: #4894f7;
+        --color-note-a50: #1f6feb; //# AQUI
+        --color-note-a60: #1052c4;
+        --color-note-a70: #05389e;
+        --color-note-a80: #002478;
+        --color-note-a90: #001652;
 
-        --color-tip-a0: #3fb950;
-        --color-tip-a10: #5bc164;
-        --color-tip-a20: #73c977;
-        --color-tip-a30: #89d18a;
-        --color-tip-a40: #9ed99d;
-        --color-tip-a50: #b2e1b0;
+        --color-tip-a0: #ebfaeb;
+        --color-tip-a10: #dfeddf;
+        --color-tip-a20: #b8e0b9;
+        --color-tip-a30: #8cd490;
+        --color-tip-a40: #63c76d;
+        --color-tip-a50: #3fb950;
+        --color-tip-a60: #2b943c;
+        --color-tip-a70: #1a6e2b;
+        --color-tip-a80: #0e471b;
+        --color-tip-a90: #06210d;
 
-        --color-important-a0: #ab7df8;
-        --color-important-a10: #b68bf9;
-        --color-important-a20: #c099fa;
-        --color-important-a30: #caa8fb;
-        --color-important-a40: #d3b6fc;
-        --color-important-a50: #dcc4fd;
+        --color-important-a0: #f8f0ff;
+        --color-important-a10: #f7f0ff;
+        --color-important-a20: #f7f0ff;
+        --color-important-a30: #e5d1ff;
+        --color-important-a40: #cba8ff;
+        --color-important-a50: #ab7df8;
+        --color-important-a60: #845ed1;
+        --color-important-a70: #6344ab;
+        --color-important-a80: #452e85;
+        --color-important-a90: #2f205e;
 
-        --color-warning-a0: #d29922;
-        --color-warning-a10: #d9a440;
-        --color-warning-a20: #e0af59;
-        --color-warning-a30: #e6ba71;
-        --color-warning-a40: #ecc588;
-        --color-warning-a50: #f1d0a0;
+        --color-warning-a0: #fffdf0;
+        --color-warning-a10: #fff6cc;
+        --color-warning-a20: #f7e49e;
+        --color-warning-a30: #ebcc71;
+        --color-warning-a40: #deb347;
+        --color-warning-a50: #d29922;
+        --color-warning-a60: #ab7613;
+        --color-warning-a70: #855508;
+        --color-warning-a80: #5e3701;
+        --color-warning-a90: #381f00;
 
-        --color-caution-a0: #f85149;
-        --color-caution-a10: #fc685b;
-        --color-caution-a20: #ff7e6e;
-        --color-caution-a30: #ff9182;
-        --color-caution-a40: #ffa496;
-        --color-caution-a50: #ffb7aa;
+        --color-caution-a0: #fff3f0;
+        --color-caution-a10: #fff0ed;
+        --color-caution-a20: #ffcdc4;
+        --color-caution-a30: #ffa79c;
+        --color-caution-a40: #ff7e73;
+        --color-caution-a50: #f85149;
+        --color-caution-a60: #d13532;
+        --color-caution-a70: #ab2023;
+        --color-caution-a80: #851318;
+        --color-caution-a90: #5e0c13;
 
-        --color-surface-a0: #121212;
-        --color-surface-a10: #282828;
-        --color-surface-a20: #3f3f3f;
-        --color-surface-a30: #575757;
-        --color-surface-a40: #717171;
-        --color-surface-a50: #8b8b8b;
-        --color-surface-a150: #e7e7e7;
-        --color-surface-a200: #f4f4f4;
-
-        --color-note-surface-a0: #232c4b;
-        --color-note-surface-a10: #39405d;
-        --color-note-surface-a20: #505570;
-        --color-note-surface-a30: #676b83;
-        --color-note-surface-a40: #7f8297;
-        --color-note-surface-a50: #979aab;
-
-        --color-tip-surface-a0: #243f25;
-        --color-tip-surface-a10: #3a523a;
-        --color-tip-surface-a20: #506650;
-        --color-tip-surface-a30: #677a66;
-        --color-tip-surface-a40: #7f8f7e;
-        --color-tip-surface-a50: #97a496;
-
-        --color-important-surface-a0: #3c304e;
-        --color-important-surface-a10: #4f4460;
-        --color-important-surface-a20: #645972;
-        --color-important-surface-a30: #786f85;
-        --color-important-surface-a40: #8d8598;
-        --color-important-surface-a50: #a39cac;
-
-        --color-warning-surface-a0: #46361c;
-        --color-warning-surface-a10: #594932;
-        --color-warning-surface-a20: #6d5e48;
-        --color-warning-surface-a30: #817360;
-        --color-warning-surface-a40: #958978;
-        --color-warning-surface-a50: #a99f92;
-
-        --color-caution-surface-a0: #512722;
-        --color-caution-surface-a10: #643c37;
-        --color-caution-surface-a20: #77524d;
-        --color-caution-surface-a30: #8a6964;
-        --color-caution-surface-a40: #9d807c;
-        --color-caution-surface-a50: #b19894;
+        --color-surface-a0: #ffffff;
+        --color-surface-a10: #f5f5f5;
+        --color-surface-a20: #e8e8e8;
+        --color-surface-a30: #dbdbdb;
+        --color-surface-a40: #cfcfcf;
+        --color-surface-a50: #c2c2c2;
+        --color-surface-a60: #9c9c9c;
+        --color-surface-a70: #757575;
+        --color-surface-a80: #4f4f4f;
+        --color-surface-a90: #292929;
 
         --color-background-opacity: 0.1;
     }
@@ -215,8 +189,8 @@ html
 {
     display: flex; 
     justify-content: center;
-    color: var(--color-surface-a0);
-    background: var(--color-surface-a200);
+    color: var(--color-surface-a90);
+    background: var(--color-surface-a0);
 } 
 html > body 
 {
@@ -226,12 +200,12 @@ html > body
     flex: 1 1 auto;
 }
 html > body a {
-    color: var(--color-note-a30);
+    color: var(--color-note-a60);
 }
 
 h1
 {
-    border-bottom: solid 0.085em var(--color-surface-a200);
+    border-bottom: solid 0.085em var(--color-surface-a10);
 }
 a
 {
@@ -272,73 +246,53 @@ blockquote > p > span.icon {
 }
 blockquote.note
 {
-    border-left: solid 0.25em var(--color-note-a0);
+    border-left: solid 0.25em var(--color-note-a50);
     background-color: rgb(from var(--color-note-a50) r g b / var(--color-background-opacity));
 }
 blockquote.note > p > span.icon
 {
-    color: var(--color-note-a0);
-}
-blockquote.note > h1, blockquote.note > h2, blockquote.note > h3, blockquote.note > h4, blockquote.note > h5, blockquote.note > h6
-{
-    color: var(--color-note-surface-a0);
+    color: var(--color-note-a50);
 }
 blockquote.tip
 {
-    border-left: solid 0.25em var(--color-tip-a0);
+    border-left: solid 0.25em var(--color-tip-a50);
     background-color: rgb(from var(--color-tip-a50) r g b / var(--color-background-opacity));
 }
 blockquote.tip > p > span.icon
 {
-    color: var(--color-tip-a0);
-}
-blockquote.tip > h1, blockquote.tip > h2, blockquote.tip > h3, blockquote.tip > h4, blockquote.tip > h5, blockquote.tip > h6
-{
-    color: var(--color-tip-surface-a0);
+    color: var(--color-tip-a50);
 }
 blockquote.important
 {
-    border-left: solid 0.25em var(--color-important-a0);
+    border-left: solid 0.25em var(--color-important-a50);
     background-color: rgb(from var(--color-important-a50) r g b / var(--color-background-opacity));
 }
 blockquote.important > p > span.icon
 {
-    color: var(--color-important-a0);
-}
-blockquote.important > h1, blockquote.important > h2, blockquote.important > h3, blockquote.important > h4, blockquote.important > h5, blockquote.important > h6
-{
-    color: var(--color-important-surface-a0);
+    color: var(--color-important-a50);
 }
 blockquote.warning
 {
-    border-left: solid 0.25em var(--color-warning-a0);
+    border-left: solid 0.25em var(--color-warning-a50);
     background-color: rgb(from var(--color-warning-a50) r g b / var(--color-background-opacity));
 }
 blockquote.warning > p > span.icon
 {
-    color: var(--color-warning-a0);
-}
-blockquote.warning > h1, blockquote.warning > h2, blockquote.warning > h3, blockquote.warning > h4, blockquote.warning > h5, blockquote.warning > h6
-{
-    color: var(--color-warning-surface-a0);
+    color: var(--color-warning-a50);
 }
 blockquote.caution
 {
-    border-left: solid 0.25em var(--color-caution-a0);
+    border-left: solid 0.25em var(--color-caution-a50);
     background-color: rgb(from var(--color-caution-a50) r g b / var(--color-background-opacity));
 }
 blockquote.caution > p > span.icon
 {
-    color: var(--color-caution-a0);
-}
-blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, blockquote.caution > h4, blockquote.caution > h5, blockquote.caution > h6
-{
-    color: var(--color-caution-surface-a0);
+    color: var(--color-caution-a50);
 }
 cite
 {
     font-size: 0.85em;
-    color: var(--color-surface-a30);
+    color: var(--color-surface-a40);
     vertical-align: super;
 }
 ";
@@ -544,7 +498,7 @@ cite
         target = Regex.Replace(target, @$"({SVG_NOTE})", (match) =>
         {
             return $@"<span class=""icon"">{SvgBuild(
-                "var(--color-note-a0)",
+                "var(--color-note-a50)",
                 "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
             )} <b>Nota</b></span>";
         }, RegexOptions.Multiline);
@@ -552,7 +506,7 @@ cite
         target = Regex.Replace(target, @$"({SVG_TIP})", (match) =>
         {
             return $@"<span class=""icon"">{SvgBuild(
-                "var(--color-tip-a0)",
+                "var(--color-tip-a50)",
                 "M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.75 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"
             )} <b>Dica</b></span>";
         }, RegexOptions.Multiline);
@@ -560,7 +514,7 @@ cite
         target = Regex.Replace(target, @$"({SVG_IMPORTANT})", (match) =>
         {
             return $@"<span class=""icon"">{SvgBuild(
-                "var(--color-important-a0)",
+                "var(--color-important-a50)",
                 "M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
             )} <b>Importante</b></span>";
         }, RegexOptions.Multiline);
@@ -568,7 +522,7 @@ cite
         target = Regex.Replace(target, @$"({SVG_WARNING})", (match) =>
         {
             return $@"<span class=""icon"">{SvgBuild(
-                "var(--color-warning-a0)",
+                "var(--color-warning-a50)",
                 "M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
             )} <b>Aviso</b></span>";
         }, RegexOptions.Multiline);
@@ -576,7 +530,7 @@ cite
         target = Regex.Replace(target, @$"({SVG_CAUTION})", (match) =>
         {
             return $@"<span class=""icon"">{SvgBuild(
-                "var(--color-caution-a0)",
+                "var(--color-caution-a50)",
                 "M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
             )} <b>Cuidado</b></span>";
         }, RegexOptions.Multiline);
