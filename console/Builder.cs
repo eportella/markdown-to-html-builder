@@ -367,6 +367,8 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     --color-surface-a30: #575757;
     --color-surface-a40: #717171;
     --color-surface-a50: #8b8b8b;
+    --color-surface-a150: #e7e7e7;
+    --color-surface-a200: #f4f4f4;
 
     --color-note-surface-a0: #232c4b;
     --color-note-surface-a10: #39405d;
@@ -418,6 +420,10 @@ html > body
     flex-direction: column; 
     max-width: 1024px; 
     flex: 1 1 auto;
+}
+h1
+{
+    border-bottom: solid 0.85em var(--color-surface-a200);
 }
 p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote
 {
