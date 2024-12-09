@@ -22,4 +22,11 @@ runs:
   steps:
     - name: Run
       shell: bash
-      run: cd $GITHUB_ACTION_PATH/console; dotnet restore; dotnet build; dotnet run ${{ inputs.source-path }} ${{ inputs.target-path }} ${{ inputs.target-file-name }} ${{ github.repository_owner }} ${{ inputs.source-url-base }};
+      run: cd $GITHUB_ACTION_PATH/console;\
+        dotnet restore;\
+        dotnet build;\
+        dotnet run ${{ inputs.source-path }} \
+                   ${{ inputs.target-path }} \
+                   ${{ inputs.target-file-name }} \
+                   ${{ github.repository_owner }} \
+                   ${{ inputs.source-url-base }};
