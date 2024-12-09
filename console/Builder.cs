@@ -727,7 +727,7 @@ cite
         target = Regex.Replace(target, @$"({CITED})", (match) =>
         {
             var index = match.Groups["CITED_INDEX"].Value;
-            return @$"<cite id=""cited-{index}""> <a href=""#cite-{index}"">({index})</a></cite>";
+            return @$"<cite id=""cited-{index}""><a href=""#cite-{index}"">({index})</a></cite>";
         }, RegexOptions.Multiline);
 
         return target;
