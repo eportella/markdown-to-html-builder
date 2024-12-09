@@ -374,6 +374,18 @@ html > body
     max-width: 1024px; 
     flex:1 1 auto; 
 }
+blockquote.note
+{
+    border-left: solid 0.25em var(--color-note-a0);
+    margin-inline-start: 0em;
+    padding-inline-start: 1em;
+}
+blockquote.tip
+{
+    border-left: solid 0.25em var(--color-tip-a0);
+    margin-inline-start: 0em;
+    padding-inline-start: 1em;
+}
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -741,8 +753,13 @@ html > body
                     Parent = parent,
                     Children = default,
                 };
+
+                var class = string.Empty;
+                if(blockquote.Source.StartsWith("[!NOTE]")) {
+                    class = @" class=""note""";
+                }
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
-                blockquote.Built = $"<blockquote>{blockquote.Children.Build()}</blockquote>";
+                blockquote.Built = $"<blockquote{class}>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
             }
