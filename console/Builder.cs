@@ -481,6 +481,7 @@ blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, block
 cite
 {
     font-size: 0.85em;
+    color: var(--color-surface-a30);
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
