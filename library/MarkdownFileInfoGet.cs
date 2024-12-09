@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using MediatR;
-public sealed class MarkdownFileInfoGetStreamRequest : IStreamRequest<FileInfo>
+internal sealed class MarkdownFileInfoGetStreamRequest : IStreamRequest<FileInfo>
 {
     public DirectoryInfo? DirectoryInfo { get; init; }
 }

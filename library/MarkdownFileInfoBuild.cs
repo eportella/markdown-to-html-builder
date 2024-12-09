@@ -1,5 +1,5 @@
 using MediatR;
-public sealed class MarkdownFileInfoBuildRequest : IRequest
+internal sealed class MarkdownFileInfoBuildRequest : IRequest
 {
     public string? Title { get; init; }
     public string? Url { get; init; }

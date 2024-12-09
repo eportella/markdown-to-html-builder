@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using MediatR;
-public sealed class GitHubRepositoryOwnerUserNameGetRequest : IRequest<string?>
+internal sealed class GitHubRepositoryOwnerUserNameGetRequest : IRequest<string?>
 {
     public string? Name { get; set; }
 }

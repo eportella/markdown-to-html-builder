@@ -1,4 +1,4 @@
-public interface IElement
+internal interface IElement
 {
     IElement? Parent { get; init; }
     IElement[]? Children { get; }
