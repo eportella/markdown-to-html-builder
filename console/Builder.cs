@@ -344,7 +344,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{element.Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{element.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{element.Children.Build()}</html>";
         return element;
     }
 
@@ -358,7 +358,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{body.Children.Build()}</body>";
+        body.Built = @$"<body><h1><a href=""{body.Url}""/>{body.Title}</a></h1>{body.Children.Build()}</body>";
         return [body];
     }
 
@@ -612,7 +612,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h1.Children = Build(h1, content).ToArray();
-                hi.Built = $"<h1>{h1.Children.Build()}</h1>";
+                h1.Built = $"<h1>{h1.Children.Build()}</h1>";
                 yield return h1;
                 continue;
             }
