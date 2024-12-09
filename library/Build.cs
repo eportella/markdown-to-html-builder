@@ -229,7 +229,7 @@ blockquote
     padding-inline-start: 1em;
     border-left: solid 0.25em var(--color-surface-a50);
     background-color: rgb(from var(--color-surface-a50) r g b / var(--color-background-opacity));
-    color: var(--color-surface-a20);
+    color: var(--color-surface-a70);
 }
 blockquote > p
 {
