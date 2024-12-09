@@ -29,17 +29,31 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator) : IR
             ) ??
             request.RepositoryOnwer;
 
-        var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = request.SourcePath }, cancellationToken);
-        await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }, cancellationToken))
+        var sourceDirectoryInfo = await mediator
+            .Send(new DirectoryInfoGetRequest 
+            { 
+                Path = request.SourcePath 
+            }, 
+            cancellationToken);
+
+        await foreach (var source in mediator
+            .CreateStream(new MarkdownFileInfoGetStreamRequest 
+            { 
+                DirectoryInfo = sourceDirectoryInfo 
+            }, 
+            cancellationToken)
+        )
         {
-            var partial = source.FullName.Replace(source.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
+            var sufix = source.FullName
+                .Replace(source.Name, string.Empty)
+                .Replace(sourceDirectoryInfo.FullName, string.Empty);
 
             var target = await mediator
                         .Send(new DirectoryInfoGetRequest
                         {
-                            Path = string.IsNullOrWhiteSpace(partial) ?
+                            Path = string.IsNullOrWhiteSpace(sufix) ?
                                 request.TargetPath :
-                                $"{request.TargetPath}{Path.DirectorySeparatorChar}{partial}"
+                                $"{request.TargetPath}{Path.DirectorySeparatorChar}{sufix}"
                         },
                          cancellationToken);
 

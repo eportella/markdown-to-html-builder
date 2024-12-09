@@ -10,22 +10,20 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
 {
     public async Task Handle(MarkdownFileInfoBuildRequest request, CancellationToken cancellationToken)
     {
-        var content = (
+        var built = (
             await mediator
                 .Send(new BuildRequest
                 {
                     Title = request.Title,
                     Url = request.Url,
                     Source = await mediator
-                            .Send(new FileInfoTextReadRequest
-                            {
-                                FileInfo = request.Source
-                            },
-                                cancellationToken
-                            ),
+                        .Send(new FileInfoTextReadRequest
+                        {
+                            FileInfo = request.Source
+                        },
+                        cancellationToken),
                 },
-                    cancellationToken
-                )
+                cancellationToken)
             )?
             .Target?
             .Built;
@@ -35,6 +33,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
 
         var fileInfo = request.Target;
         using var fileStrem = fileInfo!.CreateText();
-        await fileStrem.WriteAsync(content);
+        await fileStrem.WriteAsync(built);
     }
 }
