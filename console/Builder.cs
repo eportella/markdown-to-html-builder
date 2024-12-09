@@ -323,6 +323,19 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     const string SVG_CAUTION = @"(?'SVG_CAUTION'\[!CAUTION\])";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
+    const string STYLE = @"
+html 
+{
+    display:flex; 
+    justify-content:center;
+} 
+html > body 
+{
+    display:flex; 
+    flex-direction:column; 
+    max-width: 1024px; 
+    flex:1 1 auto; 
+}";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -344,7 +357,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{element.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{element.Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{element.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>{STYLE}</style></head>{element.Children.Build()}</html>";
         return element;
     }
 
