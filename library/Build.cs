@@ -170,11 +170,13 @@ blockquote > p
     margin-block-start: 0.2em;
     margin-block-end: 0.5em;
 }
-blockquote > p > span.icon
-{
-    display: block;
+blockquote > p > span.icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-top: 0.85em;
     margin-bottom: 0.85em;
+    column-gap: 0.5em;
 }
 blockquote.note
 {
