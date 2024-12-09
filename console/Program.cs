@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 var serviceCollection = new ServiceCollection();
 serviceCollection
@@ -16,19 +14,15 @@ var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path
 if (sourceDirectoryInfo == default)
     return;
 
-using var client = serviceProvider
-    .GetRequiredService<IHttpClientFactory>()
-    .CreateClient();
-client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("repository-owner", Environment.GetCommandLineArgs()[4]));
-
 var owner = (
-    await client
-        .GetFromJsonAsync<User>(
-            $"https://api.github.com/users/{Environment.GetCommandLineArgs()[4]}",
-            CancellationToken.None
-        )
-    )?
-    .Name ?? Environment.GetCommandLineArgs()[4];
+    await mediator
+        .Send(new GitHubRepositoryOwnerUserNameGetRequest
+        {
+            Name = Environment.GetCommandLineArgs()[4]
+        }, 
+        CancellationToken.None)
+    ) ?? 
+    Environment.GetCommandLineArgs()[4];
 
 await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }))
 {
@@ -51,9 +45,4 @@ await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStream
             Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}"),
         });
 
-}
-
-internal class User
-{
-    public string? Name { get; set; }
 }
