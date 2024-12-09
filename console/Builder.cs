@@ -344,7 +344,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{element.Children.Build()}</html>";
         return element;
     }
 
@@ -358,7 +358,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}</body>";
+        body.Built = @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{body.Children.Build()}</body>";
         return [body];
     }
 
@@ -612,7 +612,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h1.Children = Build(h1, content).ToArray();
-                hi.Built = $"<h1>{Children.Build()}</h1>";
+                hi.Built = $"<h1>{h1.Children.Build()}</h1>";
                 yield return h1;
                 continue;
             }
@@ -625,7 +625,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h2.Children = Build(h2, content).ToArray();
-                h2.Built = $"<h2>{Children.Build()}</h2>";
+                h2.Built = $"<h2>{h2.Children.Build()}</h2>";
                 yield return h2;
                 continue;
             }
@@ -638,7 +638,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h3.Children = Build(h3, content).ToArray();
-                h3.Built = $"<h3>{Children.Build()}</h3>";
+                h3.Built = $"<h3>{h3.Children.Build()}</h3>";
                 yield return h3;
                 continue;
             }
@@ -651,7 +651,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h4.Children = Build(h4, content).ToArray();
-                h4.Built = $"<h4>{Children.Build()}</h4>";
+                h4.Built = $"<h4>{h4.Children.Build()}</h4>";
                 yield return h4;
                 continue;
             }
@@ -664,7 +664,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h5.Children = Build(h5, content).ToArray();
-                h5.Built = $"<h5>{Children.Build()}</h5>";
+                h5.Built = $"<h5>{h5.Children.Build()}</h5>";
                 yield return h5;
                 continue;
             }
@@ -677,7 +677,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h6.Children = Build(h6, content).ToArray();
-                h6.Built = $"<h6>{Children.Build()}</h6>";
+                h6.Built = $"<h6>{h6.Children.Build()}</h6>";
                 yield return h6;
                 continue;
             }
@@ -707,7 +707,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                             Parent = parent,
                         };
                         ul.Children = Build(ul, content).ToArray();
-                        ul.Built = $"<ul>{Children.Build()}</ul>";
+                        ul.Built = $"<ul>{ul.Children.Build()}</ul>";
                         yield return ul;
                         continue;
                     }
@@ -720,7 +720,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                             Parent = parent,
                         };
                         ol.Children = Build(ol, content).ToArray();
-                        ol.Built = $"<ol>{Children.Build()}</ol>";
+                        ol.Built = $"<ol>{ol.Children.Build()}</ol>";
                         yield return ol;
                         continue;
                     }
@@ -737,7 +737,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                         Parent = parent,
                     };
                     li.Children = Build(li, content).ToArray();
-                    li.Built = $"<li>{Children.Build()}</li>";
+                    li.Built = $"<li>{li.Children.Build()}</li>";
                     yield return li;
                     continue;
                 }
