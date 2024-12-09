@@ -324,41 +324,43 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
     const string STYLE = @"
+:root
+{
+    --color-note-a0: #1f6feb;
+    --color-note-a10: #4e7dee;
+    --color-note-a20: #6c8cf1;
+    --color-note-a30: #859cf3;
+    --color-note-a40: #9bacf6;
+    --color-note-a50: #b0bcf8;
 
---color-note-a0: #1f6feb;
---color-note-a10: #4e7dee;
---color-note-a20: #6c8cf1;
---color-note-a30: #859cf3;
---color-note-a40: #9bacf6;
---color-note-a50: #b0bcf8;
+    --color-tip-a0: #3fb950;
+    --color-tip-a10: #5bc164;
+    --color-tip-a20: #73c977;
+    --color-tip-a30: #89d18a;
+    --color-tip-a40: #9ed99d;
+    --color-tip-a50: #b2e1b0;
 
---color-tip-a0: #3fb950;
---color-tip-a10: #5bc164;
---color-tip-a20: #73c977;
---color-tip-a30: #89d18a;
---color-tip-a40: #9ed99d;
---color-tip-a50: #b2e1b0;
+    --color-important-a0: #ab7df8;
+    --color-important-a10: #b68bf9;
+    --color-important-a20: #c099fa;
+    --color-important-a30: #caa8fb;
+    --color-important-a40: #d3b6fc;
+    --color-important-a50: #dcc4fd;
 
---color-important-a0: #ab7df8;
---color-important-a10: #b68bf9;
---color-important-a20: #c099fa;
---color-important-a30: #caa8fb;
---color-important-a40: #d3b6fc;
---color-important-a50: #dcc4fd;
+    --color-warning-a0: #d29922;
+    --color-warning-a10: #d9a440;
+    --color-warning-a20: #e0af59;
+    --color-warning-a30: #e6ba71;
+    --color-warning-a40: #ecc588;
+    --color-warning-a50: #f1d0a0;
 
---color-warning-a0: #d29922;
---color-warning-a10: #d9a440;
---color-warning-a20: #e0af59;
---color-warning-a30: #e6ba71;
---color-warning-a40: #ecc588;
---color-warning-a50: #f1d0a0;
-
---color-caution-a0: #f85149;
---color-caution-a10: #fc685b;
---color-caution-a20: #ff7e6e;
---color-caution-a30: #ff9182;
---color-caution-a40: #ffa496;
---color-caution-a50: #ffb7aa;
+    --color-caution-a0: #f85149;
+    --color-caution-a10: #fc685b;
+    --color-caution-a20: #ff7e6e;
+    --color-caution-a30: #ff9182;
+    --color-caution-a40: #ffa496;
+    --color-caution-a50: #ffb7aa;
+}
 
 html 
 {
