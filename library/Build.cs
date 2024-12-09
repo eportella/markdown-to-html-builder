@@ -138,15 +138,16 @@ html > body
     flex: 1 1 auto;
 }
 @media (prefers-color-scheme: dark) {
-  body {
+  html {
     color: #eee;
     background: var(--color-surface-a0);
   }
 
-  body a {
+  html > body a {
     color: #809fff;
   }
 }
+
 h1
 {
     border-bottom: solid 0.085em var(--color-surface-a200);
