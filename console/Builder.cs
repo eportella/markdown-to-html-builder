@@ -429,6 +429,10 @@ a
 {
     text-decoration: none;
 }
+li::marker
+{
+    color: var(--color-surface-a50);
+}
 p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote
 {
     margin-block-start: 0.2em;
