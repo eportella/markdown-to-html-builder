@@ -754,12 +754,12 @@ blockquote.tip
                     Children = default,
                 };
 
-                var class = string.Empty;
+                var attribute = string.Empty;
                 if(blockquote.Source.StartsWith("[!NOTE]")) {
-                    class = @" class=""note""";
+                    attribute = @" class=""note""";
                 }
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
-                blockquote.Built = $"<blockquote{class}>{blockquote.Children.Build()}</blockquote>";
+                blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
             }
