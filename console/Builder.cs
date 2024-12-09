@@ -761,6 +761,15 @@ blockquote.tip
                 else if(blockquote.Source.StartsWith("[!TIP]")) {
                     attribute = @" class=""tip""";
                 }
+                else if(blockquote.Source.StartsWith("[!IMPORTANT]")) {
+                    attribute = @" class=""important""";
+                }
+                else if(blockquote.Source.StartsWith("[!WARNING]")) {
+                    attribute = @" class=""warning""";
+                }
+                else if(blockquote.Source.StartsWith("[!CAUTION]")) {
+                    attribute = @" class=""caution""";
+                }
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
