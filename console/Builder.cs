@@ -494,7 +494,7 @@ blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, block
 {
     color: var(--color-caution-surface-a0);
 }
-blockquote > p > sgv
+blockquote > p > svg
 {
     display: block;
     margin-top: 0.85em;
