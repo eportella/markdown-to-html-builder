@@ -425,6 +425,10 @@ h1
 {
     border-bottom: solid 0.85em var(--color-surface-a200);
 }
+a
+{
+    text-decoration: none;
+}
 p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote
 {
     margin-block-start: 0.2em;
