@@ -427,6 +427,7 @@ p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote
 blockquote
 {
     margin-inline-start: 0em;
+    margin-inline-end: 0em;
     padding-inline-start: 1em;
     border-left: solid 0.25em var(--color-surface-a0);
     background-color: rgb(from var(--color-surface-a50) r g b / var(--color-background-opacity));
