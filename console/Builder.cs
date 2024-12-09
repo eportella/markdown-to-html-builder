@@ -361,7 +361,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     --color-caution-a40: #ffa496;
     --color-caution-a50: #ffb7aa;
 
-    --color-background-alpha: 0.5;
+    --color-background-opacity: 0.1;
 }
 
 html 
@@ -381,14 +381,14 @@ blockquote.note
     border-left: solid 0.25em var(--color-note-a0);
     margin-inline-start: 0em;
     padding-inline-start: 1em;
-    background-color: rgba(var(--color-note-a0), var(--color-background-alpha));
+    background-color: rgb(from var(--color-note-a50) r g b / var(--color-background-opacity));
 }
 blockquote.tip
 {
     border-left: solid 0.25em var(--color-tip-a0);
     margin-inline-start: 0em;
     padding-inline-start: 1em;
-    background-color: rgba(var(--color-tip-a0), var(--color-background-alpha));
+    background-color: rgb(from var(--color-tip-a50) r g b / var(--color-background-opacity));
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
