@@ -368,6 +368,41 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     --color-surface-a40: #717171;
     --color-surface-a50: #8b8b8b;
 
+    --color-note-surface-a0: #232c4b;
+    --color-note-surface-a10: #39405d;
+    --color-note-surface-a20: #505570;
+    --color-note-surface-a30: #676b83;
+    --color-note-surface-a40: #7f8297;
+    --color-note-surface-a50: #979aab;
+
+    --color-tip-surface-a0: #243f25;
+    --color-tip-surface-a10: #3a523a;
+    --color-tip-surface-a20: #506650;
+    --color-tip-surface-a30: #677a66;
+    --color-tip-surface-a40: #7f8f7e;
+    --color-tip-surface-a50: #97a496;
+
+    --color-important-surface-a0: #3c304e;
+    --color-important-surface-a10: #4f4460;
+    --color-important-surface-a20: #645972;
+    --color-important-surface-a30: #786f85;
+    --color-important-surface-a40: #8d8598;
+    --color-important-surface-a50: #a39cac;
+
+    --color-warning-surface-a0: #46361c;
+    --color-warning-surface-a10: #594932;
+    --color-warning-surface-a20: #6d5e48;
+    --color-warning-surface-a30: #817360;
+    --color-warning-surface-a40: #958978;
+    --color-warning-surface-a50: #a99f92;
+
+    --color-caution-surface-a0: #512722;
+    --color-caution-surface-a10: #643c37;
+    --color-caution-surface-a20: #77524d;
+    --color-caution-surface-a30: #8a6964;
+    --color-caution-surface-a40: #9d807c;
+    --color-caution-surface-a50: #b19894;
+
     --color-background-opacity: 0.1;
 }
 
@@ -402,25 +437,45 @@ blockquote.note
     border-left: solid 0.25em var(--color-note-a0);
     background-color: rgb(from var(--color-note-a50) r g b / var(--color-background-opacity));
 }
+blockquote.note > h1, blockquote.note > h2, blockquote.note > h3, blockquote.note > h4, blockquote.note > h5, blockquote.note > h6
+{
+    color: var(--color-note-surface-a0);
+}
 blockquote.tip
 {
     border-left: solid 0.25em var(--color-tip-a0);
     background-color: rgb(from var(--color-tip-a50) r g b / var(--color-background-opacity));
+}
+blockquote.tip > h1, blockquote.tip > h2, blockquote.tip > h3, blockquote.tip > h4, blockquote.tip > h5, blockquote.tip > h6
+{
+    color: var(--color-tip-surface-a0);
 }
 blockquote.important
 {
     border-left: solid 0.25em var(--color-important-a0);
     background-color: rgb(from var(--color-important-a50) r g b / var(--color-background-opacity));
 }
+blockquote.important > h1, blockquote.important > h2, blockquote.important > h3, blockquote.important > h4, blockquote.important > h5, blockquote.important > h6
+{
+    color: var(--color-important-surface-a0);
+}
 blockquote.warning
 {
     border-left: solid 0.25em var(--color-warning-a0);
     background-color: rgb(from var(--color-warning-a50) r g b / var(--color-background-opacity));
 }
+blockquote.warning > h1, blockquote.warning > h2, blockquote.warning > h3, blockquote.warning > h4, blockquote.warning > h5, blockquote.warning > h6
+{
+    color: var(--color-warning-surface-a0);
+}
 blockquote.caution
 {
     border-left: solid 0.25em var(--color-caution-a0);
     background-color: rgb(from var(--color-caution-a50) r g b / var(--color-background-opacity));
+}
+blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, blockquote.caution > h4, blockquote.caution > h5, blockquote.caution > h6
+{
+    color: var(--color-caution-surface-a0);
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
