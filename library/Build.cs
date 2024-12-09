@@ -292,7 +292,7 @@ blockquote.caution > p > span.icon
 cite
 {
     font-size: 0.85em;
-    color: var(--color-surface-a40);
+    color: var(--color-surface-a70);
     vertical-align: super;
 }
 ";
