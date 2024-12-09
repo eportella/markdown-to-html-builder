@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using System.Runtime.CompilerServices;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-[assembly: InternalsVisibleTo("test")]
 
 var serviceCollection = new ServiceCollection();
 serviceCollection

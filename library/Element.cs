@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-[assembly: InternalsVisibleTo("test")]
 public interface IElement
 {
     IElement? Parent { get; init; }
