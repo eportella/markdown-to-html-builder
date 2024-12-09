@@ -48,7 +48,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         --color-note-a20: #172f55;
         --color-note-a30: #193d75;
         --color-note-a40: #1b4fa0;
-        --color-note-a50: #1d61cb; //# AQUI
+        --color-note-a50: #1d61cb;
         --color-note-a60: #4387e0;
         --color-note-a70: #6eacf3;
         --color-note-a80: #98c7f8;
@@ -120,7 +120,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         --color-note-a20: #9ccdff;
         --color-note-a30: #73b4ff;
         --color-note-a40: #4894f7;
-        --color-note-a50: #1f6feb; //# AQUI
+        --color-note-a50: #1f6feb;
         --color-note-a60: #1052c4;
         --color-note-a70: #05389e;
         --color-note-a80: #002478;
