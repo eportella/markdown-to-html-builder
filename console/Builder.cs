@@ -482,6 +482,7 @@ cite
 {
     font-size: 0.85em;
     color: var(--color-surface-a30);
+    vertical-align: super;
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
