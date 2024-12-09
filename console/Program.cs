@@ -1,16 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using System.Runtime.CompilerServices;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-[assembly: InternalsVisibleTo("test")]
 
 var serviceCollection = new ServiceCollection();
 serviceCollection
     .AddHttpClient()
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeElapsedPipelineBehavior<,>))
     .AddTransient(typeof(IStreamPipelineBehavior<,>), typeof(TimeElapsedStreamPipelineBehavior<,>))
-    .AddMediatR(mediatorServiceConfiguration => mediatorServiceConfiguration.RegisterServicesFromAssemblyContaining<Program>());
+    .AddMediatR(mediatorServiceConfiguration => mediatorServiceConfiguration.RegisterServicesFromAssemblyContaining<BuildRequest>());
 var serviceProvider = serviceCollection.BuildServiceProvider();
 var mediator = serviceProvider.GetRequiredService<IMediator>();
 var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[1] });
