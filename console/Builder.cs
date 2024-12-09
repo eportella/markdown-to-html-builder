@@ -757,6 +757,9 @@ blockquote.tip
                 var attribute = string.Empty;
                 if(blockquote.Source.StartsWith("[!NOTE]")) {
                     attribute = @" class=""note""";
+                } 
+                else if(blockquote.Source.StartsWith("[!TIP]")) {
+                    attribute = @" class=""tip""";
                 }
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
