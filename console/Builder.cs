@@ -478,6 +478,10 @@ blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, block
 {
     color: var(--color-caution-surface-a0);
 }
+cite
+{
+    font-size: 0.7em;
+}
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
