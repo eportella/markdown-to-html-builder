@@ -249,6 +249,17 @@ cite
     color: var(--color-surface-a30);
     vertical-align: super;
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+    background: var(--color-surface-a0);
+  }
+
+  body a {
+    color: #809fff;
+  }
+}
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
