@@ -156,14 +156,14 @@ internal class Html : IElement
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
     internal string? Source { get; init; }
-    public string? Built { get => $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{Children.Build()}</html>"; }
+    public string? Built { get; internal set; }
     public string? Title { get; init; }
 }
 internal class Body : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}</body>"; }
+    public string? Built { get; internal set; }
     public string? Title { get; init; }
     public string? Url { get; init; }
     internal string? Source { get; init; }
@@ -180,7 +180,7 @@ internal class H1 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h1>{Children.Build()}</h1>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -188,7 +188,7 @@ internal class H2 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h2>{Children.Build()}</h2>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -196,7 +196,7 @@ internal class H3 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h3>{Children.Build()}</h3>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -204,7 +204,7 @@ internal class H4 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h4>{Children.Build()}</h4>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -212,7 +212,7 @@ internal class H5 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h5>{Children.Build()}</h5>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -220,7 +220,7 @@ internal class H6 : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<h6>{Children.Build()}</h6>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -236,7 +236,7 @@ internal class Ul : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<ul>{Children.Build()}</ul>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -244,7 +244,7 @@ internal class Ol : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<ol>{Children.Build()}</ol>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -252,7 +252,7 @@ internal class LI : IElement
 {
     public IElement? Parent { get; init; }
     public IElement[]? Children { get; internal set; }
-    public string? Built { get => $"<li>{Children.Build()}</li>"; }
+    public string? Built { get; internal set; }
     internal string? Source { get; init; }
 }
 
@@ -344,6 +344,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = default,
         };
         element.Children = Build(element, request);
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><style>html {{ display:flex; justify-content:center; }} html > body {{ display:flex; flex-direction:column; max-width: 1024px; flex:1 1 auto; }}</style></head>{Children.Build()}</html>";
         return element;
     }
 
@@ -357,6 +358,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
+        body.Built = @$"<body><h1><a href=""{Url}""/>{Title}</a></h1>{Children.Build()}</body>";
         return [body];
     }
 
@@ -610,6 +612,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h1.Children = Build(h1, content).ToArray();
+                hi.Built = $"<h1>{Children.Build()}</h1>";
                 yield return h1;
                 continue;
             }
@@ -622,6 +625,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h2.Children = Build(h2, content).ToArray();
+                h2.Built = $"<h2>{Children.Build()}</h2>";
                 yield return h2;
                 continue;
             }
@@ -634,6 +638,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h3.Children = Build(h3, content).ToArray();
+                h3.Built = $"<h3>{Children.Build()}</h3>";
                 yield return h3;
                 continue;
             }
@@ -646,6 +651,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h4.Children = Build(h4, content).ToArray();
+                h4.Built = $"<h4>{Children.Build()}</h4>";
                 yield return h4;
                 continue;
             }
@@ -658,6 +664,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h5.Children = Build(h5, content).ToArray();
+                h5.Built = $"<h5>{Children.Build()}</h5>";
                 yield return h5;
                 continue;
             }
@@ -670,6 +677,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                     Parent = parent,
                 };
                 h6.Children = Build(h6, content).ToArray();
+                h6.built = $"<h6>{Children.Build()}</h6>";
                 yield return h6;
                 continue;
             }
@@ -699,6 +707,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                             Parent = parent,
                         };
                         ul.Children = Build(ul, content).ToArray();
+                        ul.Built = $"<ul>{Children.Build()}</ul>";
                         yield return ul;
                         continue;
                     }
@@ -711,6 +720,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                             Parent = parent,
                         };
                         ol.Children = Build(ol, content).ToArray();
+                        ol.Built = $"<ol>{Children.Build()}</ol>";
                         yield return ol;
                         continue;
                     }
@@ -727,6 +737,7 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
                         Parent = parent,
                     };
                     li.Children = Build(li, content).ToArray();
+                    li.Built = $"<li>{Children.Build()}</li>";
                     yield return li;
                     continue;
                 }
