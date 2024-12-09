@@ -423,7 +423,7 @@ html > body
 }
 h1
 {
-    border-bottom: solid 0.85em var(--color-surface-a200);
+    border-bottom: solid 0.085em var(--color-surface-a200);
 }
 a
 {
