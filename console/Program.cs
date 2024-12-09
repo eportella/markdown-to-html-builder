@@ -20,6 +20,8 @@ if (sourcePath == default)
     return;
 if (targetPath == default)
     return;
+if(htmlFileName == default)
+    return;
 
 var title = (
     await mediator
