@@ -183,6 +183,9 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     }
 }
 
+html, body {
+    font-family: Segoe UI, SegoeUI, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
 html 
 {
     display: flex; 
