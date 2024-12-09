@@ -373,15 +373,16 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
 
 html 
 {
-    display:flex; 
-    justify-content:center;
+    display: flex; 
+    justify-content: center;
+    color: var(--color-surface-a0);
 } 
 html > body 
 {
-    display:flex; 
-    flex-direction:column; 
+    display: flex; 
+    flex-direction: column; 
     max-width: 1024px; 
-    flex:1 1 auto; 
+    flex: 1 1 auto;
 }
 blockquote
 {
@@ -389,6 +390,7 @@ blockquote
     padding-inline-start: 1em;
     border-left: solid 0.25em var(--color-surface-a0);
     background-color: rgb(from var(--color-surface-a50) r g b / var(--color-background-opacity));
+    color: var(--color-surface-a20);
 }
 blockquote.note
 {
