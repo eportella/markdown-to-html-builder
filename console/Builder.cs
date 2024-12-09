@@ -384,9 +384,10 @@ html > body
     max-width: 1024px; 
     flex: 1 1 auto;
 }
-p
+p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote
 {
-    margin-block-start: 0em;
+    margin-block-start: 0.2em;
+    margin-block-end: 1em;
 }
 blockquote
 {
