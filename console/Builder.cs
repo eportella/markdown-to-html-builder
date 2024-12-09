@@ -384,6 +384,10 @@ html > body
     max-width: 1024px; 
     flex: 1 1 auto;
 }
+p
+{
+    margin-block-start: 0em;
+}
 blockquote
 {
     margin-inline-start: 0em;
