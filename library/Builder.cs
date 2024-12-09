@@ -4,7 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using MediatR;
-internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+[assembly: InternalsVisibleTo("test")]
+public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
@@ -23,7 +24,7 @@ internal sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipeli
     }
 }
 
-internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
+public sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
         where TRequest : IStreamRequest<TResponse>
 {
     Stopwatch Stopwatch { get; }
@@ -46,7 +47,7 @@ internal sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : I
     }
 }
 
-internal sealed class DirectoryInfoGetRequest : IRequest<DirectoryInfo?>
+public sealed class DirectoryInfoGetRequest : IRequest<DirectoryInfo?>
 {
     public string? Path { get; set; }
 }
@@ -74,7 +75,7 @@ internal sealed class HtmlFileGetStreamHandler : IStreamRequestHandler<HtmlFileG
     }
 }
 
-internal sealed class MarkdownFileInfoGetStreamRequest : IStreamRequest<FileInfo>
+public sealed class MarkdownFileInfoGetStreamRequest : IStreamRequest<FileInfo>
 {
     public DirectoryInfo? DirectoryInfo { get; init; }
 }
@@ -102,7 +103,7 @@ internal sealed class StringGetRequestHandler : IRequestHandler<FileInfoTextRead
     }
 }
 
-internal sealed class MarkdownFileInfoBuildRequest : IRequest
+public sealed class MarkdownFileInfoBuildRequest : IRequest
 {
     public string? Title { get; init; }
     public string? Url { get; init; }
