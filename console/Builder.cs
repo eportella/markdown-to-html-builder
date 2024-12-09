@@ -361,6 +361,13 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     --color-caution-a40: #ffa496;
     --color-caution-a50: #ffb7aa;
 
+    --color-surface-a0: #121212;
+    --color-surface-a10: #282828;
+    --color-surface-a20: #3f3f3f;
+    --color-surface-a30: #575757;
+    --color-surface-a40: #717171;
+    --color-surface-a50: #8b8b8b;
+
     --color-background-opacity: 0.1;
 }
 
@@ -376,19 +383,37 @@ html > body
     max-width: 1024px; 
     flex:1 1 auto; 
 }
+blockquote
+{
+    margin-inline-start: 0em;
+    padding-inline-start: 1em;
+    border-left: solid 0.25em var(--color-surface-a0);
+    background-color: rgb(from var(--color-surface-a50) r g b / var(--color-background-opacity));
+}
 blockquote.note
 {
     border-left: solid 0.25em var(--color-note-a0);
-    margin-inline-start: 0em;
-    padding-inline-start: 1em;
     background-color: rgb(from var(--color-note-a50) r g b / var(--color-background-opacity));
 }
 blockquote.tip
 {
     border-left: solid 0.25em var(--color-tip-a0);
-    margin-inline-start: 0em;
-    padding-inline-start: 1em;
     background-color: rgb(from var(--color-tip-a50) r g b / var(--color-background-opacity));
+}
+blockquote.important
+{
+    border-left: solid 0.25em var(--color-important-a0);
+    background-color: rgb(from var(--color-important-a50) r g b / var(--color-background-opacity));
+}
+blockquote.warning
+{
+    border-left: solid 0.25em var(--color-warning-a0);
+    background-color: rgb(from var(--color-warning-a50) r g b / var(--color-background-opacity));
+}
+blockquote.caution
+{
+    border-left: solid 0.25em var(--color-caution-a0);
+    background-color: rgb(from var(--color-caution-a50) r g b / var(--color-background-opacity));
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
