@@ -40,7 +40,9 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
     const string STYLE = @"
-
+:root {
+    --color-background-opacity: 0.1;
+}
 @media (prefers-color-scheme: dark) {
     :root {
         --color-note-a0: #121929;
@@ -108,8 +110,6 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         --color-surface-a70: #d1d1d1;
         --color-surface-a80: #e2e2e2;
         --color-surface-a90: #f1f1f1;
-
-        --color-background-opacity: 0.1;
     }
 }
 
@@ -180,8 +180,6 @@ internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildR
         --color-surface-a70: #757575;
         --color-surface-a80: #4f4f4f;
         --color-surface-a90: #292929;
-
-        --color-background-opacity: 0.1;
     }
 }
 
