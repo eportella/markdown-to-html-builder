@@ -494,6 +494,17 @@ blockquote.caution > h1, blockquote.caution > h2, blockquote.caution > h3, block
 {
     color: var(--color-caution-surface-a0);
 }
+blockquote > p > sgv
+{
+    display: block;
+    margin-top: 0.85em;
+    margin-bottom: 0.85em;
+}
+blockquote > p
+{
+    margin-block-start: 0.2em;
+    margin-block-end: 0.5em;
+}
 cite
 {
     font-size: 0.85em;
