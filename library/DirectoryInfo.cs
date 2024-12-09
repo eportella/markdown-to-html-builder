@@ -1,5 +1,5 @@
 using MediatR;
-public sealed class DirectoryInfoGetRequest : IRequest<DirectoryInfo>
+internal sealed class DirectoryInfoGetRequest : IRequest<DirectoryInfo>
 {
     public string? Path { get; set; }
 }

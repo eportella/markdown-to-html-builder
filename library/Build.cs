@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using MediatR;
-public sealed class BuildRequest : IRequest<BuildResponse>
+internal sealed class BuildRequest : IRequest<BuildResponse>
 {
     public string? Title { get; init; }
     public string? Source { get; init; }
