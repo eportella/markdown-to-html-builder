@@ -137,6 +137,16 @@ html > body
     max-width: 1024px; 
     flex: 1 1 auto;
 }
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+    background: var(--color-surface-a0);
+  }
+
+  body a {
+    color: #809fff;
+  }
+}
 h1
 {
     border-bottom: solid 0.085em var(--color-surface-a200);
@@ -248,17 +258,6 @@ cite
     font-size: 0.85em;
     color: var(--color-surface-a30);
     vertical-align: super;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    color: #eee;
-    background: var(--color-surface-a0);
-  }
-
-  body a {
-    color: #809fff;
-  }
 }
 ";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
