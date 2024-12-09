@@ -9,21 +9,29 @@ serviceCollection
     .AddMediatR(mediatorServiceConfiguration => mediatorServiceConfiguration.RegisterServicesFromAssemblyContaining<BuildRequest>());
 var serviceProvider = serviceCollection.BuildServiceProvider();
 var mediator = serviceProvider.GetRequiredService<IMediator>();
-var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = Environment.GetCommandLineArgs()[1] });
+var sourcePath = Environment.GetCommandLineArgs()[1];
+var targetPath = Environment.GetCommandLineArgs()[2];
+var htmlFileName = Environment.GetCommandLineArgs()[3];
+var repositoryOnwer = Environment.GetCommandLineArgs()[4];
+var baseUrl = Environment.GetCommandLineArgs()[5];
 
-if (sourceDirectoryInfo == default)
+
+if (sourcePath == default)
+    return;
+if (targetPath == default)
     return;
 
-var owner = (
+var title = (
     await mediator
         .Send(new GitHubRepositoryOwnerUserNameGetRequest
         {
-            Name = Environment.GetCommandLineArgs()[4]
-        }, 
+            Name = repositoryOnwer
+        },
         CancellationToken.None)
-    ) ?? 
-    Environment.GetCommandLineArgs()[4];
+    ) ??
+    repositoryOnwer;
 
+var sourceDirectoryInfo = await mediator.Send(new DirectoryInfoGetRequest { Path = sourcePath });
 await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStreamRequest { DirectoryInfo = sourceDirectoryInfo }))
 {
     var partial = source.FullName.Replace(source.Name, string.Empty).Replace(sourceDirectoryInfo.FullName, string.Empty);
@@ -32,17 +40,17 @@ await foreach (var source in mediator.CreateStream(new MarkdownFileInfoGetStream
                 .Send(new DirectoryInfoGetRequest
                 {
                     Path = string.IsNullOrWhiteSpace(partial) ?
-                        Environment.GetCommandLineArgs()[2] :
-                        $"{Environment.GetCommandLineArgs()[2]}{Path.DirectorySeparatorChar}{partial}"
+                        targetPath :
+                        $"{targetPath}{Path.DirectorySeparatorChar}{partial}"
                 });
 
     await mediator
         .Send(new MarkdownFileInfoBuildRequest
         {
-            Title = owner,
-            Url = Environment.GetCommandLineArgs()[5],
+            Title = title,
+            Url = baseUrl,
             Source = source,
-            Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{Environment.GetCommandLineArgs()[3]}"),
+            Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{htmlFileName}"),
         });
 
 }
