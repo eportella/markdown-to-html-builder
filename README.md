@@ -1,3 +1,3 @@
 # markdown-to-html-builder
-Apenas mais um compilador de markdown para html.
+Apenas mais um construtor de html a partir de markdown.
 
