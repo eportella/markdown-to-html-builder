@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using MediatR;
 public sealed class InputBuildRequest : IRequest<InputBuildResponse>
@@ -10,7 +11,7 @@ internal sealed class InputBuildResponse
     public string? TargetPath { get; init; }
     public string? TargetFileName { get; init; }
     public string? RepositoryOnwer { get; init; }
-    public string? BaseUrl { get; init; }
+    public Uri? BaseUrl { get; init; }
 }
 internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildRequest, InputBuildResponse>
 {
@@ -62,7 +63,7 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
             TargetPath = matches.Select(match => match.Groups["TARGET_PATH_VALUE"]).Single(group => group.Success).Value,
             TargetFileName = matches.Select(match => match.Groups["TARGET_FILE_NAME_VALUE"]).Single(group => group.Success).Value,
             RepositoryOnwer = matches.Select(match => match.Groups["REPOSITORY_OWNER_VALUE"]).Single(group => group.Success).Value,
-            BaseUrl = matches.Select(match => match.Groups["SOURCE_URL_BASE_VALUE"]).Single(group => group.Success).Value,
+            BaseUrl = new Uri(matches.Select(match => match.Groups["SOURCE_URL_BASE_VALUE"]).Single(group => group.Success).Value),
         };
     }
 }
