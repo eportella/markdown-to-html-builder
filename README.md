@@ -14,4 +14,4 @@ O Construtor suporta seis tipos de títulos
 
 ## Páragrafos
 há suporte para apenas um nível de párafrago snedo ele o 
-[p](https://eportella.github.io/markdown-to-html-builder/p);
+[p](https://eportella.github.io/markdown-to-html-builder/p).
