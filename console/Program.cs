@@ -10,9 +10,5 @@ await new ServiceCollection()
     .GetRequiredService<IMediator>()
     .Send(new MarkdownToHtmlBuildRequest
     {
-        SourcePath = Environment.GetCommandLineArgs()[1],
-        TargetPath = Environment.GetCommandLineArgs()[2],
-        HtmlFileName = Environment.GetCommandLineArgs()[3],
-        RepositoryOnwer = Environment.GetCommandLineArgs()[4],
-        BaseUrl = Environment.GetCommandLineArgs()[5],
+        Args = Environment.GetCommandLineArgs(),
     }, CancellationToken.None);
