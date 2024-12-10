@@ -337,7 +337,7 @@ c
         var arrange = new BuildRequest
         {
             Title = "--title--",
-            Url = "--url--",
+            Url = new Uri("https://github.com"),
             Source = informed
         };
 
