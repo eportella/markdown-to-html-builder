@@ -15,17 +15,16 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator) : IR
             },
             cancellationToken);
 
-        var title = input.BaseUrl!.AbsolutePath == "/" ?
-            (
+        var project = input.BaseUrl!.AbsolutePath.TrimStart('/');
+        var title = $"{(
                 await mediator
                     .Send(new GitHubRepositoryOwnerUserNameGetRequest
                     {
                         Name = input.RepositoryOnwer
                     },
                     CancellationToken.None)
-            ) ?? input.RepositoryOnwer :
-            input.BaseUrl!.AbsolutePath.TrimStart('/');
-
+            ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $"'{project}'")}"; 
+            
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
