@@ -6,7 +6,7 @@ internal sealed class BuildRequest : IRequest<BuildResponse>
 {
     public string? Title { get; init; }
     public string? Source { get; init; }
-    public string? Url { get; internal set; }
+    public Uri? Url { get; internal set; }
 }
 internal sealed class BuildResponse
 {

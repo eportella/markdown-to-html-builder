@@ -2,7 +2,7 @@ using MediatR;
 internal sealed class MarkdownFileInfoBuildRequest : IRequest
 {
     public string? Title { get; init; }
-    public string? Url { get; init; }
+    public Uri? Url { get; init; }
     public FileInfo? Source { get; init; }
     public FileInfo? Target { get; init; }
 }

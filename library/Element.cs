@@ -36,7 +36,7 @@ internal class Body : IElement
     public IElement[]? Children { get; internal set; }
     public string? Built { get; internal set; }
     public string? Title { get; init; }
-    public string? Url { get; init; }
+    public Uri? Url { get; init; }
 }
 internal class P : IElement
 {

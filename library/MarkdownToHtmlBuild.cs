@@ -12,18 +12,19 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator) : IR
             .Send(new InputBuildRequest
             {
                 Args = request.Args
-            }, 
+            },
             cancellationToken);
 
-        var onwer = (
-            await mediator
-                .Send(new GitHubRepositoryOwnerUserNameGetRequest
-                {
-                    Name = input.RepositoryOnwer
-                },
-                CancellationToken.None)
-            ) ??
-            input.RepositoryOnwer;
+        var title = input.BaseUrl!.AbsolutePath == "/" ?
+            (
+                await mediator
+                    .Send(new GitHubRepositoryOwnerUserNameGetRequest
+                    {
+                        Name = input.RepositoryOnwer
+                    },
+                    CancellationToken.None)
+            ) ?? input.RepositoryOnwer :
+            input.BaseUrl!.AbsolutePath.TrimStart('/');
 
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
@@ -56,7 +57,7 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator) : IR
             await mediator
                 .Send(new MarkdownFileInfoBuildRequest
                 {
-                    Title = onwer,
+                    Title = title,
                     Url = input.BaseUrl,
                     Source = source,
                     Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{input.TargetFileName}"),
