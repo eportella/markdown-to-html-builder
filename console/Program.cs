@@ -10,5 +10,5 @@ await new ServiceCollection()
     .GetRequiredService<IMediator>()
     .Send(new MarkdownToHtmlBuildRequest
     {
-        Args = Environment.GetCommandLineArgs().Skip(1).ToArray(),
+        Args = Environment.GetCommandLineArgs(),
     }, CancellationToken.None);
