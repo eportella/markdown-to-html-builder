@@ -18,17 +18,13 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
     {
         await Task.Yield();
 
-        Console.WriteLine("ARGS->" + string.Join("\n", request.Args ?? []));
+        if (request.Args == default)
+            throw new ArgumentNullException(nameof(request.Args));
 
-        var args = request.Args;
-
-        if (args == default)
-            throw new ArgumentNullException(nameof(args));
-
-        var matches = Regex.Matches(string.Join("\n", args), @"((?'SOURCE_PATH_KEY'--source-path)(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|((?'TARGET_PATH_KEY'--target-path)(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|((?'TARGET_FILE_NAME_KEY'--target-file-name)(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|((?'REPOSITORY_OWNER_KEY'--repository_owner)(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|(((?'SOURCE_URL_BASE_KEY'--source-url-base)(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+", RegexOptions.Multiline | RegexOptions.ExplicitCapture).Where(match => match.Success);
+        var matches = Regex.Matches(string.Join("\n", request.Args), @"((?'SOURCE_PATH_KEY'--source-path)(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|((?'TARGET_PATH_KEY'--target-path)(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|((?'TARGET_FILE_NAME_KEY'--target-file-name)(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|((?'REPOSITORY_OWNER_KEY'--repository_owner)(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|(((?'SOURCE_URL_BASE_KEY'--source-url-base)(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+", RegexOptions.Multiline | RegexOptions.ExplicitCapture).Where(match => match.Success);
 
         if (!matches.Any())
-            throw new ArgumentException($"'{nameof(args)}' not match");
+            throw new ArgumentException($"'{nameof(request.Args)}' not any match");
 
         if (!matches.Any(match => match.Groups["SOURCE_PATH_KEY"].Success))
             throw new ArgumentException($"'--source-path' not found");
