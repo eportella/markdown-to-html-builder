@@ -18,6 +18,8 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
     {
         await Task.Yield();
 
+        Console.WriteLine("ARGS->" + string.Join(string.Empty, request.Args ?? []));
+
         var args = request.Args;
 
         if (args == default)
@@ -25,37 +27,37 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
 
         var match = Regex.Match(@"(?'SOURCE_PATH_KEY'--source-path){1} (?'SOURCE_PATH_VALUE'.+?)( |$)|(?'TARGET_PATH_KEY'--target-path){1} (?'TARGET_PATH_VALUE'.+?)( |$)|(?'TARGET_FILE_KEY'--target-file-name){1} (?'TARGET_FILE_NAME_VALUE'.+?)( |$)|(?'REPOSITORY_OWNER_KEY'--repository_owner){1} (?'REPOSITORY_OWNER_VALUE'.+?)( |$)|((?'SOURCE_URL_BASE_KEY'--source-url-base){1} (?'SOURCE_URL_BASE_VALUE'.+?)( |$))", string.Join(string.Empty, args));
 
-        if(!match.Success)
+        if (!match.Success)
             throw new ArgumentException($"'{nameof(args)}' not match");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["SOURCE_PATH_KEY"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["SOURCE_PATH_KEY"].Value))
             throw new ArgumentException($"'--source-path' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["SOURCE_PATH_VALUE"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["SOURCE_PATH_VALUE"].Value))
             throw new ArgumentException($"value of '--source-path' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["TARGET_PATH_KEY"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["TARGET_PATH_KEY"].Value))
             throw new ArgumentException($"'--target-path' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["TARGET_PATH_VALUE"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["TARGET_PATH_VALUE"].Value))
             throw new ArgumentException($"value of '--target-path' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["TARGET_FILE_KEY"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["TARGET_FILE_KEY"].Value))
             throw new ArgumentException($"'--target-file-name' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["TARGET_FILE_NAME_VALUE"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["TARGET_FILE_NAME_VALUE"].Value))
             throw new ArgumentException($"value of '--target-file-name' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["REPOSITORY_OWNER_KEY"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["REPOSITORY_OWNER_KEY"].Value))
             throw new ArgumentException($"'--repository_owner' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["REPOSITORY_OWNER_VALUE"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["REPOSITORY_OWNER_VALUE"].Value))
             throw new ArgumentException($"value of '--repository_owner' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["SOURCE_URL_BASE_KEY"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["SOURCE_URL_BASE_KEY"].Value))
             throw new ArgumentException($"'--source-url-base' not found");
 
-        if(string.IsNullOrWhiteSpace(match.Groups["SOURCE_URL_BASE_VALUE"].Value))
+        if (string.IsNullOrWhiteSpace(match.Groups["SOURCE_URL_BASE_VALUE"].Value))
             throw new ArgumentException($"value of '--source-url-base' not found");
 
         return new InputBuildResponse
