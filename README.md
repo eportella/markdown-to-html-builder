@@ -13,5 +13,5 @@ O Construtor suporta seis tipos de títulos
 [h6](/h6/README.md).
 
 ## Páragrafos
-há suporte para apenas um nível de párafrago snedo ele o 
+há suporte para apenas um nível de parágrafo snedo ele o 
 [p](/p).
