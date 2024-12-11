@@ -1,7 +1,7 @@
 # Markdown to html builder
 
 >[!NOTE]
->Apenas mais um construtor de html a partir de markdown.
+>Apenas mais um construtor de html com base em um markdown.
 
 ## Títulos
 O Construtor suporta seis tipos de títulos 
