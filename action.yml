@@ -23,7 +23,7 @@ runs:
     - name: Run
       shell: bash
       run: >
-        cd $GITHUB_ACTION_PATH/console;
+        cd $GITHUB_ACTION_PATH/.console;
         dotnet restore;
         dotnet build;
         dotnet run --source-path ${{ inputs.source-path }} \
