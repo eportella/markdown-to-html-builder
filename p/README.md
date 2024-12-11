@@ -1,6 +1,3 @@
-Parágrafo
-
-
 Esse é o **Parágrafo**, ele pode ser usado em diversos pontos da página, mas sempre no início de cada linha para ela. O texto dele pode conter também diversas variações conforme os exemplos a seguir.
 
 >[!TIP]
