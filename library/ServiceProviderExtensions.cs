@@ -1,12 +1,10 @@
-using System;
-using System.Runtime.CompilerServices;
-using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 public static class IServiceProviderExtensions
 {
-    public static IServiceProvider ArgsConfigure(this IServiceProvider serviceProvider)
+    public static IServiceCollection ArgsConfigure(this IServiceCollection serviceCollection)
     {
-        return serviceProvider
-            .AddSingleton((sp) =>
+        return serviceCollection
+            .AddSingleton(sp =>
             {
                 return new InputBuildResponse
                 {
