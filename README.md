@@ -9,7 +9,7 @@ O Construtor suporta seis tipos de títulos
 [h2](/h2/README.md),
 [h3](/h3/README.md),
 [h4](/h4/README.md),
-[h5](/H5/README.md) e 
+[h5](/h5/README.md) e 
 [h6](/h6/README.md).
 
 ## Páragrafos
