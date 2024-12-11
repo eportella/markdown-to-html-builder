@@ -1,19 +1,17 @@
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-public static class IServiceProviderExtensions
+public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection ArgsConfigure(this IServiceCollection serviceCollection)
+    public static IServiceCollection ArgsAsInputAdd(this IServiceCollection serviceCollection)
     {
         return serviceCollection
-            .AddSingleton(sp =>
-            {
-                return new InputBuildResponse
+            .AddSingleton(async serviceProvider => await serviceProvider
+                .GetRequiredService<IMediator>()
+                .Send(new InputBuildRequest
                 {
-                    SourcePath = default,
-                    TargetPath = default,
-                    TargetFileName = default,
-                    RepositoryOnwer = default,
-                    BaseUrl = default,
-                };
-            });
+                    Args = Environment.GetCommandLineArgs()
+                },
+                CancellationToken.None)
+            );
     }
 }

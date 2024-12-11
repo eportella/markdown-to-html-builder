@@ -1,20 +1,11 @@
 using MediatR;
 public sealed class MarkdownToHtmlBuildRequest : IRequest
 {
-    public string[]? Args { internal get; init; }
 }
-internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator) : IRequestHandler<MarkdownToHtmlBuildRequest>
+internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<MarkdownToHtmlBuildRequest>
 {
-
     public async Task Handle(MarkdownToHtmlBuildRequest request, CancellationToken cancellationToken)
     {
-        var input = await mediator
-            .Send(new InputBuildRequest
-            {
-                Args = request.Args
-            },
-            cancellationToken);
-
         var project = input.BaseUrl!.AbsolutePath.TrimStart('/');
         var title = $"{(
                 await mediator
