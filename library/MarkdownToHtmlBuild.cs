@@ -37,7 +37,6 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
             await mediator
                 .Send(new MarkdownFileInfoBuildRequest
                 {
-                    Url = input.BaseUrl,
                     Source = source,
                     Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{input.TargetFileName}"),
                 },

@@ -5,7 +5,6 @@ using MediatR;
 internal sealed class BuildRequest : IRequest<BuildResponse>
 {
     public string? Source { get; init; }
-    public Uri? Url { get; internal set; }
 }
 internal sealed class BuildResponse
 {
@@ -324,12 +323,11 @@ cite
     {
         var body = new Body
         {
-            Url = request.Url,
             Source = request.Source,
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{body.Url}""/>{title.Value}</a></h1>{body.Children.Build()}</body>";
+        body.Built = @$"<body><h1><a href=""{input.BaseUrl}""/>{title.Value}</a></h1>{body.Children.Build()}</body>";
         return [body];
     }
 
