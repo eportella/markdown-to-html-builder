@@ -495,7 +495,7 @@ cite
         {
             var href = new Uri(match.Groups["A_HREF"].Value);
             
-            if (!string.IsNullOrWhiteSpace(href.Host))
+            if (string.IsNullOrWhiteSpace(href.Host))
                 href = new Uri($"{input.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}");
 
             return $@"<a href=""{href}"">{match.Groups["A_CONTENT"].Value}</a>";
