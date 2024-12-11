@@ -5,7 +5,7 @@ public static class IServiceProviderExtensions
 {
     public static IServiceProvider ArgsConfigure(this IServiceProvider serviceProvider)
     {
-        return serviceProvide
+        return serviceProvider
             .AddSingleton<InputBuildResponse>(serviceProvider=>{
                 return new InputBuildResponse
                 {
