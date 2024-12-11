@@ -4,7 +4,6 @@ using System.Xml.Linq;
 using MediatR;
 internal sealed class BuildRequest : IRequest<BuildResponse>
 {
-    public string? Title { get; init; }
     public string? Source { get; init; }
     public Uri? Url { get; internal set; }
 }
@@ -12,7 +11,7 @@ internal sealed class BuildResponse
 {
     internal Html? Target { get; init; }
 }
-internal sealed class BuildRequestHandler(InputBuildResponse input) : IRequestHandler<BuildRequest, BuildResponse>
+internal sealed class BuildRequestHandler(InputBuildResponse input, TitleInputBuildResponse title) : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -313,12 +312,11 @@ cite
     {
         var element = new Html
         {
-            Title = request.Title,
             Source = request.Source,
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{element.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><style>{STYLE}</style></head>{element.Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><style>{STYLE}</style></head>{element.Children.Build()}</html>";
         return element;
     }
 
@@ -326,13 +324,12 @@ cite
     {
         var body = new Body
         {
-            Title = request.Title,
             Url = request.Url,
             Source = request.Source,
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{body.Url}""/>{body.Title}</a></h1>{body.Children.Build()}</body>";
+        body.Built = @$"<body><h1><a href=""{body.Url}""/>{title}</a></h1>{body.Children.Build()}</body>";
         return [body];
     }
 

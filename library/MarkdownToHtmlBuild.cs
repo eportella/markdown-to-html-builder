@@ -6,16 +6,6 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
 {
     public async Task Handle(MarkdownToHtmlBuildRequest request, CancellationToken cancellationToken)
     {
-        var project = input.BaseUrl!.AbsolutePath.TrimStart('/');
-        var title = $"{(
-                await mediator
-                    .Send(new GitHubRepositoryOwnerUserNameGetRequest
-                    {
-                        Name = input.RepositoryOnwer
-                    },
-                    CancellationToken.None)
-            ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $" '{project}'")}"; 
-            
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
@@ -47,7 +37,6 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
             await mediator
                 .Send(new MarkdownFileInfoBuildRequest
                 {
-                    Title = title,
                     Url = input.BaseUrl,
                     Source = source,
                     Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{input.TargetFileName}"),

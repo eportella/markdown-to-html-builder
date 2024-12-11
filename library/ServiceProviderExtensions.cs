@@ -14,4 +14,16 @@ public static class IServiceCollectionExtensions
                 CancellationToken.None).Result
             );
     }
+    public static IServiceCollection TitleAdd(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddSingleton(serviceProvider => serviceProvider
+                .GetRequiredService<IMediator>()
+                .Send(new TitleBuildRequest
+                {
+                    Args = Environment.GetCommandLineArgs()
+                },
+                CancellationToken.None).Result
+            );
+    }
 }

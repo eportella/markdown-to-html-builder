@@ -1,7 +1,7 @@
 using MediatR;
 internal sealed class MarkdownFileInfoBuildRequest : IRequest
 {
-    public string? Title { get; init; }
+    
     public Uri? Url { get; init; }
     public FileInfo? Source { get; init; }
     public FileInfo? Target { get; init; }
@@ -14,7 +14,6 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
             await mediator
                 .Send(new BuildRequest
                 {
-                    Title = request.Title,
                     Url = request.Url,
                     Source = await mediator
                         .Send(new FileInfoTextReadRequest
