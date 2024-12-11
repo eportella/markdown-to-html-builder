@@ -12,7 +12,7 @@ internal sealed class BuildResponse
 {
     internal Html? Target { get; init; }
 }
-internal sealed class BuildRequestHandler : IRequestHandler<BuildRequest, BuildResponse>
+internal sealed class BuildRequestHandler(InputBuildResponse input) : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -322,7 +322,7 @@ cite
         return element;
     }
 
-    private static IElement[] Build(Html html, BuildRequest request)
+    private IElement[] Build(Html html, BuildRequest request)
     {
         var body = new Body
         {
@@ -336,7 +336,7 @@ cite
         return [body];
     }
 
-    private static IEnumerable<IElement> Build(IElement? parent, string? source)
+    private IEnumerable<IElement> Build(IElement? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -345,7 +345,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(Blockquote? parent, string? source)
+    private IEnumerable<IElement> Build(Blockquote? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -354,7 +354,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(LI? parent, string? source)
+    private IEnumerable<IElement> Build(LI? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -370,7 +370,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(Ul? parent, string? source)
+    private IEnumerable<IElement> Build(Ul? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -379,7 +379,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(Ol? parent, string? source)
+    private IEnumerable<IElement> Build(Ol? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -388,7 +388,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H1? parent, string? source)
+    private IEnumerable<IElement> Build(H1? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -397,7 +397,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H2? parent, string? source)
+    private IEnumerable<IElement> Build(H2? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -406,7 +406,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H3? parent, string? source)
+    private IEnumerable<IElement> Build(H3? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -415,7 +415,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H4? parent, string? source)
+    private IEnumerable<IElement> Build(H4? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -424,7 +424,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H5? parent, string? source)
+    private IEnumerable<IElement> Build(H5? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -433,7 +433,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(H6? parent, string? source)
+    private IEnumerable<IElement> Build(H6? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -442,7 +442,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(P? parent, string? source)
+    private IEnumerable<IElement> Build(P? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -451,7 +451,7 @@ cite
             yield return element;
     }
 
-    private static IEnumerable<IElement> Build(Cite? parent, string? source)
+    private IEnumerable<IElement> Build(Cite? parent, string? source)
     {
         if (source == default)
             yield break;
@@ -460,7 +460,7 @@ cite
             yield return element;
     }
 
-    private static string? Build(string? source)
+    private string? Build(string? source)
     {
         if (source == default)
             return source;
@@ -493,7 +493,12 @@ cite
 
         target = Regex.Replace(target, @$"({A})", (match) =>
         {
-            return $@"<a href=""{match.Groups["A_HREF"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
+            var href = new Uri(match.Groups["A_HREF"].Value);
+            
+            if (!string.IsNullOrWhiteSpace(href.Host))
+                href = new Uri(input.BaseUrl!, href);
+
+            return $@"<a href=""{href}"">{match.Groups["A_CONTENT"].Value}</a>";
         }, RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
         target = Regex.Replace(target, @$"({SVG_NOTE})", (match) =>
@@ -573,7 +578,7 @@ cite
         return svgElement.ToString(SaveOptions.DisableFormatting);
     }
 
-    private static IEnumerable<IElement> Build(IElement? parent, MatchCollection matches)
+    private IEnumerable<IElement> Build(IElement? parent, MatchCollection matches)
     {
         foreach (Match match in matches)
         {
@@ -665,19 +670,24 @@ cite
                 };
 
                 var attribute = string.Empty;
-                if(blockquote.Source.StartsWith("[!NOTE]")) {
+                if (blockquote.Source.StartsWith("[!NOTE]"))
+                {
                     attribute = @" class=""note""";
-                } 
-                else if(blockquote.Source.StartsWith("[!TIP]")) {
+                }
+                else if (blockquote.Source.StartsWith("[!TIP]"))
+                {
                     attribute = @" class=""tip""";
                 }
-                else if(blockquote.Source.StartsWith("[!IMPORTANT]")) {
+                else if (blockquote.Source.StartsWith("[!IMPORTANT]"))
+                {
                     attribute = @" class=""important""";
                 }
-                else if(blockquote.Source.StartsWith("[!WARNING]")) {
+                else if (blockquote.Source.StartsWith("[!WARNING]"))
+                {
                     attribute = @" class=""warning""";
                 }
-                else if(blockquote.Source.StartsWith("[!CAUTION]")) {
+                else if (blockquote.Source.StartsWith("[!CAUTION]"))
+                {
                     attribute = @" class=""caution""";
                 }
                 blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
