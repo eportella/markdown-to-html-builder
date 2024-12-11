@@ -1,9 +1,8 @@
 # Markdown to html builder
 
->[!NOTE]
->Apenas mais um construtor de html com base em um markdown.
+## Apenas mais um construtor de html com base em um markdown.
 
-## Títulos
+### Títulos
 O Construtor suporta seis tipos de títulos 
 [h1](/h1/README.md),
 [h2](/h2/README.md),
@@ -12,20 +11,20 @@ O Construtor suporta seis tipos de títulos
 [h5](/h5/README.md) e 
 [h6](/h6/README.md).
 
-## Páragrafos
+### Páragrafos
 O Construtor suporta para apenas um nível de parágrafo sendo ele o 
 [p](/p).
 
-## Listas
+### Listas
 O Construtor suporta dois tipos de listas recursivamente entre elas próprias.
 [ul](/ul/README.md) e
 [ol](/ol/README.md).
 
-## Citações em blocos
+### Citações em blocos
 O construtor suporta um tipo de citação em bloco recursivamente sendo ele
 [blockquote](/blockquote/README.md).
 
-### Extensão em formato de alertas para citações em blocos
+#### Extensão em formato de alertas para citações em blocos
 O construtor suporta cinco alertas sendo elas
 [note](/blockquote/alert/note/README.md),
 [tip](/blockquote/alert/tip/README.md),
