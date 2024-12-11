@@ -272,11 +272,11 @@ c
 @"multi link [link1](https://route-1/readme.md), [link2](https://route-2/readme.md) e [link3](https://route-3/readme.md) text, contnue text [link4](https://route-4/README.md).",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>multi link <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a> text, contnue text <a href=""https://route-4/"">link4</a>.</p></body></html>")]
 
-[InlineData(
+    [InlineData(
 @"[^1]: multi link with cite [link1](https://route-1/readme.md), [link2](https://route-2/readme.md) e [link3](https://route-3/readme.md).",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><br/><cite id=""cite-1""><a href=""#cited-1"">(1)</a>. multi link with cite <a href=""https://route-1/"">link1</a>, <a href=""https://route-2/"">link2</a> e <a href=""https://route-3/"">link3</a>.</cite></p></body></html>")]
 
-[InlineData(
+    [InlineData(
 @"- li 1.0
 - li 1.1
 - li 1.2
@@ -336,12 +336,19 @@ c
     {
         var arrange = new BuildRequest
         {
-            Title = "--title--",
-            Url = new Uri("https://github.com"),
             Source = informed
         };
 
-        var result = await new BuildRequestHandler()
+        var result = await new BuildRequestHandler(
+                new InputBuildResponse
+                {
+                    BaseUrl = new Uri("https://github.com")
+                }, 
+                new TitleBuildResponse
+                {
+                    Value = "--title--"
+                }
+            )
             .Handle(
                 arrange,
                 CancellationToken.None
