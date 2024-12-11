@@ -21,6 +21,8 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
             - subitem um do subitem um
             - subitem dois do subitem um
             - subitem três do subitem um
+- item quatro
+- item cinco
 
 ## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 
@@ -29,8 +31,12 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
     1. subitem um do item dois
     1. subitem dois do item um
 - item três
-    - subitem um do item três
+- item quatro
+- item cinco
+    - subitem um do item cinco
         - subitem um do subitem um
             1. subitem um do subitem um
             1. subitem dois do subitem um
             1. subitem três do subitem um
+    - item dois do item cinco
+    - item três do item cinco
