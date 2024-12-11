@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "console", "console\console.csproj", "{6B078885-6AF1-4325-8C56-021246FE2888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "console", ".console\console.csproj", "{6B078885-6AF1-4325-8C56-021246FE2888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{E5B87D20-BB3B-4839-AD07-855309C051F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", ".test\test.csproj", "{E5B87D20-BB3B-4839-AD07-855309C051F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library", "library\library.csproj", "{478E640D-2F98-4203-B7EB-5064DAF42B60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library", ".library\library.csproj", "{478E640D-2F98-4203-B7EB-5064DAF42B60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
