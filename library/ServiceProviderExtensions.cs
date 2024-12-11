@@ -6,7 +6,8 @@ public static class IServiceProviderExtensions
     public static IServiceProvider ArgsConfigure(this IServiceProvider serviceProvider)
     {
         return serviceProvider
-            .AddSingleton<InputBuildResponse>(serviceProvider=>{
+            .AddSingleton<InputBuildResponse>((sp) =>
+            {
                 return new InputBuildResponse
                 {
                     SourcePath = default,
