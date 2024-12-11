@@ -48,3 +48,5 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 Quebra de linha uma citação[^1] em rodapé e um [hiperlink](/README.md)
 
 [^1]: 1ª citação de apoio qualquer
+
+    TEXTO PARA DEBUG
