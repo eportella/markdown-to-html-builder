@@ -14,7 +14,7 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
                         Name = input.RepositoryOnwer
                     },
                     CancellationToken.None)
-            ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $"'{project}'")}"; 
+            ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $" '{project}'")}"; 
             
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
