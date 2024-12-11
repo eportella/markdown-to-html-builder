@@ -25,7 +25,7 @@ Esse é o **Título do tipo 4**, ele pode ser usado em diversos pontos da págin
 >[!WARNING]
 >#### Título do tipo 4 dentro de um alerta como atenção
 
->[!IMPORTANT]
->#### Título do tipo 4 dentro de um alerta como importante
+>[!CAUTION]
+>#### Título do tipo 4 dentro de um alerta como cuidado
 
 [^1]: 1ª citação de apoio qualquer
