@@ -3,13 +3,13 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >[!TIP]
 >A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/tree/main/ul/README.md)
 
-## uma lista com três itens
+## Uma lista com três itens
 
 - item um
 - item dois
 - item três
 
-## uma lista com cinco itens contendo sub níveis
+## Uma lista com cinco itens contendo sub níveis
 
 - item um
 - item dois
@@ -24,7 +24,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 - item quatro
 - item cinco
 
-## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 
 - item um
 - item dois
@@ -42,17 +42,17 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
     - item dois do item cinco
     - item três do item cinco
 
-## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
     
 - item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^1] em rodapé e um [hiperlink](/README.md)
 
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -67,7 +67,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -85,18 +85,18 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^2] em rodapé e um [hiperlink](/README.md)
 
 >[!NOTE]
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -111,7 +111,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -129,18 +129,18 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^3] em rodapé e um [hiperlink](/README.md)
 
 >[!TIP]
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -155,7 +155,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -173,18 +173,18 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^4] em rodapé e um [hiperlink](/README.md)
 
 >[!IMPORTANT]
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -199,7 +199,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -217,18 +217,18 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^5] em rodapé e um [hiperlink](/README.md)
 
 >[!WARNING]
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -243,7 +243,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -261,18 +261,18 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^6] em rodapé e um [hiperlink](/README.md)
 
 >[!CAUTION]
->## uma lista com três itens
+>## Uma lista com três itens
 >
 >- item um
 >- item dois
 >- item três
 >
->## uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis
 >
 >- item um
 >- item dois
@@ -287,7 +287,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >- item quatro
 >- item cinco
 >
->## uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas ordenadas
 >
 >- item um
 >- item dois
@@ -305,7 +305,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 >    - item dois do item cinco
 >    - item três do item cinco
 >
->## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 >    
 >- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e >***itálico mais negrito***. Uma citação[^7] em rodapé e um [hiperlink](/README.md)
 
