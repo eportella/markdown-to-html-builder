@@ -13,5 +13,10 @@ O Construtor suporta seis tipos de títulos
 [h6](/h6/README.md).
 
 ## Páragrafos
-há suporte para apenas um nível de parágrafo sendo ele o 
+O Construtor suporta para apenas um nível de parágrafo sendo ele o 
 [p](/p).
+
+## Listas
+O Construtor suporta dois tipos de listas 
+[ul](/h1/README.md),
+[ol](/h2/README.md).
