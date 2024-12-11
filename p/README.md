@@ -39,7 +39,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de um alerta como nota quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo um alerta como nota contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^3] qualquer
 
