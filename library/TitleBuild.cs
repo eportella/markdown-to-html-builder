@@ -1,15 +1,15 @@
 using MediatR;
-public sealed class TitleBuildRequest : IRequest<TitleInputBuildResponse>
+public sealed class TitleBuildRequest : IRequest<TitleBuildResponse>
 {
     public string[]? Args { internal get; init; }
 }
-internal sealed class TitleInputBuildResponse
+internal sealed class TitleBuildResponse
 {
     public string? Value { get; init; }
 }
-internal sealed class TitleBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<TitleBuildRequest, TitleInputBuildResponse>
+internal sealed class TitleBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<TitleBuildRequest, TitleBuildResponse>
 {
-    public async Task<TitleInputBuildResponse> Handle(TitleBuildRequest request, CancellationToken cancellationToken)
+    public async Task<TitleBuildResponse> Handle(TitleBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
 
@@ -23,7 +23,7 @@ internal sealed class TitleBuildRequestHandler(IMediator mediator, InputBuildRes
                     CancellationToken.None)
             ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $" '{project}'")}";
 
-        return new TitleInputBuildResponse
+        return new TitleBuildResponse
         {
             Value = title
         };
