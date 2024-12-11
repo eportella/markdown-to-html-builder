@@ -46,13 +46,13 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
     
 1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^1] em rodapé e um [hiperlink](/README.md)
 
->## Uma lista com três itens
+>## Uma lista com três itens dentro de uma citação em bloco
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de uma citação em bloco
 >
 >1. item um
 >1. item dois
@@ -67,7 +67,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de uma citação em bloco
 >
 >1. item um
 >1. item dois
@@ -85,18 +85,18 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de uma citação em bloco
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^2] em rodapé e um [hiperlink](/README.md)
 
 >[!NOTE]
->## Uma lista com três itens
+>## Uma lista com três itens dentro de um alerta como nota
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de um alerta como nota
 >
 >1. item um
 >1. item dois
@@ -111,7 +111,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de um alerta como nota
 >
 >1. item um
 >1. item dois
@@ -129,18 +129,18 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de um alerta como nota
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^3] em rodapé e um [hiperlink](/README.md)
 
 >[!TIP]
->## Uma lista com três itens
+>## Uma lista com três itens dentro de um alerta como dica
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de um alerta como dica
 >
 >1. item um
 >1. item dois
@@ -155,7 +155,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de um alerta como dica
 >
 >1. item um
 >1. item dois
@@ -173,18 +173,18 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de um alerta como dica
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^4] em rodapé e um [hiperlink](/README.md)
 
 >[!IMPORTANT]
->## Uma lista com três itens
+>## Uma lista com três itens dentro de um alerta como importante
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de um alerta como importante
 >
 >1. item um
 >1. item dois
@@ -199,7 +199,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de um alerta como importante
 >
 >1. item um
 >1. item dois
@@ -217,18 +217,18 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de um alerta como importante
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^5] em rodapé e um [hiperlink](/README.md)
 
 >[!WARNING]
->## Uma lista com três itens
+>## Uma lista com três itens dentro de um alerta como atenção
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de um alerta como atenção
 >
 >1. item um
 >1. item dois
@@ -243,7 +243,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de um alerta como atenção
 >
 >1. item um
 >1. item dois
@@ -261,18 +261,18 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de um alerta como atenção
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^6] em rodapé e um [hiperlink](/README.md)
 
 >[!CAUTION]
->## Uma lista com três itens
+>## Uma lista com três itens dentro de um alerta como cuidado
 >
 >- item um
 >- item dois
 >- item três
 >
->## Uma lista com cinco itens contendo sub níveis
+>## Uma lista com cinco itens contendo sub níveis dentro de um alerta como cuidado
 >
 >1. item um
 >1. item dois
@@ -287,7 +287,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >1. item quatro
 >1. item cinco
 >
->## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas
+>## Uma lista com cinco itens contendo sub níveis sendo alguns deles listas não ordenadas dentro de um alerta como cuidado
 >
 >1. item um
 >1. item dois
@@ -305,7 +305,7 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 >    1. item dois do item cinco
 >    1. item três do item cinco
 >
->## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
+>## Uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação dentro de um alerta como cuidado
 >    
 >1. item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^7] em rodapé e um [hiperlink](/README.md)
 
