@@ -28,7 +28,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de uma citação em bloco quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^1] qualquer
+>Quinto parágrafo contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
 
 >[!NOTE]
 >Primeiro parágrafo dentro de um alerta como nota
@@ -41,7 +41,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de um alerta como nota quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo um alerta como nota contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
+>Quinto parágrafo um alerta como nota contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^3] qualquer
 
 >[!TIP]
 >Primeiro parágrafo dentro de um alerta como dica
@@ -54,7 +54,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de um alerta como dica quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo um alerta como dica contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
+>Quinto parágrafo um alerta como dica contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^4] qualquer
 
 >[!IMPORTANT]
 >Primeiro parágrafo dentro de um alerta como importante
@@ -67,7 +67,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de um alerta como importante quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo um alerta como importante contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
+>Quinto parágrafo um alerta como importante contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^5] qualquer
 
 >[!WARNING]
 >Primeiro parágrafo dentro de um alerta como atenção
@@ -80,7 +80,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de um alerta como atenção quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo um alerta como atenção contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
+>Quinto parágrafo um alerta como atenção contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^6] qualquer
 
 >[!CAUTION]
 >Primeiro parágrafo dentro de um alerta como cuidado
@@ -93,7 +93,12 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >Quarto parágrafo dentro de um alerta como cuidado quebrando linha dentro dele\
 >para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
 >
->Quinto parágrafo um alerta como cuidado contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
+>Quinto parágrafo um alerta como cuidado contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^7] qualquer
 
 [^1]: 1ª citação de apoio qualquer
 [^2]: 2ª citação de apoio qualquer
+[^3]: 3ª citação de apoio qualquer
+[^4]: 4ª citação de apoio qualquer
+[^5]: 5ª citação de apoio qualquer
+[^6]: 6ª citação de apoio qualquer
+[^7]: 7ª citação de apoio qualquer
