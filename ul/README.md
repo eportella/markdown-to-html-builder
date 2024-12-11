@@ -46,8 +46,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
     
     TEXTO PARA DEBUG
 
-- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***.\
-Quebra de linha uma citação[^1] em rodapé e um [hiperlink](/README.md)
+- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***. Uma citação[^1] em rodapé e um [hiperlink](/README.md)
 
     
 
