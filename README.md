@@ -5,13 +5,13 @@
 
 ## Títulos
 O Construtor suporta seis tipos de títulos 
-[h1](https://eportella.github.io/markdown-to-html-builder/h1),
-[h2](https://eportella.github.io/markdown-to-html-builder/h2),
-[h3](https://eportella.github.io/markdown-to-html-builder/h3),
-[h4](https://eportella.github.io/markdown-to-html-builder/h4),
-[h5](https://eportella.github.io/markdown-to-html-builder/H5) e 
-[h6](https://eportella.github.io/markdown-to-html-builder/h6).
+[h1](/h1/README.md),
+[h2](/h2/README.md),
+[h3](/h3/README.md),
+[h4](/h4/README.md),
+[h5](/H5/README.md) e 
+[h6](/h6/README.md).
 
 ## Páragrafos
 há suporte para apenas um nível de párafrago snedo ele o 
-[p](https://eportella.github.io/markdown-to-html-builder/p).
+[p](/p).
