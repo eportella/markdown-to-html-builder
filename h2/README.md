@@ -1,4 +1,4 @@
-Esse é o **Título do tipo 2**, ele pode ser usado em diversos pontos da página, mas sempre no incício de cada linha para ela. O texto dele pode conter também diversas variações conforme os exemplos a seguir.
+Esse é o **Título do tipo 2**, ele pode ser usado em diversos pontos da página, mas sempre no início de cada linha para ela. O texto dele pode conter também diversas variações conforme os exemplos a seguir.
 
 >[!TIP]
 >A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/tree/main/h2/README.md)
@@ -14,18 +14,18 @@ Esse é o **Título do tipo 2**, ele pode ser usado em diversos pontos da págin
 >## Título do tipo 2 dentro de uma citação em bloco
 
 >[!NOTE]
->## Título do tipo 2 dentro de uma alerta como nota
+>## Título do tipo 2 dentro de um alerta como nota
 
 >[!TIP]
->## Título do tipo 2 dentro de uma alerta como dica
+>## Título do tipo 2 dentro de um alerta como dica
 
 >[!IMPORTANT]
->## Título do tipo 2 dentro de uma alerta como importante
+>## Título do tipo 2 dentro de um alerta como importante
 
 >[!WARNING]
->## Título do tipo 2 dentro de uma alerta como atenção
+>## Título do tipo 2 dentro de um alerta como atenção
 
 >[!IMPORTANT]
->## Título do tipo 2 dentro de uma alerta como importante
+>## Título do tipo 2 dentro de um alerta como importante
 
 [^1]: 1ª citação de apoio qualquer
