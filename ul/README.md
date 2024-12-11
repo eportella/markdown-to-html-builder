@@ -44,4 +44,7 @@ Essa é a **lista não ordenada**, ela pode ser usada em diversos pontos da pág
 
 ## uma lista com um único item, contendo uma grande quantidade de texto e variação de formatação
 
--
+- item um contendo uma grande quantidade de texto e com uma grande quantidade de formatação palavras em *itálico*, **negrito** e ***itálico mais negrito***.\
+Quebra de linha uma citação[^1] em rodapé e um [hiperlink](/README.md)
+
+[^1]: 1ª citação de apoio qualquer
