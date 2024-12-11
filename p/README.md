@@ -11,7 +11,7 @@ Terceiro parágrafo quebrando texto no código
 mas sem quebrar linha
 
 Quarto parágrafo quebrando linha dentro dele\
-para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 
 Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^1] qualquer
 
@@ -23,7 +23,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de uma citação em bloco quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^2] qualquer
 
@@ -49,7 +49,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de um alerta como dica quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo um alerta como dica contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^4] qualquer
 
@@ -62,7 +62,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de um alerta como importante quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo um alerta como importante contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^5] qualquer
 
@@ -75,7 +75,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de um alerta como atenção quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo um alerta como atenção contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^6] qualquer
 
@@ -88,7 +88,7 @@ Quinto parágrafo com um texto em *itálico*, **negrito**, ***itálico e negrito
 >mas sem quebrar linha
 >
 >Quarto parágrafo dentro de um alerta como cuidado quebrando linha dentro dele\
->para quebrar linha para usar o caractere **\\** no fim dela e continuar escrevendo na próxima
+>para quebrar linha para usar o caractere **\** no fim dela e continuar escrevendo na próxima
 >
 >Quinto parágrafo um alerta como cuidado contendo texto em *itálico*, **negrito**, ***itálico e negrito***, [hiperlink](/README.md) e por fim uma citação[^7] qualquer
 
