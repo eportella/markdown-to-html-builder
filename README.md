@@ -18,5 +18,5 @@ O Construtor suporta para apenas um nível de parágrafo sendo ele o
 
 ## Listas
 O Construtor suporta dois tipos de listas 
-[ul](/h1/README.md),
-[ol](/h2/README.md).
+[ul](/ul/README.md),
+[ol](/ol/README.md).
