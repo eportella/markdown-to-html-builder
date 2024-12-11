@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using MediatR;
@@ -13,7 +14,7 @@ internal sealed class InputBuildResponse
     public string? RepositoryOnwer { get; init; }
     public Uri? BaseUrl { get; init; }
 }
-internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildRequest, InputBuildResponse>
+internal sealed class InputBuildRequestHandler(IServiceProvider serviceProvider) : IRequestHandler<InputBuildRequest, InputBuildResponse>
 {
     public async Task<InputBuildResponse> Handle(InputBuildRequest request, CancellationToken cancellationToken)
     {
