@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MediatR;
 public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+        where TRequest : notnull
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedPipelineBehavior()
