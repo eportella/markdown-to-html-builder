@@ -3,10 +3,77 @@ Esse é o **Formatador de texto em tachado**, ele pode ser usado em diversos pon
 >[!TIP]
 >A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/blob/main/del/README.md?plain=1)
 
-Um parágrafo com ~~Tachado~~ no meio do texto
+Um parágrafo com ~~tachado~~ no meio do texto
 
-~~Tachado~~ no início de um parágrafo
+~~tachado~~ no início de um parágrafo
 
-Um parágrafo contento no fim uma palavra em ~~Tachado~~
+Um parágrafo contento no fim uma palavra em ~~tachado~~
 
-Essa ~~*palavra*~~ tem ~~Tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~Tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~Tachado~~, **negrito** e *itálico*.
+Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+
+~~Um parágrafo inteiro em tachado~~
+
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~
+
+>[!NOTE]
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~
+
+>[!TIP]
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~
+
+>[!IMPORTANT]
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~
+
+[!WARNING]
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~
+
+>[!CAUTION]
+>Um parágrafo com ~~tachado~~ no meio do texto
+>
+>~~tachado~~ no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em ~~tachado~~
+>
+>Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~tachado~~, **negrito** e *itálico*.
+>
+>~~Um parágrafo inteiro em tachado~~

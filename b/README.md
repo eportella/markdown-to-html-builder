@@ -10,3 +10,70 @@ Um parágrafo com **negrito** no meio do texto
 Um parágrafo contento no fim uma palavra em **negrito**
 
 Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+
+**Um parágrafo inteiro em negirto**
+
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**
+
+>[!NOTE]
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**
+
+>[!TIP]
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**
+
+>[!IMPORTANT]
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**
+
+>[!WARNING]
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**
+
+[!CAUTION]
+>Um parágrafo com **negrito** no meio do texto
+>
+>**negrito** no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em **negrito**
+>
+>Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem **negrito** com tachado e essa **~~*palavra*~~** está em **negrito**, ~~tachado~~ e *itálico*.
+>
+>**Um parágrafo inteiro em negirto**

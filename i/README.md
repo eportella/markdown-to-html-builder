@@ -11,3 +11,69 @@ Um parágrafo contento no fim uma palavra em *itálico*
 
 Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
 
+*Um parágrafo inteiro em itálico*
+
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
+
+>[!NOTE]
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
+
+>[!TIP]
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
+
+>[!IMPORTANT]
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
+
+>[!WARNING]
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
+
+>[!CAUTION]
+>Um parágrafo com *itálico* no meio do texto
+>
+>*itálico* no início de um parágrafo
+>
+>Um parágrafo contento no fim uma palavra em *itálico*
+>
+>Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+>
+>*Um parágrafo inteiro em itálico*
