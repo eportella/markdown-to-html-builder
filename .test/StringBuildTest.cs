@@ -388,6 +388,10 @@ c
 </li><li>li 2.1
 </li><li>li 2.2</li></ol></li></ol></blockquote></body></html>")]
 
+    [InlineData(
+@"um [hiperlink[^15]](https://teste/) formatado",
+@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1></body></html>")]
+
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest

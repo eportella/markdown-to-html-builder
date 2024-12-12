@@ -17,6 +17,10 @@ O Construtor suporta seis tipos de títulos
 O Construtor suporta para apenas um nível de parágrafo sendo ele o 
 [p](/p).
 
+## Quebras de linha
+O Construtor suporta uma forma para forçar quebra de linha sendo ele o
+[br](/br).
+
 ## Listas
 O Construtor suporta dois tipos de listas recursivamente entre elas próprias.
 [ul](/ul/README.md) e
