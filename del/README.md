@@ -7,6 +7,6 @@ Um parágrafo com ~~Tachado~~ no meio do texto
 
 ~~Tachado~~ no início de um parágrafo
 
-Uma parágrafo contento no fim uma palavra em ~~Tachado~~
+Um parágrafo contento no fim uma palavra em ~~Tachado~~
 
 Essa ~~*palavra*~~ tem ~~Tachado~~ com *itálico*, já essa ~~**palavra**~~ tem ~~Tachado~~ com **negrito** e essa ~~***palavr***a~~ está em ~~Tachado~~, **negrito** e *itálico*.

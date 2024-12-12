@@ -7,6 +7,7 @@ Um parágrafo com *itálico* no meio do texto
 
 *itálico* no início de um parágrafo
 
-Uma parágrafo contento no fim uma palavra em *itálico*
+Um parágrafo contento no fim uma palavra em *itálico*
 
 Essa ***palavra*** tem *itálico* com **negrito**, já essa *~~palavra~~* tem *itálico* com tachado e essa ***~~palavra~~*** está em *itálico*, **negrito** e ~~tachado~~.
+
