@@ -21,7 +21,7 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
             },
             cancellationToken);
 
-        foreach (var item in sourceDirectoryInfo!.EnumerateFiles("*theme.css", new EnumerationOptions() { RecurseSubdirectories = true }))
+        foreach (var item in sourceDirectoryInfo!.EnumerateFiles("theme.css", new EnumerationOptions() { RecurseSubdirectories = true }))
         {
             Console.WriteLine("-> theme.css iterate!");
             if (!targetDirectoryInfo!.Exists)
