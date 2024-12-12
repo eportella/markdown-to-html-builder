@@ -23,7 +23,6 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
 
         foreach (var item in sourceDirectoryInfo!.EnumerateFiles("*.css", new EnumerationOptions() { RecurseSubdirectories = true }))
         {
-            Console.WriteLine("-> theme.css iterate!");
             if (!targetDirectoryInfo!.Exists)
                 targetDirectoryInfo.Create();
 
