@@ -41,3 +41,9 @@ O construtor suporta um tipo de citação livre sendo ele
 ## Hiperlinks
 O construtor suporta um tipo de hiperlink sendo ele
 [a](/a/README.md).
+
+## Formatadores de texto
+O construtor suporta três variações para formatadores de texto sendo eles
+[i](/i/README.md),
+[b](/b/README.md) e
+[del](/del/README.md).
