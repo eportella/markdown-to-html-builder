@@ -32,3 +32,8 @@ O construtor suporta um tipo de citação em bloco recursivamente sendo ele
 ## Citações livres
 O construtor suporta um tipo de citação livre sendo ele
 [cite](/cite/README.md).
+
+
+## Hiperlinks
+O construtor suporta um tipo de hiperlink sendo ele
+[a](/a/README.md).
