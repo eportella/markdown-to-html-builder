@@ -1,20 +1,32 @@
 using MediatR;
 internal sealed class CssThemeBuildRequest : IRequest
 {
-    public DirectoryInfo? SourceDirectoryInfo { get; init; }
-    public DirectoryInfo? TargetDirectoryInfo { get; init; }
 }
-internal sealed class CssThemeBuildHandler : IRequestHandler<CssThemeBuildRequest>
+internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<CssThemeBuildRequest>
 {
     public async Task Handle(CssThemeBuildRequest request, CancellationToken cancellationToken)
     {
-        foreach (var item in request.SourceDirectoryInfo!.EnumerateFiles("*theme.css", new EnumerationOptions() { RecurseSubdirectories = true }))
-        {
-            if (!request.TargetDirectoryInfo!.Exists)
-                request.TargetDirectoryInfo.Create();
+        var sourceDirectoryInfo = await mediator
+            .Send(new DirectoryInfoGetRequest
+            {
+                Path = input.SourcePath
+            },
+            cancellationToken);
 
-            request.TargetDirectoryInfo.Refresh();
-            item.CopyTo($"{request.TargetDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{item.Name}");
+        var targetDirectoryInfo = await mediator
+            .Send(new DirectoryInfoGetRequest
+            {
+                Path = input.TargetPath
+            },
+            cancellationToken);
+
+        foreach (var item in sourceDirectoryInfo!.EnumerateFiles("*theme.css", new EnumerationOptions() { RecurseSubdirectories = true }))
+        {
+            if (!targetDirectoryInfo!.Exists)
+                targetDirectoryInfo.Create();
+
+            targetDirectoryInfo.Refresh();
+            item.CopyTo($"{targetDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{item.Name}");
         }
 
         await Task.Yield();

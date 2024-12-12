@@ -13,6 +13,12 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
             },
             cancellationToken);
 
+        await mediator
+            .Send(
+                new CssThemeBuildRequest(),
+                cancellationToken
+            );
+
         await foreach (var source in mediator
             .CreateStream(new MarkdownFileInfoGetStreamRequest
             {
