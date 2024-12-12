@@ -1,7 +1,7 @@
 Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, mas sempre no início de cada linha. O texto dela pode conter diversas variações conforme os exemplos a seguir.
 
 >[!TIP]
->A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/tree/main/ol/README.md)
+>A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/tree/main/ol/README.md?plain=1)
 
 ## Uma lista com três itens
 
