@@ -6,7 +6,7 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
 {
     public async Task Handle(CssThemeBuildRequest request, CancellationToken cancellationToken)
     {
-        Console.WriteLine("-> theme.css entry!");
+        
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
@@ -21,7 +21,7 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
             },
             cancellationToken);
 
-        foreach (var item in sourceDirectoryInfo!.EnumerateFiles("theme.css", new EnumerationOptions() { RecurseSubdirectories = true }))
+        foreach (var item in sourceDirectoryInfo!.EnumerateFiles("*.css", new EnumerationOptions() { RecurseSubdirectories = true }))
         {
             Console.WriteLine("-> theme.css iterate!");
             if (!targetDirectoryInfo!.Exists)
@@ -32,6 +32,5 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
         }
 
         await Task.Yield();
-        Console.WriteLine("-> theme.css out!");
     }
 }
