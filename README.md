@@ -27,6 +27,6 @@ O construtor suporta um tipo de citação em bloco recursivamente sendo ele
 >[!NOTE]
 >citações em bloco conta com cinco tipos de alertas que também são recursivos, são eles [note](/blockquote/alert/note/README.md), [tip](/blockquote/alert/tip/README.md), [important](/blockquote/alert/important/README.md), [warning](/blockquote/alert/warning/README.md) e [caution](/blockquote/alert/caution/README.md).
 
-## Citações livre
+## Citações livres
 O construtor suporta um tipo de citação livre sendo ele
 [cite](/cite/README.md).
