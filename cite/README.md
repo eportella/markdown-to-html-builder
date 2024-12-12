@@ -23,6 +23,8 @@ Citado[^3] algo o mais próximo do início de um parágrafo.
 - Adicionando uma citação[^10] em um lista não ordenada
 1. Adicionando uma citação[^11] em um lista ordenada
 
+> Uma citação em *itálico[^12]*, em **negrito[^13]**, ***itálico mais negrito[^14}*** e dentro de um [hiperlink[^15]](/).
+
 
 [^4]: 4ª citação de algo.
 [^5]: 5ª citação de algo.
@@ -32,3 +34,7 @@ Citado[^3] algo o mais próximo do início de um parágrafo.
 [^9]: 9ª citação de algo.
 [^10]: 10ª citação de algo.
 [^11]: 11ª citação de algo.
+[^12]: 12ª citação de algo.
+[^13]: 13ª citação de algo.
+[^14]: 14ª citação de algo.
+[^15]: 15ª citação de algo.
