@@ -25,6 +25,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
+    const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
     const string BR = @"(?'BR'\\(\r?\n))";
@@ -483,6 +484,11 @@ cite
         target = Regex.Replace(target, @$"({I})", (match) =>
         {
             return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
+        }, RegexOptions.Multiline);
+
+        target = Regex.Replace(target, @$"({DEL})", (match) =>
+        {
+            return $"<del>{match.Groups["DEL_CONTENT"].Value}</del>";
         }, RegexOptions.Multiline);
 
         target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
