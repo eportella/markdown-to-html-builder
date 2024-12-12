@@ -19,7 +19,7 @@ Algumas quebras de linha com formatação de texto como *itá*\
 >Quebra de\
 >linha em um alerta de nota
 
->[!IP]
+>[!TIP]
 >Quebra de\
 >linha em um alerta de dica
 
