@@ -10,7 +10,7 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
-                Path = input.SourcePath
+                Path = input.ActionPath
             },
             cancellationToken);
 

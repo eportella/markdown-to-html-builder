@@ -26,8 +26,9 @@ runs:
         cd $GITHUB_ACTION_PATH/.console;
         dotnet restore;
         dotnet build;
-        dotnet run --source-path ${{ inputs.source-path }} \
+        dotnet run --repository_owner ${{ github.repository_owner }} \
+                   --action-path $GITHUB_ACTION_PATH \
+                   --source-path ${{ inputs.source-path }} \
                    --target-path ${{ inputs.target-path }} \
                    --target-file-name ${{ inputs.target-file-name }} \
-                   --repository_owner ${{ github.repository_owner }} \
-                   --source-url-base ${{ inputs.source-url-base }};
+                   --source-url-base ${{ inputs.source-url-base }} ;
