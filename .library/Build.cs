@@ -514,7 +514,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
                         Parent = parent,
                     };
                     cite.Children = Build(cite, content).ToArray();
-                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}""><sup>({index})</sup></a>. {cite.Children.Build()}</cite>";
+                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
                     yield return cite;
                     continue;
                 }
