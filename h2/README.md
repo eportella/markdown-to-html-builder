@@ -1,7 +1,7 @@
 Esse é o **Título do tipo 2**, ele pode ser usado em diversos pontos da página, mas sempre no início de cada linha para ela. O texto dele pode conter também diversas variações conforme os exemplos a seguir.
 
 >[!TIP]
->A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/tree/main/h2/README.md?plain=1)
+>A forma como esses exemplos foram implementados podem ser consultados nesse [código fonte](https://github.com/eportella/markdown-to-html-builder/blob/main/h2/README.md?plain=1)
 
 ## Título do tipo 2
 ## *Tìtulo do tipo 2 em itálico*
