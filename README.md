@@ -2,7 +2,7 @@
 
 Apenas mais um construtor de html com base em um markdown.
 
-O código fonte dessa documentação assim como do contrutor estão disponíveis [aqui](https://github.com/eportella/markdown-to-html-builder/).
+O código fonte dessa documentação assim como do construtor estão disponíveis [aqui](https://github.com/eportella/markdown-to-html-builder/).
 
 ## Títulos
 O Construtor suporta seis tipos de títulos 
