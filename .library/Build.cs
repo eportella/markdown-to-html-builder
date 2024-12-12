@@ -202,7 +202,7 @@ html > body a {
     color: var(--color-note-a60);
 }
 
-h1
+h1, h2
 {
     border-bottom: solid 0.085em var(--color-surface-a10);
 }
