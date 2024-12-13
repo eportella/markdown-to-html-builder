@@ -7,11 +7,14 @@ public static class IServiceCollectionExtensions
         return serviceCollection
             .AddSingleton(serviceProvider => serviceProvider
                 .GetRequiredService<IMediator>()
-                .Send(new InputBuildRequest
-                {
-                    Args = Environment.GetCommandLineArgs()
-                },
-                CancellationToken.None).Result
+                .Send(
+                    new InputBuildRequest
+                    {
+                        Args = Environment.GetCommandLineArgs()
+                    },
+                    CancellationToken.None
+                )
+                .Result
             );
     }
     public static IServiceCollection TitleAdd(this IServiceCollection serviceCollection)
@@ -19,11 +22,14 @@ public static class IServiceCollectionExtensions
         return serviceCollection
             .AddSingleton(serviceProvider => serviceProvider
                 .GetRequiredService<IMediator>()
-                .Send(new TitleBuildRequest
-                {
-                    Args = Environment.GetCommandLineArgs()
-                },
-                CancellationToken.None).Result
+                .Send(
+                    new TitleBuildRequest
+                    {
+                        Args = Environment.GetCommandLineArgs()
+                    },
+                    CancellationToken.None
+                )
+                .Result
             );
     }
 }
