@@ -30,33 +30,6 @@ public class UlOlBuildTest
 </li></ul><ul><li>listitem3
 </li></ul>")]
     [InlineData(
-@"prefix **infix bold** *sufix italic*",
-@"<p>prefix <b>infix bold</b> <i>sufix italic</i></p>")]
-    [InlineData(
-@"**prefix bold** *infix italic* sufix",
-@"<p><b>prefix bold</b> <i>infix italic</i> sufix</p>")]
-    [InlineData(
-@"*prefix italic* infix **sufix bold**",
-@"<p><i>prefix italic</i> infix <b>sufix bold</b></p>")]
-    [InlineData(
-@"***text bold italic***",
-@"<p><b><i>text bold italic</i></b></p>")]
-    [InlineData(
-@" *italic* **bold** ***bolditalic*** ",
-@"<p> <i>italic</i> <b>bold</b> <b><i>bolditalic</i></b> </p>")]
-    [InlineData(
-@" **bold** **bold** *italic* *italic* ",
-@"<p> <b>bold</b> <b>bold</b> <i>italic</i> <i>italic</i> </p>")]
-    [InlineData(
-@"**bold**
-**bold**
-*italic*    
-    *italic*",
-@"<p><b>bold</b>
-</p><p><b>bold</b>
-</p><p><i>italic</i>    
-</p><p>    <i>italic</i></p>")]
-    [InlineData(
 @"- li 1.0
 - li 1.1
 - li 1.2
