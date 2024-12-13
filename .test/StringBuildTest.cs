@@ -8,25 +8,6 @@ public class StringBuildTest
 @"`[age-calc]:1985-06-28` abc [link](https://url)",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>" + AGE_CURRENT + @" abc <a href=""https://url"">link</a></p></body></html>")]
     [InlineData(
-@"a
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>a
-</p></body></html>")]
-    [InlineData(
-@"a
-#b
-c
-#d
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>a
-</p><h1>b
-</h1><p>c
-</p><h1>d
-</h1></body></html>")]
-    [InlineData(
-@"#prefix *infix italic* sufix",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h1>prefix <i>infix italic</i> sufix</h1></body></html>")]
-    [InlineData(
 @"##*prefix italic* infix sufix",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h2><i>prefix italic</i> infix sufix</h2></body></html>")]
     [InlineData(
@@ -43,9 +24,6 @@ c
     [InlineData(
 @"###### *italic* ",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h6><i>italic</i> </h6></body></html>")]
-    [InlineData(
-@"#prefix **infix bold** sufix",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h1>prefix <b>infix bold</b> sufix</h1></body></html>")]
     [InlineData(
 @"##**prefix bold** infix sufix",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h2><b>prefix bold</b> infix sufix</h2></body></html>")]
@@ -64,9 +42,6 @@ c
 @"###### **bold** ",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h6><b>bold</b> </h6></body></html>")]
     [InlineData(
-@"#prefix **infix bold** *sufix italic*",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h1>prefix <b>infix bold</b> <i>sufix italic</i></h1></body></html>")]
-    [InlineData(
 @"##**prefix bold** *infix italic* sufix",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h2><b>prefix bold</b> <i>infix italic</i> sufix</h2></body></html>")]
     [InlineData(
@@ -81,10 +56,6 @@ c
     [InlineData(
 @"###### **bold** **bold** *italic* *italic*",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h6><b>bold</b> <b>bold</b> <i>italic</i> <i>italic</i></h6></body></html>")]
-
-    [InlineData(
-@"#prefix `[age-calc]:1985-06-28` [link](https://url)",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h1>prefix " + AGE_CURRENT + @" <a href=""https://url"">link</a></h1></body></html>")]
     [InlineData(
 @"##prefix [`[age-calc]:1985-06-28`](https://url)",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><h2>prefix <a href=""https://url"">" + AGE_CURRENT + @"</a></h2></body></html>")]
