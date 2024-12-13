@@ -1,57 +1,21 @@
 namespace test;
 
-public class BlockquoteBuildTest
+public class AgeCalcBuildTest
 {
+    const string AGE_CURRENT = "39";
     [Theory]
     [InlineData(
-@">a
-",
-@"<blockquote><p>a
-</p></blockquote>")]
+@"prefix `[age-calc]:1985-06-28` sufix",
+@"<p>prefix " + AGE_CURRENT + @" sufix</p>")]
     [InlineData(
-@">a
->b
-",
-@"<blockquote><p>a
-b
-</p></blockquote>")]
+@"prefix`[age-calc]:1985-06-28` sufix",
+@"<p>prefix" + AGE_CURRENT + @" sufix</p>")]
     [InlineData(
-@">a
->b
->c
-",
-@"<blockquote><p>a
-b
-c
-</p></blockquote>")]
+@"prefix`[age-calc]:1985-06-28`sufix",
+@"<p>prefix" + AGE_CURRENT + @"sufix</p>")]
     [InlineData(
-@">quote 1
-
->quote2
-",
-@"<blockquote><p>quote 1
-</p></blockquote><blockquote><p>quote2
-</p></blockquote>")]
-    [InlineData(
-@">a
->>b
->c
-",
-@"<blockquote><p>a
-</p><blockquote><p>b
-</p></blockquote><p>c
-</p></blockquote>")]
-    [InlineData(
-@">a
->>b
->>>c
->>>d
->e",
-@"<blockquote><p>a
-</p><blockquote><p>b
-</p><blockquote><p>c
-d
-</p></blockquote></blockquote><p>e</p></blockquote>")]
+@"prefix `[age-calc]:1985-06-28`sufix",
+@"<p>prefix " + AGE_CURRENT + @"sufix</p>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest
