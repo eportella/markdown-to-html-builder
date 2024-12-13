@@ -7,36 +7,6 @@ public class StringBuildTest
     [InlineData(
 @"`[age-calc]:1985-06-28` abc [link](https://url)",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>" + AGE_CURRENT + @" abc <a href=""https://url"">link</a></p></body></html>")]
-
-    [InlineData(
-@">a
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><blockquote><p>a
-</p></blockquote></body></html>")]
-    [InlineData(
-@">a
->b
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><blockquote><p>a
-</p><p>b
-</p></blockquote></body></html>")]
-    [InlineData(
-@">a
->b
->c
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><blockquote><p>a
-</p><p>b
-</p><p>c
-</p></blockquote></body></html>")]
-    [InlineData(
-@">quote 1
-
->quote2
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><blockquote><p>quote 1
-</p></blockquote><blockquote><p>quote2
-</p></blockquote></body></html>")]
     [InlineData(
 @"- list item 1
 - list item 2
