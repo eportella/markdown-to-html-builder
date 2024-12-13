@@ -236,7 +236,8 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
 
         target = Regex.Replace(target, @$"({A})", (match) =>
         {
-            var href = new Uri(match.Groups["A_HREF"].Value);
+            var str = match.Groups["A_HREF"].Value;
+            var href = new Uri(str);
             
             if (string.IsNullOrWhiteSpace(href.Host)){
                 return $@"<a href=""{input.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
