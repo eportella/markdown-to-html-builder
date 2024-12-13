@@ -1,29 +1,29 @@
 namespace test;
 
-public class H2BuildTest
+public class H3BuildTest
 {
     [Theory]
     [InlineData(
-@"##a
-##b
-##d
+@"###a
+###b
+###d
 ",
-@"<h2>a
-</h2><h2>b
-</h2><h2>d
-</h2>")]
+@"<h3>a
+</h3><h3>b
+</h3><h3>d
+</h3>")]
     [InlineData(
-@"##prefix *infix italic* sufix",
-@"<h2>prefix <i>infix italic</i> sufix</h2>")]
+@"###prefix *infix italic* sufix",
+@"<h3>prefix <i>infix italic</i> sufix</h3>")]
     [InlineData(
-@"##prefix **infix bold** sufix",
-@"<h2>prefix <b>infix bold</b> sufix</h2>")]
+@"###prefix **infix bold** sufix",
+@"<h3>prefix <b>infix bold</b> sufix</h3>")]
     [InlineData(
-@"##prefix **infix bold** *sufix italic*",
-@"<h2>prefix <b>infix bold</b> <i>sufix italic</i></h2>")]
+@"###prefix **infix bold** *sufix italic*",
+@"<h3>prefix <b>infix bold</b> <i>sufix italic</i></h3>")]
     [InlineData(
-@"## prefix infix sufix",
-@"<h2>prefix infix sufix</h2>")]
+@"### prefix infix sufix",
+@"<h3>prefix infix sufix</h3>")]
 
     public async Task Success(string informed, string expected)
     {
