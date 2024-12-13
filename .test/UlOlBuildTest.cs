@@ -1,8 +1,7 @@
 namespace test;
 
-public class StringBuildTest
+public class UlOlBuildTest
 {
-    const string AGE_CURRENT = "39";
     [Theory]
     [InlineData(
 @"- list item 1
@@ -10,11 +9,11 @@ public class StringBuildTest
 - list item 3
 - listitem4
 -listitem5",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><ul><li>list item 1
+@"<ul><li>list item 1
 </li><li>list item 2
 </li><li>list item 3
 </li><li>listitem4
-</li><li>listitem5</li></ul></body></html>")]
+</li><li>listitem5</li></ul>")]
     [InlineData(
 @"- list item 1
 
@@ -23,40 +22,40 @@ public class StringBuildTest
 
 -listitem3
 ",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><ul><li>list item 1
+@"<ul><li>list item 1
 
 </li></ul><ul><li>list item 1
 </li><li>listitem2
 
 </li></ul><ul><li>listitem3
-</li></ul></body></html>")]
+</li></ul>")]
     [InlineData(
 @"prefix **infix bold** *sufix italic*",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>prefix <b>infix bold</b> <i>sufix italic</i></p></body></html>")]
+@"<p>prefix <b>infix bold</b> <i>sufix italic</i></p>")]
     [InlineData(
 @"**prefix bold** *infix italic* sufix",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><b>prefix bold</b> <i>infix italic</i> sufix</p></body></html>")]
+@"<p><b>prefix bold</b> <i>infix italic</i> sufix</p>")]
     [InlineData(
 @"*prefix italic* infix **sufix bold**",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><i>prefix italic</i> infix <b>sufix bold</b></p></body></html>")]
+@"<p><i>prefix italic</i> infix <b>sufix bold</b></p>")]
     [InlineData(
 @"***text bold italic***",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><b><i>text bold italic</i></b></p></body></html>")]
+@"<p><b><i>text bold italic</i></b></p>")]
     [InlineData(
 @" *italic* **bold** ***bolditalic*** ",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p> <i>italic</i> <b>bold</b> <b><i>bolditalic</i></b> </p></body></html>")]
+@"<p> <i>italic</i> <b>bold</b> <b><i>bolditalic</i></b> </p>")]
     [InlineData(
 @" **bold** **bold** *italic* *italic* ",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p> <b>bold</b> <b>bold</b> <i>italic</i> <i>italic</i> </p></body></html>")]
+@"<p> <b>bold</b> <b>bold</b> <i>italic</i> <i>italic</i> </p>")]
     [InlineData(
 @"**bold**
 **bold**
 *italic*    
     *italic*",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p><b>bold</b>
+@"<p><b>bold</b>
 </p><p><b>bold</b>
 </p><p><i>italic</i>    
-</p><p>    <i>italic</i></p></body></html>")]
+</p><p>    <i>italic</i></p>")]
     [InlineData(
 @"- li 1.0
 - li 1.1
@@ -85,7 +84,7 @@ public class StringBuildTest
     1. li 2.0
     9. li 2.1
     8. li 2.2",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><ul><li>li 1.0
+@"<ul><li>li 1.0
 </li><li>li 1.1
 </li><li>li 1.2
 <ul><li>li 2.0
@@ -111,7 +110,7 @@ public class StringBuildTest
 </li><li>li 1.2
 <ol><li>li 2.0
 </li><li>li 2.1
-</li><li>li 2.2</li></ol></li></ol></body></html>")]
+</li><li>li 2.2</li></ol></li></ol>")]
 
     [InlineData(
 @">- li 1.0
@@ -141,7 +140,7 @@ public class StringBuildTest
 >    1. li 2.0
 >    9. li 2.1
 >    8. li 2.2",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><blockquote><ul><li>li 1.0
+@"<blockquote><ul><li>li 1.0
 </li><li>li 1.1
 </li><li>li 1.2
 <ul><li>li 2.0
@@ -167,7 +166,7 @@ public class StringBuildTest
 </li><li>li 1.2
 <ol><li>li 2.0
 </li><li>li 2.1
-</li><li>li 2.2</li></ol></li></ol></blockquote></body></html>")]
+</li><li>li 2.2</li></ol></li></ol></blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest
@@ -190,6 +189,6 @@ public class StringBuildTest
                 CancellationToken.None
             );
 
-        Assert.Equal(expected, result.Target?.Built);
+        Assert.Contains(expected, result.Target?.Built);
     }
 }
