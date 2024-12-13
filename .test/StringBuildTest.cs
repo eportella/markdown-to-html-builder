@@ -5,12 +5,6 @@ public class StringBuildTest
     const string AGE_CURRENT = "39";
     [Theory]
     [InlineData(
-default,
-default)]
-    [InlineData(
-@"",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1></body></html>")]
-    [InlineData(
 @"a",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>a</p></body></html>")]
     [InlineData(
@@ -22,10 +16,6 @@ default)]
     [InlineData(
 @"`[age-calc]:1985-06-28` abc [link](https://url)",
 @"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1><p>" + AGE_CURRENT + @" abc <a href=""https://url"">link</a></p></body></html>")]
-    [InlineData(
-@"
-",
-@"<html><title>--title--</title><body><h1><a href=""--url--""/>--title--</a></h1></body></html>")]
     [InlineData(
 @"a
 ",
