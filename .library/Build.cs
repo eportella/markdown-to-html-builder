@@ -10,7 +10,7 @@ internal sealed class BuildResponse
 {
     internal Html? Target { get; init; }
 }
-internal sealed class BuildRequestHandler(InputBuildResponse input, ProjectBuildResponse project) : IRequestHandler<BuildRequest, BuildResponse>
+internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -60,7 +60,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, ProjectBuild
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{input.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{element.Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{element.Children.Build()}</html>";
         return element;
     }
 
@@ -243,7 +243,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, ProjectBuild
 
             if (string.IsNullOrWhiteSpace(href.Host))
             {
-                return $@"<a href=""{input.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
+                return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
             }
 
             return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";

@@ -41,13 +41,10 @@ c
         };
 
         var result = await new BuildRequestHandler(
-                new InputBuildResponse
-                {
-                    BaseUrl = new Uri("https://github.com")
-                }, 
                 new ProjectBuildResponse
                 {
-                    Value = "--title--"
+                    Title = "--title--",
+                    BaseUrl = new Uri("https://github.com"),
                 }
             )
             .Handle(
