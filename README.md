@@ -47,3 +47,6 @@ O construtor suporta três variações para formatadores de texto sendo eles
 [i](/i/README.md),
 [b](/b/README.md) e
 [del](/del/README.md).
+
+## Temas
+O construtor suporta temas através do [theme](/theme/README.md).
