@@ -28,6 +28,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
     const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
+    const string THEME = @"(?'THEME'\[!(\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|))){1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     const string A = @"(?'A'\[(?!\^)(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
@@ -290,6 +291,15 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
         {
             var index = match.Groups["CITED_INDEX"].Value;
             return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";
+        }, RegexOptions.Multiline);
+
+        target = Regex.Replace(target, @$"({THEME})", (match) =>
+        {
+            var location = match.Groups["THEME_LOCATION"].Value;
+            var color = match.Groups["THEME_COLOR"].Value;
+            var tonality = match.Groups["THEME_TONALITY"].Value;
+            var content = match.Groups["THEME_CONTENT"].Value;
+            return @$"<span class=""color-{location}-{tonality}"">{content}</span>";
         }, RegexOptions.Multiline);
 
         return target;
