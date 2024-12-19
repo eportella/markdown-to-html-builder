@@ -28,7 +28,8 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
     const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
-    const string THEME = @"(?'THEME'\[!(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|))){1,2}\](?'THEME_CONTENT'\w+))";
+    const string THEME_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
+    const string THEME = @"(?'THEME'\[!" + THEME_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     const string A = @"(?'A'\[(?!\^)(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
@@ -296,21 +297,26 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
 
         target = Regex.Replace(target, @$"({THEME})", (match) =>
         {
-            if (match.Groups["THEME_RULE"].Captures.Count > 1)
+            var themes = match.Groups["THEME_RULE"].Captures.Select(capture =>
             {
-                Console.Write(string.Join("|", match.Groups["THEME_RULE"].Captures.Select(capture => capture.Value)));
-            }
-            var location = match.Groups["THEME_LOCATION"].Value;
-            if (string.IsNullOrWhiteSpace(location))
-                location = "F";
-            var color = match.Groups["THEME_COLOR"].Value;
-            if (string.IsNullOrWhiteSpace(color))
-                color = "D";
-            var tonality = match.Groups["THEME_TONALITY"].Value;
-            if (string.IsNullOrWhiteSpace(tonality))
-                tonality = "5";
+                return Regex.Replace(capture.Value, THEME_RULE, match =>
+                {
+                    var location = match.Groups["THEME_LOCATION"].Value;
+                    if (string.IsNullOrWhiteSpace(location))
+                        location = "F";
+                    var color = match.Groups["THEME_COLOR"].Value;
+                    if (string.IsNullOrWhiteSpace(color))
+                        color = "D";
+                    var tonality = match.Groups["THEME_TONALITY"].Value;
+                    if (string.IsNullOrWhiteSpace(tonality))
+                        tonality = "5";
+                    var content = match.Groups["THEME_CONTENT"].Value;
+
+                    return $"{color.ToLower()}-{location.ToLower()}-{tonality}";
+                });
+            }).ToArray();
             var content = match.Groups["THEME_CONTENT"].Value;
-            return @$"<span class=""theme {color.ToLower()}-{location.ToLower()}-{tonality}"">{content}</span>";
+            return @$"<span class=""theme {string.Join(" ", themes)}"">{content}</span>";
         }, RegexOptions.Multiline);
 
         return target;
