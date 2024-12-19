@@ -165,7 +165,7 @@ html>body a {
     color: var(--color-note-a60);
 }
 
-html>body>h1:first {
+html>body>h1:first-child {
     position: sticky;
     top: 0;
     background: var(--color-default-a0);
