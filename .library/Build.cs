@@ -306,7 +306,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
             if (string.IsNullOrWhiteSpace(tonality))
                 tonality = "5";
             var content = match.Groups["THEME_CONTENT"].Value;
-            return @$"<span class=""theme-{color.ToLower()}-{location.ToLower()}-{tonality}"">{content}</span>";
+            return @$"<span class=""theme {color.ToLower()}-{location.ToLower()}-{tonality}"">{content}</span>";
         }, RegexOptions.Multiline);
 
         return target;
