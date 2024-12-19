@@ -27,6 +27,28 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 **[!.BD8]padrão** **[!.BN8]nota** **[!.BT8]dica** **[!.BI8]importante** **[!.BW8]atenção** **[!.BC8]cuidado**\
 **[!.BD9]padrão** **[!.BN9]nota** **[!.BT9]dica** **[!.BI9]importante** **[!.BW9]atenção** **[!.BC9]cuidado**
 
+**[!.BD0.FD9]padrão** **[!.BN0.FN9]nota** **[!.BT0.FT9]dica** **[!.BI0.FI9]importante** **[!.BW0.FW9]atenção** **[!.BC0.FC9]cuidado**\
+**[!.BD1.FD8]padrão** **[!.BN1.FN8]nota** **[!.BT1.FT8]dica** **[!.BI1.FI8]importante** **[!.BW1.FW8]atenção** **[!.BC1.FC8]cuidado**\
+**[!.BD2.FD7]padrão** **[!.BN2.FN7]nota** **[!.BT2.FT7]dica** **[!.BI2.FI7]importante** **[!.BW2.FW7]atenção** **[!.BC2.FC7]cuidado**\
+**[!.BD3.FD6]padrão** **[!.BN3.FN6]nota** **[!.BT3.FT6]dica** **[!.BI3.FI6]importante** **[!.BW3.FW6]atenção** **[!.BC3.FC6]cuidado**\
+**[!.BD4.FD5]padrão** **[!.BN4.FN5]nota** **[!.BT4.FT5]dica** **[!.BI4.FI5]importante** **[!.BW4.FW5]atenção** **[!.BC4.FC5]cuidado**\
+**[!.BD5.FD4]padrão** **[!.BN5.FN4]nota** **[!.BT5.FT4]dica** **[!.BI5.FI4]importante** **[!.BW5.FW4]atenção** **[!.BC5.FC4]cuidado**\
+**[!.BD6.FD3]padrão** **[!.BN6.FN3]nota** **[!.BT6.FT3]dica** **[!.BI6.FI3]importante** **[!.BW6.FW3]atenção** **[!.BC6.FC3]cuidado**\
+**[!.BD7.FD2]padrão** **[!.BN7.FN2]nota** **[!.BT7.FT2]dica** **[!.BI7.FI2]importante** **[!.BW7.FW2]atenção** **[!.BC7.FC2]cuidado**\
+**[!.BD8.FD1]padrão** **[!.BN8.FN1]nota** **[!.BT8.FT1]dica** **[!.BI8.FI1]importante** **[!.BW8.FW1]atenção** **[!.BC8.FC1]cuidado**\
+**[!.BD9.FD0]padrão** **[!.BN9.FN0]nota** **[!.BT9.FT0]dica** **[!.BI9.FI0]importante** **[!.BW9.FW0]atenção** **[!.BC9.FC0]cuidado**
+
+**[!.BD9.FD0]padrão** **[!.BN9.FN0]nota** **[!.BT9.FT0]dica** **[!.BI9.FI0]importante** **[!.BW9.FW0]atenção** **[!.BC9.FC0]cuidado**\
+**[!.BD8.FD1]padrão** **[!.BN8.FN1]nota** **[!.BT8.FT1]dica** **[!.BI8.FI1]importante** **[!.BW8.FW1]atenção** **[!.BC8.FC1]cuidado**\
+**[!.BD7.FD2]padrão** **[!.BN7.FN2]nota** **[!.BT7.FT2]dica** **[!.BI7.FI2]importante** **[!.BW7.FW2]atenção** **[!.BC7.FC2]cuidado**\
+**[!.BD6.FD3]padrão** **[!.BN6.FN3]nota** **[!.BT6.FT3]dica** **[!.BI6.FI3]importante** **[!.BW6.FW3]atenção** **[!.BC6.FC3]cuidado**\
+**[!.BD5.FD4]padrão** **[!.BN5.FN4]nota** **[!.BT5.FT4]dica** **[!.BI5.FI4]importante** **[!.BW5.FW4]atenção** **[!.BC5.FC4]cuidado**\
+**[!.BD4.FD5]padrão** **[!.BN4.FN5]nota** **[!.BT4.FT5]dica** **[!.BI4.FI5]importante** **[!.BW4.FW5]atenção** **[!.BC4.FC5]cuidado**\
+**[!.BD3.FD6]padrão** **[!.BN3.FN6]nota** **[!.BT3.FT6]dica** **[!.BI3.FI6]importante** **[!.BW3.FW6]atenção** **[!.BC3.FC6]cuidado**\
+**[!.BD2.FD7]padrão** **[!.BN2.FN7]nota** **[!.BT2.FT7]dica** **[!.BI2.FI7]importante** **[!.BW2.FW7]atenção** **[!.BC2.FC7]cuidado**\
+**[!.BD1.FD8]padrão** **[!.BN1.FN8]nota** **[!.BT1.FT8]dica** **[!.BI1.FI8]importante** **[!.BW1.FW8]atenção** **[!.BC1.FC8]cuidado**\
+**[!.BD0.FD9]padrão** **[!.BN0.FN9]nota** **[!.BT0.FT9]dica** **[!.BI0.FI9]importante** **[!.BW0.FW9]atenção** **[!.BC0.FC9]cuidado**
+
 **[!.BD0.FD0]padrão** **[!.BN0.FN0]nota** **[!.BT0.FT0]dica** **[!.BI0.FI0]importante** **[!.BW0.FW0]atenção** **[!.BC0.FC0]cuidado**\
 **[!.BD1.FD1]padrão** **[!.BN1.FN1]nota** **[!.BT1.FT1]dica** **[!.BI1.FI1]importante** **[!.BW1.FW1]atenção** **[!.BC1.FC1]cuidado**\
 **[!.BD2.FD2]padrão** **[!.BN2.FN2]nota** **[!.BT2.FT2]dica** **[!.BI2.FI2]importante** **[!.BW2.FW2]atenção** **[!.BC2.FC2]cuidado**\
