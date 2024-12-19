@@ -3,7 +3,7 @@ As funcionalidades estão implementadas em uma única folha de estilho sendo ela
 Cada funcionalidade tem seu objetivo conforme detalhados a seguir.
 
 ## Cores
-São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.DEFAULT]padrão**, **[!.NOTE]nota**, **[!.TIP]dica**, **[!.IMPORTANT]importante** **[!.WARNING]atenção** e **[!.CAUTION]cuidado**. Cada cor varia entre dez tons que foram originalmente concebidas para atender as fontes e aos backgrounds além dos alertas.
+São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]padrão**, **[!.N]nota**, **[!.T]dica**, **[!.I]importante** **[!.W]atenção** e **[!.C]cuidado**. Cada cor varia entre dez tons que foram originalmente concebidas para atender as fontes e aos backgrounds além dos alertas.
 
 
 ## Esquema de cores
