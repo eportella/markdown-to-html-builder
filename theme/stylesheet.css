@@ -314,3 +314,43 @@ span.theme-d-f-8 {
 span.theme-d-f-9 {
     color: var(--color-surface-a90);
 }
+
+span.theme-d-f-0 {
+    color: var(--color-surface-a0);
+}
+
+span.theme-d-b-1 {
+    background-color: var(--color-surface-a10);
+}
+
+span.theme-d-b-2 {
+    background-color: var(--color-surface-a20);
+}
+
+span.theme-d-b-3 {
+    background-color: var(--color-surface-a30);
+}
+
+span.theme-d-b-4 {
+    background-color: var(--color-surface-a40);
+}
+
+span.theme-d-b-5 {
+    background-color: var(--color-surface-a50);
+}
+
+span.theme-d-b-6 {
+    background-color: var(--color-surface-a60);
+}
+
+span.theme-d-b-7 {
+    background-color: var(--color-surface-a70);
+}
+
+span.theme-d-b-8 {
+    background-color: var(--color-surface-a80);
+}
+
+span.theme-d-b-9 {
+    background-color: var(--color-surface-a90);
+}
