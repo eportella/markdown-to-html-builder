@@ -28,7 +28,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
     const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
-    const string THEME = @"(?'THEME'\[!(\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|))){1,2}\](?'THEME_CONTENT'\w+))";
+    const string THEME = @"(?'THEME'\[!(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|))){1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     const string A = @"(?'A'\[(?!\^)(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
