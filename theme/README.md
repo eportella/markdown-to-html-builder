@@ -60,7 +60,10 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 **[!.BD8.FD8]padrão** **[!.BN8.FN8]nota** **[!.BT8.FT8]dica** **[!.BI8.FI8]importante** **[!.BW8.FW8]atenção** **[!.BC8.FC8]cuidado**\
 **[!.BD9.FD9]padrão** **[!.BN9.FN9]nota** **[!.BT9.FT9]dica** **[!.BI9.FI9]importante** **[!.BW9.FW9]atenção** **[!.BC9.FC9]cuidado**
 
+
+
 ## Esquema de cores
+Há usporte para 2 esquemas de cores que são herdados do navegador. eles são conhecidos como modo ***dark*** e modo ***ligth***. Qualquer modo com esquema de cores que for configurado diferente deles nenhum esquema será adorado. Ou seja, todas as cores serão herdadas do navegador.
 
 ## Esqueleto
 
