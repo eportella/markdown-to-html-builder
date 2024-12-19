@@ -68,6 +68,10 @@ Há suporte para 2 esquemas de cores que são herdados do navegador e eles são 
 Nenhum esquema de cores será adotado caso o navegador não tenha suporte a eles.
 
 ## Esqueleto
+O esquelo está preparado para lidar com responsividade entre telas e tamanho de janelas.
+A primeira linha da tela será sempre o nome de projeto e ele ficará disponível no topo da tela com um link que redirecionará para a página inicial do projeto.
+
+Todo o restante do espaço será destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por compelo na janela. Como as páginas tendem a ter uma grande parte de texto está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
 
 ## Fontes
 
