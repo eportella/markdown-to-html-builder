@@ -64,7 +64,8 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 >As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular as cor ou background na construção que qualquer página.
 
 ## Esquema de cores
-Há suporte para 2 esquemas de cores que são herdados do navegador e eles são conhecidos como modo ***dark*** e modo ***ligth***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores será adotado e todas as cores serão as herdadas do navegador.
+Há suporte para 2 esquemas de cores que são herdados do navegador e eles são conhecidos como modo ***dark*** e modo ***ligth***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores será adotado e todas as cores serão as herdadas do navegador.\
+Nenhum esquema de cores será adotado caso o navegador não tenha suporte a eles.
 
 ## Esqueleto
 
