@@ -22,13 +22,10 @@ default)]
         };
 
         var result = await new BuildRequestHandler(
-                new InputBuildResponse
-                {
-                    BaseUrl = new Uri("https://domain")
-                }, 
                 new ProjectBuildResponse
                 {
-                    Value = "--title--"
+                    Title = "--title--",
+                    BaseUrl = new Uri("https://domain"),
                 }
             )
             .Handle(
