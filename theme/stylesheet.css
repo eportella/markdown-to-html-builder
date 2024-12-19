@@ -171,6 +171,13 @@ html>body>h1:first-child {
     background: var(--color-default-a0);
 }
 
+html>body>span.owner {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-default-a0);
+    text-align: right;
+}
+
 h1,
 h2 {
     border-bottom: solid 0.085em var(--color-default-a10);

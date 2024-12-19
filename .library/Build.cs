@@ -72,7 +72,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{input.BaseUrl}""/>{title.Value}</a></h1>{body.Children.Build()}</body>";
+        body.Built = @$"<body><h1><a href=""{input.BaseUrl}""/>{title.Value}</a></h1>{body.Children.Build()}<span class=""owner""><a href=""{input.BaseUrl}""/>{title.Value}</a></span></body>";
         return [body];
     }
 
