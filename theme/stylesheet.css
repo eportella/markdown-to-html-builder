@@ -59,16 +59,16 @@
         --color-caution-a80: #f8c7bf;
         --color-caution-a90: #faece9;
 
-        --color-surface-a0: #232323;
-        --color-surface-a10: #363636;
-        --color-surface-a20: #484848;
-        --color-surface-a30: #626262;
-        --color-surface-a40: #858585;
-        --color-surface-a50: #a8a8a8;
-        --color-surface-a60: #bcbcbc;
-        --color-surface-a70: #d1d1d1;
-        --color-surface-a80: #e2e2e2;
-        --color-surface-a90: #f1f1f1;
+        --color-default-a0: #232323;
+        --color-default-a10: #363636;
+        --color-default-a20: #484848;
+        --color-default-a30: #626262;
+        --color-default-a40: #858585;
+        --color-default-a50: #a8a8a8;
+        --color-default-a60: #bcbcbc;
+        --color-default-a70: #d1d1d1;
+        --color-default-a80: #e2e2e2;
+        --color-default-a90: #f1f1f1;
     }
 }
 
@@ -129,16 +129,16 @@
         --color-caution-a80: #851318;
         --color-caution-a90: #5e0c13;
 
-        --color-surface-a0: #ffffff;
-        --color-surface-a10: #f5f5f5;
-        --color-surface-a20: #e8e8e8;
-        --color-surface-a30: #dbdbdb;
-        --color-surface-a40: #cfcfcf;
-        --color-surface-a50: #c2c2c2;
-        --color-surface-a60: #9c9c9c;
-        --color-surface-a70: #757575;
-        --color-surface-a80: #4f4f4f;
-        --color-surface-a90: #292929;
+        --color-default-a0: #ffffff;
+        --color-default-a10: #f5f5f5;
+        --color-default-a20: #e8e8e8;
+        --color-default-a30: #dbdbdb;
+        --color-default-a40: #cfcfcf;
+        --color-default-a50: #c2c2c2;
+        --color-default-a60: #9c9c9c;
+        --color-default-a70: #757575;
+        --color-default-a80: #4f4f4f;
+        --color-default-a90: #292929;
     }
 }
 
@@ -150,8 +150,8 @@ body {
 html {
     display: flex;
     justify-content: center;
-    color: var(--color-surface-a90);
-    background: var(--color-surface-a0);
+    color: var(--color-default-a90);
+    background: var(--color-default-a0);
 }
 
 html>body {
@@ -167,7 +167,7 @@ html>body a {
 
 h1,
 h2 {
-    border-bottom: solid 0.085em var(--color-surface-a10);
+    border-bottom: solid 0.085em var(--color-default-a10);
 }
 
 h1,
@@ -176,7 +176,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: var(--color-surface-a80)
+    color: var(--color-default-a80)
 }
 
 a {
@@ -184,7 +184,7 @@ a {
 }
 
 li::marker {
-    color: var(--color-surface-a50);
+    color: var(--color-default-a50);
 }
 
 p,
@@ -206,9 +206,9 @@ blockquote {
     margin-inline-start: 0em;
     margin-inline-end: 0em;
     padding-inline-start: 1em;
-    border-left: solid 0.25em var(--color-surface-a50);
-    background-color: rgb(from var(--color-surface-a50) r g b / var(--color-background-opacity));
-    color: var(--color-surface-a70);
+    border-left: solid 0.25em var(--color-default-a50);
+    background-color: rgb(from var(--color-default-a50) r g b / var(--color-background-opacity));
+    color: var(--color-default-a70);
 }
 
 blockquote>p {
@@ -272,85 +272,85 @@ blockquote.caution>p>span.icon {
 
 cite {
     font-size: 0.85em;
-    color: var(--color-surface-a70);
+    color: var(--color-default-a70);
 }
 
 span.theme-d-f-0 {
-    color: var(--color-surface-a0);
+    color: var(--color-default-a0);
 }
 
 span.theme-d-f-1 {
-    color: var(--color-surface-a10);
+    color: var(--color-default-a10);
 }
 
 span.theme-d-f-2 {
-    color: var(--color-surface-a20);
+    color: var(--color-default-a20);
 }
 
 span.theme-d-f-3 {
-    color: var(--color-surface-a30);
+    color: var(--color-default-a30);
 }
 
 span.theme-d-f-4 {
-    color: var(--color-surface-a40);
+    color: var(--color-default-a40);
 }
 
 span.theme-d-f-5 {
-    color: var(--color-surface-a50);
+    color: var(--color-default-a50);
 }
 
 span.theme-d-f-6 {
-    color: var(--color-surface-a60);
+    color: var(--color-default-a60);
 }
 
 span.theme-d-f-7 {
-    color: var(--color-surface-a70);
+    color: var(--color-default-a70);
 }
 
 span.theme-d-f-8 {
-    color: var(--color-surface-a80);
+    color: var(--color-default-a80);
 }
 
 span.theme-d-f-9 {
-    color: var(--color-surface-a90);
+    color: var(--color-default-a90);
 }
 
 span.theme-d-f-0 {
-    color: var(--color-surface-a0);
+    color: var(--color-default-a0);
 }
 
 span.theme-d-b-1 {
-    background-color: var(--color-surface-a10);
+    background-color: var(--color-default-a10);
 }
 
 span.theme-d-b-2 {
-    background-color: var(--color-surface-a20);
+    background-color: var(--color-default-a20);
 }
 
 span.theme-d-b-3 {
-    background-color: var(--color-surface-a30);
+    background-color: var(--color-default-a30);
 }
 
 span.theme-d-b-4 {
-    background-color: var(--color-surface-a40);
+    background-color: var(--color-default-a40);
 }
 
 span.theme-d-b-5 {
-    background-color: var(--color-surface-a50);
+    background-color: var(--color-default-a50);
 }
 
 span.theme-d-b-6 {
-    background-color: var(--color-surface-a60);
+    background-color: var(--color-default-a60);
 }
 
 span.theme-d-b-7 {
-    background-color: var(--color-surface-a70);
+    background-color: var(--color-default-a70);
 }
 
 span.theme-d-b-8 {
-    background-color: var(--color-surface-a80);
+    background-color: var(--color-default-a80);
 }
 
 span.theme-d-b-9 {
-    background-color: var(--color-surface-a90);
+    background-color: var(--color-default-a90);
 }
