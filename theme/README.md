@@ -61,7 +61,7 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 **[!.BD9.FD9]padrão** **[!.BN9.FN9]nota** **[!.BT9.FT9]dica** **[!.BI9.FI9]importante** **[!.BW9.FW9]atenção** **[!.BC9.FC9]cuidado**
 
 >[!CAUTION]
->As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar dela para manipular as cores e background na construção das páginas.
+>As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular as cor ou background na construção que qualquer página.
 
 ## Esquema de cores
 Há suporte para 2 esquemas de cores que são herdados do navegador e eles são conhecidos como modo ***dark*** e modo ***ligth***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nehum esquema de cores será adotado e todas as cores serão as herdadas do navegador.
