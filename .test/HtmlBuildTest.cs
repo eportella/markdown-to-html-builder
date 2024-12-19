@@ -25,7 +25,7 @@ default)]
                 new ProjectBuildResponse
                 {
                     Title = "--title--",
-                    BaseUrl = new Uri("https://github.com"),
+                    BaseUrl = new Uri("https://domain"),
                 }
             )
             .Handle(
