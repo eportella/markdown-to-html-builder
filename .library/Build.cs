@@ -299,7 +299,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
             var color = match.Groups["THEME_COLOR"].Value;
             var tonality = match.Groups["THEME_TONALITY"].Value;
             var content = match.Groups["THEME_CONTENT"].Value;
-            return @$"<span class=""color-{location}-{tonality}"">{content}</span>";
+            return @$"<span class=""theme-{color.ToLower()}-{location.ToLower()}-{tonality}"">{content}</span>";
         }, RegexOptions.Multiline);
 
         return target;
