@@ -296,6 +296,10 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
 
         target = Regex.Replace(target, @$"({THEME})", (match) =>
         {
+            if (match.Groups["THEME_RULE"].Captures.Count > 1)
+            {
+                Console.Write(string.Join("|", match.Groups["THEME_RULE"].Captures.Select(capture => capture.Value)));
+            }
             var location = match.Groups["THEME_LOCATION"].Value;
             if (string.IsNullOrWhiteSpace(location))
                 location = "F";
