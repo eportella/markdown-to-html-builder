@@ -36,7 +36,7 @@ public class H1BuildTest
                 {
                     BaseUrl = new Uri("https://github.com")
                 },
-                new TitleBuildResponse
+                new ProjectBuildResponse
                 {
                     Value = "--title--"
                 }

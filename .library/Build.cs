@@ -10,7 +10,7 @@ internal sealed class BuildResponse
 {
     internal Html? Target { get; init; }
 }
-internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildResponse title) : IRequestHandler<BuildRequest, BuildResponse>
+internal sealed class BuildRequestHandler(InputBuildResponse input, ProjectBuildResponse project) : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -60,7 +60,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
             Parent = default,
         };
         element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{title.Value}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{input.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{element.Children.Build()}</html>";
+        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{input.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{element.Children.Build()}</html>";
         return element;
     }
 
@@ -72,7 +72,7 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
             Parent = html,
         };
         body.Children = Build(body, request.Source).ToArray();
-        body.Built = @$"<body><h1><a href=""{input.BaseUrl}""/>{title.Value}</a></h1>{body.Children.Build()}<span class=""owner""><a href=""{input.BaseUrl}""/>{title.Value}</a></span></body>";
+        body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         return [body];
     }
 

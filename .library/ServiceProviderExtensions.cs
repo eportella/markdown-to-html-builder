@@ -23,7 +23,7 @@ public static class IServiceCollectionExtensions
             .AddSingleton(serviceProvider => serviceProvider
                 .GetRequiredService<IMediator>()
                 .Send(
-                    new TitleBuildRequest
+                    new ProjectBuildRequest
                     {
                         Args = Environment.GetCommandLineArgs()
                     },

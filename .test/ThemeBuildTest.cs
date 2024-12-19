@@ -24,7 +24,7 @@ public class ThemeBuildTest
                 {
                     BaseUrl = new Uri("https://github.com")
                 }, 
-                new TitleBuildResponse
+                new ProjectBuildResponse
                 {
                     Value = "--title--"
                 }

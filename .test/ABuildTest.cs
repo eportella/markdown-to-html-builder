@@ -21,7 +21,7 @@ public class ABuildTest
                 {
                     BaseUrl = new Uri("https://route-1")
                 }, 
-                new TitleBuildResponse
+                new ProjectBuildResponse
                 {
                     Value = "--title--"
                 }

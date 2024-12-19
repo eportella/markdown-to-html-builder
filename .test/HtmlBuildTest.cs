@@ -26,7 +26,7 @@ default)]
                 {
                     BaseUrl = new Uri("https://domain")
                 }, 
-                new TitleBuildResponse
+                new ProjectBuildResponse
                 {
                     Value = "--title--"
                 }

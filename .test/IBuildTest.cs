@@ -35,7 +35,7 @@ public class IBuildTest
                 {
                     BaseUrl = new Uri("https://github.com")
                 }, 
-                new TitleBuildResponse
+                new ProjectBuildResponse
                 {
                     Value = "--title--"
                 }

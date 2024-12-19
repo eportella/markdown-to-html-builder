@@ -1,31 +1,37 @@
 using MediatR;
-public sealed class TitleBuildRequest : IRequest<TitleBuildResponse>
+public sealed class ProjectBuildRequest : IRequest<ProjectBuildResponse>
 {
     public string[]? Args { internal get; init; }
 }
-internal sealed class TitleBuildResponse
+internal sealed class ProjectBuildResponse
 {
-    public string? Value { get; init; }
+    public string? Title { get; init; }
+    public Uri? BaseUrl { get; init; }
+    public string? OwnerTitle { get; init; }
+    public Uri? OwnerBaseUrl { get; init; }
 }
-internal sealed class TitleBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<TitleBuildRequest, TitleBuildResponse>
+internal sealed class ProjectBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<ProjectBuildRequest, ProjectBuildResponse>
 {
-    public async Task<TitleBuildResponse> Handle(TitleBuildRequest request, CancellationToken cancellationToken)
+    public async Task<ProjectBuildResponse> Handle(ProjectBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
 
         var project = input.BaseUrl!.AbsolutePath.TrimStart('/');
-        var title = $"{(
+        var ownerTitle = (
                 await mediator
                     .Send(new GitHubRepositoryOwnerUserNameGetRequest
                     {
                         Name = input.RepositoryOnwer
                     },
                     CancellationToken.None)
-            ) ?? input.RepositoryOnwer}{(string.IsNullOrWhiteSpace(project) ? string.Empty : $" '{project}'")}";
+            ) ?? input.RepositoryOnwer;
 
-        return new TitleBuildResponse
+        return new ProjectBuildResponse
         {
-            Value = title
+            Title = string.IsNullOrWhiteSpace(project) ? ownerTitle : project,
+            BaseUrl = input.BaseUrl,
+            OwnerTitle = string.IsNullOrWhiteSpace(project) ? default : ownerTitle,
+            OwnerBaseUrl = string.IsNullOrWhiteSpace(project) ? default : new Uri(input.BaseUrl.GetLeftPart(UriPartial.Authority)),
         };
     }
 }
