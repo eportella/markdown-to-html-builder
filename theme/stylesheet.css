@@ -274,3 +274,43 @@ cite {
     font-size: 0.85em;
     color: var(--color-surface-a70);
 }
+
+span.theme-d-f-0 {
+    color: var(--color-surface-a0);
+}
+
+span.theme-d-f-1 {
+    color: var(--color-surface-a10);
+}
+
+span.theme-d-f-2 {
+    color: var(--color-surface-a20);
+}
+
+span.theme-d-f-3 {
+    color: var(--color-surface-a30);
+}
+
+span.theme-d-f-4 {
+    color: var(--color-surface-a40);
+}
+
+span.theme-d-f-5 {
+    color: var(--color-surface-a50);
+}
+
+span.theme-d-f-6 {
+    color: var(--color-surface-a60);
+}
+
+span.theme-d-f-7 {
+    color: var(--color-surface-a70);
+}
+
+span.theme-d-f-8 {
+    color: var(--color-surface-a80);
+}
+
+span.theme-d-f-9 {
+    color: var(--color-surface-a90);
+}

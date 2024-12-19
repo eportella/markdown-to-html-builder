@@ -239,8 +239,9 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
         {
             var str = match.Groups["A_HREF"].Value;
             var href = new Uri(str);
-            
-            if (string.IsNullOrWhiteSpace(href.Host)){
+
+            if (string.IsNullOrWhiteSpace(href.Host))
+            {
                 return $@"<a href=""{input.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
             }
 
@@ -296,8 +297,14 @@ internal sealed class BuildRequestHandler(InputBuildResponse input, TitleBuildRe
         target = Regex.Replace(target, @$"({THEME})", (match) =>
         {
             var location = match.Groups["THEME_LOCATION"].Value;
+            if (string.IsNullOrWhiteSpace(location))
+                location = "F";
             var color = match.Groups["THEME_COLOR"].Value;
+            if (string.IsNullOrWhiteSpace(color))
+                color = "D";
             var tonality = match.Groups["THEME_TONALITY"].Value;
+            if (string.IsNullOrWhiteSpace(tonality))
+                tonality = "5";
             var content = match.Groups["THEME_CONTENT"].Value;
             return @$"<span class=""theme-{color.ToLower()}-{location.ToLower()}-{tonality}"">{content}</span>";
         }, RegexOptions.Multiline);
