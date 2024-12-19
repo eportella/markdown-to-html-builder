@@ -69,10 +69,10 @@ Há suporte para 2 esquemas de cores que são herdados do navegador atravéz dps
 >Nenhum esquema de cores será adotado caso o navegador não tenha suporte a eles.
 
 ## Esqueleto
-O esquelo está preparado para lidar com responsividade entre telas e tamanho de janelas.
-A primeira linha da tela será sempre o nome de projeto e ele ficará disponível no topo da tela com um link que redirecionará para a página inicial do projeto.
+O esqueleto está preparado para lidar com responsividade em diversos tamanhos de janelas.
+No inicio da janela ficará sempre o nome de projeto, nele há um link que redireciona para a página inicial do projeto. Caso o projeto não seja o principal do domínio, ou seja, esteja publicado em um rota dentro do domínio, ficará posicionado ao máximo posível no canto inferior direito da janela o domínio da página com o seu link.
 
-Todo o restante do espaço será destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por compelo na janela. Como as páginas tendem a ter uma grande parte de texto está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
+Todo o restante do espaço da janela será destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por compelo nela. Como as páginas tendem a ter uma grande parte de texto está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
 
 ## Fontes
 
