@@ -4,7 +4,7 @@ Cada funcionalidade tem seu objetivo conforme detalhados a seguir.
 
 ## Cores
 
-## Esquema de coras
+## Esquema de cores
 
 ## Esqueleto
 
