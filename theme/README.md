@@ -79,6 +79,8 @@ Todo o restante do espaço da janela é destinado para adicionar o conteúdo da 
 Ha suporte para apenas um tipo de fonte que pode ser consultada na [folha de estilo](https://github.com/eportella/markdown-to-html-builder/blob/main/theme/README.md?plain=1)
 
 ## Alertas
+As cores dos alertas seguem a semântica para os objetivos delas que são: **[!.D]padrão**, **[!.N]nota**, **[!.T]dica**, **[!.I]importante**, **[!.W]atenção** e **[!.C]cuidado**.\
+Maiores detalhes de os alertas funcionam pode ser consultados no [alert](/blockquote/alert/README.md).
 
 >[!TIP]
 >Acesse [código fonte](https://github.com/eportella/markdown-to-html-builder/blob/main/theme/README.md?plain=1) para o **theme**
