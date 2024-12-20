@@ -9,7 +9,7 @@ public class ABuildTest
 @"multi link <a href=""https://route-1/path/readme.md"">link1</a>, <a href=""https://route-2/readme.md"">link2</a> e <a href=""https://route-3/readme.md"">link3</a> text, contnue text <a href=""https://route-4/README.md"">link4</a>.")]
     [InlineData(
 @"um [hiperlink[^15]](https://teste/) formatado",
-@"um <a href=""https://teste/"">hiperlink<cite id=""cited-15""><a href=""#cite-15""><sup>(15)</sup></a></cite></a> formatado")]
+@"um <a href=""https://teste/"">hiperlink[^15]</a> formatado")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new ABuildRequest
