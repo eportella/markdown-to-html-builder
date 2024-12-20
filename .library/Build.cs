@@ -24,11 +24,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
-    const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
-    const string THEME_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
-    const string THEME = @"(?'THEME'\[!" + THEME_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
@@ -217,10 +214,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({DEL})", (match) =>
-        {
-            return $"<del>{match.Groups["DEL_CONTENT"].Value}</del>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
 
