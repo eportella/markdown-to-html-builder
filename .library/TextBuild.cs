@@ -1,32 +1,54 @@
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using MediatR;
-internal sealed class TextBuildRequest : IRequest<Text>
+internal sealed class TextBuildRequest : IStreamRequest<Text>
 {
     public IElement? Parent { get; init; }
     internal string? Source { get; init; }
 }
-internal sealed class TextBuildRequestHandler(IMediator mediator) : IRequestHandler<TextBuildRequest, Text>
+internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<TextBuildRequest, Text>
 {
-    public async Task<Text> Handle(TextBuildRequest request, CancellationToken cancellationToken)
-    {
-        var built = request.Source;
+    const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
+    static Regex RegexText { get; }
 
-        built = (await mediator.Send(new BrBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new BIBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new BBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new IBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new DelBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new AgeCalcBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new ABuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new SvgBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new CitedBuildRequest { Source = built }, cancellationToken))?.Target;
-        built = (await mediator.Send(new ThemeBuildRequest { Source = built }, cancellationToken))?.Target;
-        
-        return new Text
+    static TextBuildRequestHandler()
+    {
+        RegexText = new Regex(TEXT, RegexOptions.Multiline);
+    }
+
+    public async IAsyncEnumerable<Text> Handle(TextBuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        if (request.Source == default)
+            yield break;
+
+        foreach (Match match in RegexText.Matches(request.Source))
         {
-            Source = request.Source,
-            Parent = request.Parent,
-            Children = default,
-            Built = built,
-        };
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var built = content;
+
+                built = (await mediator.Send(new BrBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new BIBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new BBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new IBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new DelBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new AgeCalcBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new ABuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new SvgBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new CitedBuildRequest { Source = built }, cancellationToken))?.Target;
+                built = (await mediator.Send(new ThemeBuildRequest { Source = built }, cancellationToken))?.Target;
+
+                yield return new Text
+                {
+                    Source = request.Source,
+                    Parent = request.Parent,
+                    Children = default,
+                    Built = built,
+                };
+                continue;
+            }
+            var debug = string.Empty;
+        }
     }
 }
