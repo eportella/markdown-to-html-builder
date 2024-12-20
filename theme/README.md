@@ -3,7 +3,7 @@ As funcionalidades estão implementadas em uma única folha de estilho sendo ela
 Cada funcionalidade tem seu objetivo conforme detalhados a seguir.
 
 ## Cores
-São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]padrão**, **[!.N]nota**, **[!.T]dica**, **[!.I]importante**, **[!.W]atenção** e **[!.C]cuidado**. Cada cor varia entre dez tons que foram originalmente concebidas para atender as fontes e aos backgrounds além dos alertas. Observe as variações de cores. suportadas a seguir.
+São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]padrão**, **[!.N]nota**, **[!.T]dica**, **[!.I]importante**, **[!.W]atenção** e **[!.C]cuidado**. Cada cor varia entre dez tons que são originalmente concebidas para atender as fontes e aos backgrounds além dos alertas. Observe as variações de cores suportadas a seguir.
 
 **[!.FD0]padrão** **[!.FN0]nota** **[!.FT0]dica** **[!.FI0]importante** **[!.FW0]atenção** **[!.FC0]cuidado**\
 **[!.FD1]padrão** **[!.FN1]nota** **[!.FT1]dica** **[!.FI1]importante** **[!.FW1]atenção** **[!.FC1]cuidado**\
@@ -61,24 +61,23 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 **[!.BD9.FD9]padrão** **[!.BN9.FN9]nota** **[!.BT9.FT9]dica** **[!.BI9.FI9]importante** **[!.BW9.FW9]atenção** **[!.BC9.FC9]cuidado**
 
 >[!CAUTION]
->As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular a cor ou background na construção que qualquer página.
+>As paletas acima são compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular a cor ou background na construção que qualquer página.
 
 ## Esquema de cores
-Há suporte para 2 esquemas de cores que são herdados do navegador atravéz dos seus modos de apresentação, ele são conhecidos como ***dark*** e ***light***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores será adotado e todas as cores serão as herdadas do navegador.
+Há suporte para 2 esquemas de cores que são herdados do navegador atravéz dos seus modos de apresentação, ele são conhecidos como ***dark*** e ***light***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores é adotado e todas as cores são as herdadas do navegador.
 
->Nenhum esquema de cores será adotado caso o navegador não tenha suporte a eles.
+>[!NOTE]
+>Nenhum esquema de cores é adotado caso o navegador não tenha suporte eles.
 
 ## Esqueleto
 O esqueleto está preparado para lidar com responsividade em diversos tamanhos de janelas.
-No inicio da janela ficará sempre o nome do projeto, nele há um link que redireciona para a página inicial do projeto. Caso o projeto não seja o principal do domínio, ou seja, esteja publicado em um rota dentro do domínio, ficará posicionado ao máximo posível no canto inferior direito da janela o domínio da página com o seu link.
+No inicio da janela fica sempre o nome do projeto, nele há um link que redireciona para a página inicial do projeto. Caso o projeto não seja o principal do domínio, ou seja, esteja publicado em um rota dentro do domínio, fica posicionado ao máximo posível no canto inferior direito da janela o domínio da página com o seu link.
 
-Todo o restante do espaço da janela será destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por compelo nela. Como as páginas tendem a ter uma grande parte de texto está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
+Todo o restante do espaço da janela é destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por completo nela. Como as páginas tendem a ter uma grande parte de texto, está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
 
 ## Fontes
 
 ## Alertas
-
-
 
 >[!TIP]
 >Acesse [código fonte](https://github.com/eportella/markdown-to-html-builder/blob/main/theme/README.md?plain=1) para o **theme**
