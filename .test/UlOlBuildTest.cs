@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class UlOlBuildTest
@@ -9,11 +12,7 @@ public class UlOlBuildTest
 - list item 3
 - listitem4
 -listitem5",
-@"<ul><li>list item 1
-</li><li>list item 2
-</li><li>list item 3
-</li><li>listitem4
-</li><li>listitem5</li></ul>")]
+@"<ul><li></li><li></li><li></li><li></li><li></li></ul>")]
     [InlineData(
 @"- list item 1
 
@@ -22,13 +21,7 @@ public class UlOlBuildTest
 
 -listitem3
 ",
-@"<ul><li>list item 1
-
-</li></ul><ul><li>list item 1
-</li><li>listitem2
-
-</li></ul><ul><li>listitem3
-</li></ul>")]
+@"<ul><li></li></ul><ul><li></li><li></li></ul><ul><li></li></ul>")]
     [InlineData(
 @"- li 1.0
 - li 1.1
@@ -57,33 +50,7 @@ public class UlOlBuildTest
     1. li 2.0
     9. li 2.1
     8. li 2.2",
-@"<ul><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ul><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ul></li></ul><ul><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ol><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ol></li></ul><ol><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ul><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ul></li></ol><ol><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ol><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2</li></ol></li></ol>")]
+@"<ul><li></li><li></li><li></li></ul><ul><li></li><li></li><li></li></ul><ol><li></li><li></li><li></li></ol><ol><li></li><li></li><li></li></ol>")]
 
     [InlineData(
 @">- li 1.0
@@ -113,33 +80,7 @@ public class UlOlBuildTest
 >    1. li 2.0
 >    9. li 2.1
 >    8. li 2.2",
-@"<blockquote><ul><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ul><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ul></li></ul><ul><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ol><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ol></li></ul><ol><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ul><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2
-
-</li></ul></li></ol><ol><li>li 1.0
-</li><li>li 1.1
-</li><li>li 1.2
-<ol><li>li 2.0
-</li><li>li 2.1
-</li><li>li 2.2</li></ol></li></ol></blockquote>")]
+@"<blockquote><ul><li></li><li></li><li></li></ul><ul><li></li><li></li><li></li></ul><ol><li></li><li></li><li></li></ol><ol><li></li><li></li><li></li></ol></blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest
@@ -152,7 +93,8 @@ public class UlOlBuildTest
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com"),
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

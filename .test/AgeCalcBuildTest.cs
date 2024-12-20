@@ -6,35 +6,29 @@ public class AgeCalcBuildTest
     [Theory]
     [InlineData(
 @"prefix `[age-calc]:1985-06-28` sufix",
-@"<p>prefix " + AGE_CURRENT + @" sufix</p>")]
+@"prefix " + AGE_CURRENT + @" sufix")]
     [InlineData(
 @"prefix`[age-calc]:1985-06-28` sufix",
-@"<p>prefix" + AGE_CURRENT + @" sufix</p>")]
+@"prefix" + AGE_CURRENT + @" sufix")]
     [InlineData(
 @"prefix`[age-calc]:1985-06-28`sufix",
-@"<p>prefix" + AGE_CURRENT + @"sufix</p>")]
+@"prefix" + AGE_CURRENT + @"sufix")]
     [InlineData(
 @"prefix `[age-calc]:1985-06-28`sufix",
-@"<p>prefix " + AGE_CURRENT + @"sufix</p>")]
+@"prefix " + AGE_CURRENT + @"sufix")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BuildRequest
+        var arrange = new AgeCalcBuildRequest
         {
             Source = informed
         };
 
-        var result = await new BuildRequestHandler(
-                new ProjectBuildResponse
-                {
-                    Title = "--title--",
-                    BaseUrl = new Uri("https://github.com")
-                }
-            )
+        var result = await new AgeCalcBuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result.Target?.Built);
+        Assert.Equal(expected, result!.Target);
     }
 }

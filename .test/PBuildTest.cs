@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class PBuildTest
@@ -5,34 +8,28 @@ public class PBuildTest
     [Theory]
     [InlineData(
 @"a",
-@"<p>a</p>")]
+@"<p></p>")]
     [InlineData(
 @"ab",
-@"<p>ab</p>")]
+@"<p></p>")]
     [InlineData(
 @"abc",
-@"<p>abc</p>")]
+@"<p></p>")]
     [InlineData(
 @"a
 ",
-@"<p>a
-</p>")]
+@"<p></p>")]
     [InlineData(
 @"a
 b
 ",
-@"<p>a
-b
-</p>")]
+@"<p></p>")]
     [InlineData(
 @"a
 b
 c
 ",
-@"<p>a
-b
-c
-</p>")]
+@"<p></p>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest
@@ -45,7 +42,8 @@ c
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com"),
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

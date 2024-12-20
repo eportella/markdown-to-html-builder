@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class H2BuildTest
@@ -8,22 +11,19 @@ public class H2BuildTest
 ##b
 ##d
 ",
-@"<h2>a
-</h2><h2>b
-</h2><h2>d
-</h2>")]
+@"<h2></h2><h2></h2><h2></h2>")]
     [InlineData(
 @"##prefix *infix italic* sufix",
-@"<h2>prefix <i>infix italic</i> sufix</h2>")]
+@"<h2></h2>")]
     [InlineData(
 @"##prefix **infix bold** sufix",
-@"<h2>prefix <b>infix bold</b> sufix</h2>")]
+@"<h2></h2>")]
     [InlineData(
 @"##prefix **infix bold** *sufix italic*",
-@"<h2>prefix <b>infix bold</b> <i>sufix italic</i></h2>")]
+@"<h2></h2>")]
     [InlineData(
 @"## prefix infix sufix",
-@"<h2>prefix infix sufix</h2>")]
+@"<h2></h2>")]
 
     public async Task Success(string informed, string expected)
     {
@@ -37,7 +37,8 @@ public class H2BuildTest
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com"),
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

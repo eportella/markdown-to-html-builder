@@ -5,43 +5,37 @@ public class DelBuildTest
     [Theory]
     [InlineData(
 @"prefix ~~infix strikethrough~~ sufix",
-@"<p>prefix <del>infix strikethrough</del> sufix</p>")]
+@"prefix <del>infix strikethrough</del> sufix")]
     [InlineData(
 @"~~prefix strikethrough~~ infix sufix",
-@"<p><del>prefix strikethrough</del> infix sufix</p>")]
+@"<del>prefix strikethrough</del> infix sufix")]
     [InlineData(
 @"prefix infix ~~sufix strikethrough~~",
-@"<p>prefix infix <del>sufix strikethrough</del></p>")]
+@"prefix infix <del>sufix strikethrough</del>")]
     [InlineData(
 @"~~text strikethrough~~",
-@"<p><del>text strikethrough</del></p>")]
+@"<del>text strikethrough</del>")]
     [InlineData(
 @" ~~strikethrough~~ ~~strikethrough~~ ",
-@"<p> <del>strikethrough</del> <del>strikethrough</del> </p>")]
+@" <del>strikethrough</del> <del>strikethrough</del> ")]
     [InlineData(
 @"~~strikethrough~~
 ~~strikethrough~~",
-@"<p><del>strikethrough</del>
-<del>strikethrough</del></p>")]
+@"<del>strikethrough</del>
+<del>strikethrough</del>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BuildRequest
+        var arrange = new DelBuildRequest
         {
             Source = informed
         };
 
-        var result = await new BuildRequestHandler(
-                new ProjectBuildResponse
-                {
-                    Title = "--title--",
-                    BaseUrl = new Uri("https://github.com"),
-                }
-            )
+        var result = await new DelBuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result.Target?.Built);
+        Assert.Equal(expected, result!.Target);
     }
 }

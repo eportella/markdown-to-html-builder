@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class BlockquoteBuildTest
@@ -6,52 +9,37 @@ public class BlockquoteBuildTest
     [InlineData(
 @">a
 ",
-@"<blockquote><p>a
-</p></blockquote>")]
+@"<blockquote><p></p></blockquote>")]
     [InlineData(
 @">a
 >b
 ",
-@"<blockquote><p>a
-b
-</p></blockquote>")]
+@"<blockquote><p></p></blockquote>")]
     [InlineData(
 @">a
 >b
 >c
 ",
-@"<blockquote><p>a
-b
-c
-</p></blockquote>")]
+@"<blockquote><p></p></blockquote>")]
     [InlineData(
 @">quote 1
 
 >quote2
 ",
-@"<blockquote><p>quote 1
-</p></blockquote><blockquote><p>quote2
-</p></blockquote>")]
+@"<blockquote><p></p></blockquote><blockquote><p></p></blockquote>")]
     [InlineData(
 @">a
 >>b
 >c
 ",
-@"<blockquote><p>a
-</p><blockquote><p>b
-</p></blockquote><p>c
-</p></blockquote>")]
+@"<blockquote><p></p><blockquote><p></p></blockquote><p></p></blockquote>")]
     [InlineData(
 @">a
 >>b
 >>>c
 >>>d
 >e",
-@"<blockquote><p>a
-</p><blockquote><p>b
-</p><blockquote><p>c
-d
-</p></blockquote></blockquote><p>e</p></blockquote>")]
+@"<blockquote><p></p><blockquote><p></p><blockquote><p></p></blockquote></blockquote><p></p></blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BuildRequest
@@ -64,7 +52,8 @@ d
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com")
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

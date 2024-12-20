@@ -5,43 +5,37 @@ public class IBuildTest
     [Theory]
     [InlineData(
 @"prefix *infix italic* sufix",
-@"<p>prefix <i>infix italic</i> sufix</p>")]
+@"prefix <i>infix italic</i> sufix")]
     [InlineData(
 @"*prefix italic* infix sufix",
-@"<p><i>prefix italic</i> infix sufix</p>")]
+@"<i>prefix italic</i> infix sufix")]
     [InlineData(
 @"prefix infix *sufix italic*",
-@"<p>prefix infix <i>sufix italic</i></p>")]
+@"prefix infix <i>sufix italic</i>")]
     [InlineData(
 @"*text italic*",
-@"<p><i>text italic</i></p>")]
+@"<i>text italic</i>")]
     [InlineData(
 @" *italic* *italic* ",
-@"<p> <i>italic</i> <i>italic</i> </p>")]
+@" <i>italic</i> <i>italic</i> ")]
     [InlineData(
 @"*italic*
 *italic*",
-@"<p><i>italic</i>
-<i>italic</i></p>")]
+@"<i>italic</i>
+<i>italic</i>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BuildRequest
+        var arrange = new IBuildRequest
         {
             Source = informed
         };
 
-        var result = await new BuildRequestHandler(
-                new ProjectBuildResponse
-                {
-                    Title = "--title--",
-                    BaseUrl = new Uri("https://github.com"),
-                }
-            )
+        var result = await new IBuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result.Target?.Built);
+        Assert.Equal(expected, result!.Target);
     }
 }
