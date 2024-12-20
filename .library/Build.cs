@@ -96,19 +96,19 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var sourceInner = Regex
                 .Replace(
-                    group.Value, 
-                    "^    ", 
-                    string.Empty, 
+                    group.Value,
+                    "^    ",
+                    string.Empty,
                     RegexOptions.Multiline
                 );
             source = source
                 .Replace(
-                    group.Value, 
+                    group.Value,
                     Build(
-                        parent, 
+                        parent,
                         Regex.Matches(
-                            sourceInner, 
-                            UL_OL), 
+                            sourceInner,
+                            UL_OL),
                         cancellationToken
                     )
                     .ToBlockingEnumerable()?
@@ -211,33 +211,193 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             yield return element;
     }
 
-    private async Task<string?> Build(string? source, CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IElement> Build(H1? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (source == default)
-            return source;
-        var target = source;
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(H2? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(H3? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(H4? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(H5? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(H6? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(P? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
+    private async IAsyncEnumerable<IElement> Build(Cite? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
+    }
 
-        target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        return target;
+    private async IAsyncEnumerable<IElement> Build(LI? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (Match match in matches)
+        {
+            var content = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var text = new Text
+                {
+                    Source = content,
+                    Parent = parent,
+                    Children = default,
+                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
+                };
+                yield return text;
+                continue;
+            }
+            var debug = string.Empty;
+        }
     }
 
     private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -446,7 +606,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                         Children = default,
-                        Built = await Build(content, cancellationToken),
+                        Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
                     };
                     yield return text;
                     continue;
