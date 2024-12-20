@@ -87,10 +87,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
             var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
+            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, UL_OL), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
         }
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Singleline), cancellationToken))
             yield return element;
     }
 
@@ -99,7 +99,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -108,7 +108,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -117,7 +117,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -126,7 +126,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -135,7 +135,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -144,7 +144,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -153,7 +153,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -162,7 +162,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -171,7 +171,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
@@ -180,7 +180,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
