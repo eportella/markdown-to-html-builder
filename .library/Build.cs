@@ -32,7 +32,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string THEME = @"(?'THEME'\[!" + THEME_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
-    const string A = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -230,18 +229,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({A})", (match) =>
-        {
-            var str = match.Groups["A_HREF"].Value;
-            var href = new Uri(str);
-
-            if (string.IsNullOrWhiteSpace(href.Host))
-            {
-                return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
-            }
-
-            return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
-        }, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
 
