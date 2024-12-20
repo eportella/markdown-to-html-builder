@@ -96,7 +96,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, UL_OL), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
         }
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, TEXT, RegexOptions.Singleline), cancellationToken))
+        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
             yield return element;
     }
 
