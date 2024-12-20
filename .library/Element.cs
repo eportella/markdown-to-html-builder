@@ -1,8 +1,8 @@
 internal interface IElement
 {
-    IElement? Parent { get; init; }
-    IElement[]? Children { get; }
-    string? Built { get; }
+    internal IElement? Parent { get; init; }
+    internal IElement[]? Children { get; }
+    internal string? Built { get; }
 }
 
 internal static class IElementExtensions
