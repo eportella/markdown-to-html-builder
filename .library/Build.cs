@@ -102,25 +102,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
             yield return text;
     }
-
-    private async IAsyncEnumerable<IElement> Build(Ul? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
-            yield return element;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(Ol? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
-            yield return element;
-    }
-
     private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
@@ -270,7 +251,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, content, cancellationToken)
+                        ul.Children = Build(ul, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ul.Built = $"<ul>{ul.Children.Build()}</ul>";
@@ -285,7 +266,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, content, cancellationToken)
+                        ol.Children = Build(ol, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ol.Built = $"<ol>{ol.Children.Build()}</ol>";
