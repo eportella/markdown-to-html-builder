@@ -97,10 +97,6 @@ public class UlOlBuildTest
             .Get(mediator)
                 .Setup(s => s.CreateStream(It.IsAny<TextBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
-        Mock
-            .Get(mediator)
-                .Setup(s => s.Send(It.IsAny<CiteBuildRequest>(), CancellationToken.None))
-                .ReturnsAsync(Regex.Matches("","X"));
 
         var result = await new BuildRequestHandler(
                 new ProjectBuildResponse
