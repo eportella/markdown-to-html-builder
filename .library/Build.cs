@@ -22,6 +22,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
+    static Regex RegexLi { get; }
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
     static Regex RegexText { get; }
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
@@ -29,6 +30,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     static BuildRequestHandler()
     {
         RegexText = new Regex(TEXT, RegexOptions.Multiline);
+        RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -105,7 +107,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
             yield return element;
     }
 
@@ -114,7 +116,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
             yield return element;
     }
 
