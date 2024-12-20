@@ -46,6 +46,12 @@ public class BlockquoteBuildTest
         {
             Source = informed
         };
+        var mediator = Mock.Of<IMediator>();
+        Mock
+            .Get(mediator)
+            .Setup(s => s.Send(It.IsAny<TextBuildRequest>(), CancellationToken.None))
+            .ReturnsAsync(new Text { });
+
 
         var result = await new BuildRequestHandler(
                 new ProjectBuildResponse
@@ -53,7 +59,7 @@ public class BlockquoteBuildTest
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com")
                 },
-                Mock.Of<IMediator>()
+                mediator
             )
             .Handle(
                 arrange,

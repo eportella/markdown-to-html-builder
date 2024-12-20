@@ -122,14 +122,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -164,14 +157,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -188,14 +174,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -211,14 +190,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -234,14 +206,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -257,14 +222,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -280,14 +238,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -304,14 +255,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -328,14 +272,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var text = new Text
-                {
-                    Source = content,
-                    Parent = parent,
-                    Children = default,
-                    Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                };
-                yield return text;
+                yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                 continue;
             }
             var debug = string.Empty;
@@ -543,14 +480,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 var content = match.Groups["TEXT"].Value;
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    var text = new Text
-                    {
-                        Source = content,
-                        Parent = parent,
-                        Children = default,
-                        Built = (await mediator.Send(new TextBuildRequest { Source = content }, cancellationToken))?.Target,
-                    };
-                    yield return text;
+                    yield return await mediator.Send(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken);
                     continue;
                 }
             }
