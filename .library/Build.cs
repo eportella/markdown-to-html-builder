@@ -23,7 +23,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
-    const string BR = @"(?'BR'\\(\r?\n))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -191,10 +190,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             return source;
         var target = source;
 
-        target = Regex.Replace(target, @$"({BR})", (match) =>
-        {
-            return $"<br />";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
 
