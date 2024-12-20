@@ -22,6 +22,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
+    const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     static Regex RegexLi { get; }
 
     static BuildRequestHandler()
@@ -61,7 +62,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = html,
         };
-        body.Children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline).Concat(await mediator.Send(new CiteBuildRequest { Source = body.Source }, cancellationToken)).ToArray(), cancellationToken)
+        body.Children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline), cancellationToken)
             .ToBlockingEnumerable(cancellationToken)
             .ToArray();
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
@@ -90,8 +91,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Regex.Matches(
                                 sourceInner,
                                 UL_OL
-                            )
-                            .ToArray(),
+                            ),
                         cancellationToken
                     )
                     .ToBlockingEnumerable()?
@@ -103,7 +103,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
             yield return text;
     }
-    private async IAsyncEnumerable<IElement> Build(IElement? parent, Match[] matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
         {
@@ -233,7 +233,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline).ToArray(), cancellationToken)
+                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
@@ -252,7 +252,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, RegexLi.Matches(content).ToArray(), cancellationToken)
+                        ul.Children = Build(ul, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ul.Built = $"<ul>{ul.Children.Build()}</ul>";
@@ -267,7 +267,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, RegexLi.Matches(content).ToArray(), cancellationToken)
+                        ol.Children = Build(ol, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ol.Built = $"<ol>{ol.Children.Build()}</ol>";
