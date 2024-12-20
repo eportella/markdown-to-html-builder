@@ -92,10 +92,29 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             yield break;
 
         var matches = Regex.Matches(source, @$"{UL_OL_INNER}", RegexOptions.Multiline);
-        foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
+        foreach (Group group in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
-            var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, UL_OL), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
+            var sourceInner = Regex
+                .Replace(
+                    group.Value, 
+                    "^    ", 
+                    string.Empty, 
+                    RegexOptions.Multiline
+                );
+            source = source
+                .Replace(
+                    group.Value, 
+                    Build(
+                        parent, 
+                        Regex.Matches(
+                            sourceInner, 
+                            UL_OL), 
+                        cancellationToken
+                    )
+                    .ToBlockingEnumerable()?
+                    .SingleOrDefault()?
+                    .Built
+                );
         }
 
         await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
