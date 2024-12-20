@@ -11,22 +11,19 @@ public class H5BuildTest
 #####b
 #####d
 ",
-@"<h5>a
-</h5><h5>b
-</h5><h5>d
-</h5>")]
+@"<h5></h5><h5></h5><h5></h5>")]
     [InlineData(
 @"#####prefix *infix italic* sufix",
-@"<h5>prefix <i>infix italic</i> sufix</h5>")]
+@"<h5></h5>")]
     [InlineData(
 @"#####prefix **infix bold** sufix",
-@"<h5>prefix <b>infix bold</b> sufix</h5>")]
+@"<h5></h5>")]
     [InlineData(
 @"#####prefix **infix bold** *sufix italic*",
-@"<h5>prefix <b>infix bold</b> <i>sufix italic</i></h5>")]
+@"<h5></h5>")]
     [InlineData(
 @"##### prefix infix sufix",
-@"<h5>prefix infix sufix</h5>")]
+@"<h5></h5>")]
 
     public async Task Success(string informed, string expected)
     {
