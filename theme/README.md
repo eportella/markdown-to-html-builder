@@ -61,10 +61,10 @@ São disponibilizadas cinco cores, uma para cada finalidade e são elas: **[!.D]
 **[!.BD9.FD9]padrão** **[!.BN9.FN9]nota** **[!.BT9.FT9]dica** **[!.BI9.FI9]importante** **[!.BW9.FW9]atenção** **[!.BC9.FC9]cuidado**
 
 >[!CAUTION]
->As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular as cor ou background na construção que qualquer página.
+>As paletas acima foram compartilhadas apenas para fins didáticos e não é recomendado tentar se beneficiar delas para manipular a cor ou background na construção que qualquer página.
 
 ## Esquema de cores
-Há suporte para 2 esquemas de cores que são herdados do navegador atravéz dps seus modos de apresentação, ele são conhecidos como ***dark*** e ***ligth***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores será adotado e todas as cores serão as herdadas do navegador.
+Há suporte para 2 esquemas de cores que são herdados do navegador atravéz dos seus modos de apresentação, ele são conhecidos como ***dark*** e ***light***. Não há suporte para qualquer modo com esquema de cores diferente deles. Ou seja, nenhum esquema de cores será adotado e todas as cores serão as herdadas do navegador.
 
 >Nenhum esquema de cores será adotado caso o navegador não tenha suporte a eles.
 
