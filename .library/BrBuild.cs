@@ -11,6 +11,11 @@ internal sealed class BrBuildResponse
 internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, BrBuildResponse?>
 {
     const string PATTERN = @"(?'BR'\\(\r?\n))";
+    static Regex Regex { get; }
+    static BrBuildRequestHandler()
+    {
+        Regex = new Regex(PATTERN, RegexOptions.Multiline);
+    }
     public async Task<BrBuildResponse?> Handle(BrBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -27,11 +32,9 @@ internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, 
     {
         if (source == default)
             return source;
-        
+
         return Regex.Replace(
-            source, 
-            $"({PATTERN})", 
-            match => "<br />", 
-            RegexOptions.Multiline);
+            source,
+            match => "<br />");
     }
 }

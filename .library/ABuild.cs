@@ -11,6 +11,11 @@ internal sealed class ABuildResponse
 internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
 {
     const string PATTERN = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
+    static Regex Regex { get; }
+    static ABuildRequestHandler()
+    {
+        Regex = new Regex(PATTERN, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+    }
     public async Task<ABuildResponse?> Handle(ABuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +35,6 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
 
         return Regex.Replace(
             source,
-            $"({PATTERN})",
             match =>
             {
                 var href = new Uri(match.Groups["A_HREF"].Value);
@@ -39,7 +43,6 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
                     return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
 
                 return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
-            },
-            RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            });
     }
 }

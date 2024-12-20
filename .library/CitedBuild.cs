@@ -11,6 +11,11 @@ internal sealed class CitedBuildResponse
 internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildRequest, CitedBuildResponse?>
 {
     const string PATTERN = @$"\[\^(?'CITED_INDEX'\d+)\]";
+    static Regex Regex { get; }
+    static CitedBuildRequestHandler()
+    {
+        Regex = new Regex(PATTERN, RegexOptions.Multiline);
+    }
     public async Task<CitedBuildResponse?> Handle(CitedBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -29,13 +34,11 @@ internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildReq
             return source;
 
         return Regex.Replace(
-            source, 
-            $"({PATTERN})", 
+            source,
             match =>
             {
                 var index = match.Groups["CITED_INDEX"].Value;
                 return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";
-            }, 
-            RegexOptions.Multiline);
+            });
     }
 }
