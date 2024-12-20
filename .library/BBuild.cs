@@ -10,7 +10,7 @@ internal sealed class BBuildResponse
 }
 internal sealed class BBuildRequestHandler() : IRequestHandler<BBuildRequest, BBuildResponse?>
 {
-    const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
+    const string PATTERN = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
     public async Task<BBuildResponse?> Handle(BBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class BBuildRequestHandler() : IRequestHandler<BBuildRequest, BB
 
         return Regex.Replace(
             source,
-            $"({B})", 
+            $"({PATTERN})", 
             match => $"<b>{match.Groups["B_CONTENT"].Value}</b>",
             RegexOptions.Multiline);
     }

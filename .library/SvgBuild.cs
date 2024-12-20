@@ -11,11 +11,11 @@ internal sealed class SvgBuildResponse
 }
 internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest, SvgBuildResponse?>
 {
-    const string SVG_NOTE = @"(?'SVG_NOTE'\[!NOTE\])";
-    const string SVG_TIP = @"(?'SVG_TIP'\[!TIP\])";
-    const string SVG_IMPORTANT = @"(?'SVG_IMPORTANT'\[!IMPORTANT\])";
-    const string SVG_WARNING = @"(?'SVG_WARNING'\[!WARNING\])";
-    const string SVG_CAUTION = @"(?'SVG_CAUTION'\[!CAUTION\])";
+    const string PATTERN_NOTE = @"(?'SVG_NOTE'\[!NOTE\])";
+    const string PATTERN_TIP = @"(?'SVG_TIP'\[!TIP\])";
+    const string PATTERN_IMPORTANT = @"(?'SVG_IMPORTANT'\[!IMPORTANT\])";
+    const string PATTERN_WARNING = @"(?'SVG_WARNING'\[!WARNING\])";
+    const string PATTERN_CAUTION = @"(?'SVG_CAUTION'\[!CAUTION\])";
     public async Task<SvgBuildResponse?> Handle(SvgBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -37,7 +37,7 @@ internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest
 
         target = Regex.Replace(
             target, 
-            @$"({SVG_NOTE})", 
+            @$"({PATTERN_NOTE})", 
             match => $@"<span class=""icon"">{
                 SvgBuild(
                     "var(--color-note-a50)",
@@ -47,7 +47,7 @@ internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest
 
         target = Regex.Replace(
             target, 
-            $"({SVG_TIP})", 
+            $"({PATTERN_TIP})", 
             match => $@"<span class=""icon"">{
                 SvgBuild(
                     "var(--color-tip-a50)",
@@ -57,7 +57,7 @@ internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest
 
         target = Regex.Replace(
             target, 
-            $"({SVG_IMPORTANT})", 
+            $"({PATTERN_IMPORTANT})", 
             match => $@"<span class=""icon"">{
                 SvgBuild(
                     "var(--color-important-a50)",
@@ -67,7 +67,7 @@ internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest
 
         target = Regex.Replace(
             target, 
-            $"({SVG_WARNING})", 
+            $"({PATTERN_WARNING})", 
             match => $@"<span class=""icon"">{
                 SvgBuild(
                     "var(--color-warning-a50)",
@@ -77,7 +77,7 @@ internal sealed class SvgBuildRequestHandler() : IRequestHandler<SvgBuildRequest
 
         target = Regex.Replace(
             target, 
-            $"({SVG_CAUTION})", 
+            $"({PATTERN_CAUTION})", 
             match => $@"<span class=""icon"">{
                 SvgBuild(
                     "var(--color-caution-a50)",

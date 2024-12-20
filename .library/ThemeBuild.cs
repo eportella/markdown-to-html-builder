@@ -10,8 +10,8 @@ internal sealed class ThemeBuildResponse
 }
 internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildRequest, ThemeBuildResponse?>
 {
-    const string THEME_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
-    const string THEME = @"(?'THEME'\[!" + THEME_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
+    const string PATTERN_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
+    const string PATTERN = @"(?'THEME'\[!" + PATTERN_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
     public async Task<ThemeBuildResponse?> Handle(ThemeBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -31,14 +31,14 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
 
         return Regex.Replace(
             source,
-            $"({THEME})",
+            $"({PATTERN})",
             match =>
             {
                 var themes = match
                     .Groups["THEME_RULE"]
                     .Captures
                     .Select(capture =>
-                        Regex.Replace(capture.Value, THEME_RULE, match =>
+                        Regex.Replace(capture.Value, PATTERN_RULE, match =>
                         {
                             var location = match.Groups["THEME_LOCATION"].Value;
                             if (string.IsNullOrWhiteSpace(location))

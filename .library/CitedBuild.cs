@@ -10,7 +10,7 @@ internal sealed class CitedBuildResponse
 }
 internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildRequest, CitedBuildResponse?>
 {
-    const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
+    const string PATTERN = @$"\[\^(?'CITED_INDEX'\d+)\]";
     public async Task<CitedBuildResponse?> Handle(CitedBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildReq
 
         return Regex.Replace(
             source, 
-            $"({CITED})", 
+            $"({PATTERN})", 
             match =>
             {
                 var index = match.Groups["CITED_INDEX"].Value;

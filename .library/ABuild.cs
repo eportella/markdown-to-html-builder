@@ -10,7 +10,7 @@ internal sealed class ABuildResponse
 }
 internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
 {
-    const string A = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
+    const string PATTERN = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
     public async Task<ABuildResponse?> Handle(ABuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
 
         return Regex.Replace(
             source,
-            $"({A})",
+            $"({PATTERN})",
             match =>
             {
                 var href = new Uri(match.Groups["A_HREF"].Value);

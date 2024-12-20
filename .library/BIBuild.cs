@@ -10,7 +10,7 @@ internal sealed class BIBuildResponse
 }
 internal sealed class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, BIBuildResponse?>
 {
-    const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
+    const string PATTERN = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     public async Task<BIBuildResponse?> Handle(BIBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, 
 
         return Regex.Replace(
             source, 
-            $"({BI})", 
+            $"({PATTERN})", 
             match => $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>", 
             RegexOptions.Multiline);
     }

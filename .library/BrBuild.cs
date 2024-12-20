@@ -10,7 +10,7 @@ internal sealed class BrBuildResponse
 }
 internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, BrBuildResponse?>
 {
-    const string BR = @"(?'BR'\\(\r?\n))";
+    const string PATTERN = @"(?'BR'\\(\r?\n))";
     public async Task<BrBuildResponse?> Handle(BrBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, 
         
         return Regex.Replace(
             source, 
-            $"({BR})", 
+            $"({PATTERN})", 
             match => "<br />", 
             RegexOptions.Multiline);
     }

@@ -11,7 +11,7 @@ internal sealed class AgeCalcBuildResponse
 }
 internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuildRequest, AgeCalcBuildResponse?>
 {
-    const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
+    const string PATTERN = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     public async Task<AgeCalcBuildResponse?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -31,7 +31,7 @@ internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuil
 
         return Regex.Replace(
             source,
-            $"({AGE_CALC})",
+            $"({PATTERN})",
             match => AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString(),
             RegexOptions.Multiline);
     }

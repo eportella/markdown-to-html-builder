@@ -10,7 +10,7 @@ internal sealed class DelBuildResponse
 }
 internal sealed class DelBuildRequestHandler() : IRequestHandler<DelBuildRequest, DelBuildResponse?>
 {
-    const string DEL = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
+    const string PATTERN = @"(?'DEL'\~{2}(?'DEL_CONTENT'[^\*| ].+?)\~{2})";
     public async Task<DelBuildResponse?> Handle(DelBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class DelBuildRequestHandler() : IRequestHandler<DelBuildRequest
 
         return Regex.Replace(
             source, 
-            $"({DEL})", 
+            $"({PATTERN})", 
             match => $"<del>{match.Groups["DEL_CONTENT"].Value}</del>", 
             RegexOptions.Multiline);
     }

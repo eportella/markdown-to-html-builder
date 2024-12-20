@@ -10,7 +10,7 @@ internal sealed class IBuildResponse
 }
 internal sealed class IBuildRequestHandler() : IRequestHandler<IBuildRequest, IBuildResponse?>
 {
-    const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
+    const string PATTERN = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
     public async Task<IBuildResponse?> Handle(IBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -30,7 +30,7 @@ internal sealed class IBuildRequestHandler() : IRequestHandler<IBuildRequest, IB
 
         return Regex.Replace(
             source,
-            $"({I})",
+            $"({PATTERN})",
             match => $"<i>{match.Groups["I_CONTENT"].Value}</i>",
             RegexOptions.Multiline);
     }
