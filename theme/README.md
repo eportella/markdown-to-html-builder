@@ -76,7 +76,7 @@ No inicio da janela fica sempre o nome do projeto, nele há um link que redireci
 Todo o restante do espaço da janela é destinado para adicionar o conteúdo da página considerando barra de rolagem apenas na vertical caso o conteúdo não consiga se encaixar por completo nela. Como as páginas tendem a ter uma grande parte de texto, está fixado a largura máxima de 1024 pixels para considerar uma zona de respiro.
 
 ## Fontes
-Ha suporte para apenas um tipo de fonte que pode ser consultada na [folha de estilo](https://github.com/eportella/markdown-to-html-builder/blob/main/theme/README.md?plain=1)
+Há suporte para apenas um tipo de fonte que pode ser consultada na [folha de estilo](https://github.com/eportella/markdown-to-html-builder/blob/main/theme/README.md?plain=1)
 
 ## Alertas
 As cores dos alertas seguem a semântica para os objetivos delas que são: **[!.D]padrão**, **[!.N]nota**, **[!.T]dica**, **[!.I]importante**, **[!.W]atenção** e **[!.C]cuidado**.\
