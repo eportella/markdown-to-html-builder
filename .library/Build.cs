@@ -54,14 +54,14 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
 
     private Html Build(BuildRequest request)
     {
-        var element = new Html
+        var html = new Html
         {
             Source = request.Source,
             Parent = default,
         };
-        element.Children = Build(element, request);
-        element.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{element.Children.Build()}</html>";
-        return element;
+        html.Children = Build(html, request);
+        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{html.Children.Build()}</html>";
+        return html;
     }
 
     private IElement[] Build(Html html, BuildRequest request)
