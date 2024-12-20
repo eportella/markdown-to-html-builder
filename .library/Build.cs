@@ -22,9 +22,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
-    const string I = @"(?'I'\*{1}(?'I_CONTENT'[^\*| ].+?)\*{1})";
-    const string B = @"(?'B'\*{2}(?'B_CONTENT'[^\*| ].+?)\*{2})";
-    const string BI = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
     const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
     const string BR = @"(?'BR'\\(\r?\n))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
@@ -199,20 +196,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             return $"<br />";
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({BI})", (match) =>
-        {
-            return $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
 
-        target = Regex.Replace(target, @$"({B})", (match) =>
-        {
-            return $"<b>{match.Groups["B_CONTENT"].Value}</b>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
 
-        target = Regex.Replace(target, @$"({I})", (match) =>
-        {
-            return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
 
