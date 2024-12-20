@@ -17,24 +17,17 @@ public class ThemeBuildTest
 @"<span class=""theme d-b-0 d-f-0"">padrão</span>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BuildRequest
+        var arrange = new ThemeBuildRequest
         {
             Source = informed
         };
 
-        var result = await new BuildRequestHandler(
-                new ProjectBuildResponse
-                {
-                    Title = "--title--",
-                    BaseUrl = new Uri("https://github.com"),
-                },
-                Mock.Of<IMediator>()
-            )
+        var result = await new ThemeBuildRequestHandler()
             .Handle(
                 arrange,
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result.Target?.Built);
+        Assert.Equal(expected, result!.Target);
     }
 }
