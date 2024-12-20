@@ -30,18 +30,22 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
 
         var target = source;
 
-        target = Regex.Replace(target, @$"({A})", (match) =>
-        {
-            var str = match.Groups["A_HREF"].Value;
-            var href = new Uri(str);
-
-            if (string.IsNullOrWhiteSpace(href.Host))
+        target = Regex.Replace(
+            target, 
+            @$"({A})", 
+            (match) =>
             {
-                return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
-            }
+                var str = match.Groups["A_HREF"].Value;
+                var href = new Uri(str);
 
-            return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
-        }, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                if (string.IsNullOrWhiteSpace(href.Host))
+                {
+                    return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
+                }
+
+                return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
+            }, 
+            RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
         return target;
     }
