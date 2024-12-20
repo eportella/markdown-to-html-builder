@@ -91,7 +91,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        var matches = Regex.Matches(source, @$"{UL_OL_INNER}", RegexOptions.Multiline);
+        var matches = Regex.Matches(source, UL_OL_INNER, RegexOptions.Multiline);
         foreach (Group group in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
             var sourceInner = Regex
