@@ -23,7 +23,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     static Regex RegexLi { get; }
-    const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
 
     static BuildRequestHandler()
     {
@@ -48,12 +47,12 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = default,
         };
-        html.Children = Build(html, request, cancellationToken).ToArray();
+        html.Children = Build(html, request, cancellationToken).ToBlockingEnumerable(cancellationToken).ToArray();
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{html.Children.Build()}</html>";
         return html;
     }
 
-    private IEnumerable<IElement> Build(Html html, BuildRequest request, CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IElement> Build(Html html, BuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (request.Source == default)
             yield break;
@@ -62,7 +61,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = html,
         };
-        body.Children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline), cancellationToken)
+        body.Children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline).Concat(await mediator.Send(new CiteBuildRequest { Source = body.Source }, cancellationToken)).ToArray(), cancellationToken)
             .ToBlockingEnumerable(cancellationToken)
             .ToArray();
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
@@ -89,8 +88,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Build(
                         parent,
                         Regex.Matches(
-                            sourceInner,
-                            UL_OL),
+                                sourceInner,
+                                UL_OL
+                            )
+                            .ToArray(),
                         cancellationToken
                     )
                     .ToBlockingEnumerable()?
@@ -102,7 +103,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
             yield return text;
     }
-    private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IElement> Build(IElement? parent, Match[] matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
         {
@@ -232,7 +233,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken)
+                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline).ToArray(), cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
@@ -251,7 +252,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, RegexLi.Matches(content), cancellationToken)
+                        ul.Children = Build(ul, RegexLi.Matches(content).ToArray(), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ul.Built = $"<ul>{ul.Children.Build()}</ul>";
@@ -266,7 +267,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, RegexLi.Matches(content), cancellationToken)
+                        ol.Children = Build(ol, RegexLi.Matches(content).ToArray(), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
                         ol.Built = $"<ol>{ol.Children.Build()}</ol>";

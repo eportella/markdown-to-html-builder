@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using MediatR;
 using Moq;
 
@@ -23,6 +24,11 @@ default)]
         {
             Source = informed
         };
+        var mediator = Mock.Of<IMediator>();
+        Mock
+            .Get(mediator)
+                .Setup(s => s.Send(It.IsAny<CiteBuildRequest>(), CancellationToken.None))
+                .ReturnsAsync(Regex.Matches("","X"));
 
         var result = await new BuildRequestHandler(
                 new ProjectBuildResponse
@@ -30,7 +36,7 @@ default)]
                     Title = "--title--",
                     BaseUrl = new Uri("https://domain"),
                 },
-                Mock.Of<IMediator>()
+                mediator
             )
             .Handle(
                 arrange,
