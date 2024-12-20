@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class ABuildTest
@@ -21,7 +24,8 @@ public class ABuildTest
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://route-1")
-                }
+                },
+                 Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

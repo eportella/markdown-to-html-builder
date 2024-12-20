@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class BlockquoteBuildTest
@@ -64,7 +67,8 @@ d
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com")
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

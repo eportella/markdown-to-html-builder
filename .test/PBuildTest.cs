@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class PBuildTest
@@ -45,7 +48,8 @@ c
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com"),
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

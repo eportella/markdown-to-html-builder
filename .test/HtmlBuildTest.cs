@@ -1,3 +1,6 @@
+using MediatR;
+using Moq;
+
 namespace test;
 
 public class HtmlBuildTest
@@ -26,7 +29,8 @@ default)]
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://domain"),
-                }
+                },
+                Mock.Of<IMediator>()
             )
             .Handle(
                 arrange,

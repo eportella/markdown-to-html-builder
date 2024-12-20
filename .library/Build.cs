@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using MediatR;
@@ -10,7 +11,7 @@ internal sealed class BuildResponse
 {
     internal Html? Target { get; init; }
 }
-internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<BuildRequest, BuildResponse>
+internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, BuildResponse>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -48,53 +49,53 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
 
         return new BuildResponse
         {
-            Target = Build(request),
+            Target = Build(request, cancellationToken),
         };
     }
 
-    private Html Build(BuildRequest request)
+    private Html Build(BuildRequest request, CancellationToken cancellationToken)
     {
         var html = new Html
         {
             Source = request.Source,
             Parent = default,
         };
-        html.Children = Build(html, request);
+        html.Children = Build(html, request, cancellationToken);
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{html.Children.Build()}</html>";
         return html;
     }
 
-    private IElement[] Build(Html html, BuildRequest request)
+    private IElement[] Build(Html html, BuildRequest request, CancellationToken cancellationToken)
     {
         var body = new Body
         {
             Source = request.Source,
             Parent = html,
         };
-        body.Children = Build(body, request.Source).ToArray();
+        body.Children = Build(body, request.Source, cancellationToken).ToBlockingEnumerable().ToArray();
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         return [body];
     }
 
-    private IEnumerable<IElement> Build(IElement? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(IElement? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(Blockquote? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(Blockquote? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(LI? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(LI? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
@@ -103,104 +104,104 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
         foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
             var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"))?.SingleOrDefault()?.Built);
+            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, @$"({UL_OL})"), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
         }
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Singleline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(Ul? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(Ul? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(Ol? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(Ol? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({LI})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H1? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H1? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H2? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H2? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H3? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H3? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H4? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H4? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H5? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H5? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(H6? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(H6? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(P? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(P? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private IEnumerable<IElement> Build(Cite? parent, string? source)
+    private async IAsyncEnumerable<IElement> Build(Cite? parent, string? source, [EnumeratorCancellation]CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
 
-        foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline)))
+        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({TEXT})", RegexOptions.Multiline), cancellationToken))
             yield return element;
     }
 
-    private string? Build(string? source)
+    private async Task<string?> Build(string? source, CancellationToken cancellationToken)
     {
         if (source == default)
             return source;
@@ -295,29 +296,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
             return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({THEME})", (match) =>
-        {
-            var themes = match.Groups["THEME_RULE"].Captures.Select(capture =>
-            {
-                return Regex.Replace(capture.Value, THEME_RULE, match =>
-                {
-                    var location = match.Groups["THEME_LOCATION"].Value;
-                    if (string.IsNullOrWhiteSpace(location))
-                        location = "F";
-                    var color = match.Groups["THEME_COLOR"].Value;
-                    if (string.IsNullOrWhiteSpace(color))
-                        color = "D";
-                    var tonality = match.Groups["THEME_TONALITY"].Value;
-                    if (string.IsNullOrWhiteSpace(tonality))
-                        tonality = "5";
-                    var content = match.Groups["THEME_CONTENT"].Value;
-
-                    return $"{color.ToLower()}-{location.ToLower()}-{tonality}";
-                });
-            }).ToArray();
-            var content = match.Groups["THEME_CONTENT"].Value;
-            return @$"<span class=""theme {string.Join(" ", themes)}"">{content}</span>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
 
         return target;
     }
@@ -350,7 +329,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
         return svgElement.ToString(SaveOptions.DisableFormatting);
     }
 
-    private IEnumerable<IElement> Build(IElement? parent, MatchCollection matches)
+    private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
         {
@@ -362,7 +341,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h1.Children = Build(h1, content).ToArray();
+                h1.Children = Build(h1, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h1.Built = $"<h1>{h1.Children.Build()}</h1>";
                 yield return h1;
                 continue;
@@ -375,7 +354,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h2.Children = Build(h2, content).ToArray();
+                h2.Children = Build(h2, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h2.Built = $"<h2>{h2.Children.Build()}</h2>";
                 yield return h2;
                 continue;
@@ -388,7 +367,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h3.Children = Build(h3, content).ToArray();
+                h3.Children = Build(h3, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h3.Built = $"<h3>{h3.Children.Build()}</h3>";
                 yield return h3;
                 continue;
@@ -401,7 +380,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h4.Children = Build(h4, content).ToArray();
+                h4.Children = Build(h4, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h4.Built = $"<h4>{h4.Children.Build()}</h4>";
                 yield return h4;
                 continue;
@@ -414,7 +393,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h5.Children = Build(h5, content).ToArray();
+                h5.Children = Build(h5, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h5.Built = $"<h5>{h5.Children.Build()}</h5>";
                 yield return h5;
                 continue;
@@ -427,7 +406,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                     Source = content,
                     Parent = parent,
                 };
-                h6.Children = Build(h6, content).ToArray();
+                h6.Children = Build(h6, content, cancellationToken).ToBlockingEnumerable().ToArray();
                 h6.Built = $"<h6>{h6.Children.Build()}</h6>";
                 yield return h6;
                 continue;
@@ -462,7 +441,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, blockquote.Source).ToArray();
+                blockquote.Children = Build(blockquote, blockquote.Source, cancellationToken).ToBlockingEnumerable().ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
@@ -479,7 +458,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, content).ToArray();
+                        ul.Children = Build(ul, content, cancellationToken).ToBlockingEnumerable().ToArray();
                         ul.Built = $"<ul>{ul.Children.Build()}</ul>";
                         yield return ul;
                         continue;
@@ -492,7 +471,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, content).ToArray();
+                        ol.Children = Build(ol, content, cancellationToken).ToBlockingEnumerable().ToArray();
                         ol.Built = $"<ol>{ol.Children.Build()}</ol>";
                         yield return ol;
                         continue;
@@ -509,7 +488,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                         Source = content,
                         Parent = parent,
                     };
-                    li.Children = Build(li, content).ToArray();
+                    li.Children = Build(li, content, cancellationToken).ToBlockingEnumerable().ToArray();
                     li.Built = $"<li>{li.Children.Build()}</li>";
                     yield return li;
                     continue;
@@ -525,7 +504,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                         Source = content,
                         Parent = parent,
                     };
-                    p.Children = Build(p, content).ToArray();
+                    p.Children = Build(p, content, cancellationToken).ToBlockingEnumerable().ToArray();
                     p.Built = $"<p>{p.Children.Build()}</p>";
                     yield return p;
                     continue;
@@ -541,7 +520,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                         Source = content,
                         Parent = parent,
                     };
-                    cite.Children = Build(cite, content).ToArray();
+                    cite.Children = Build(cite, content, cancellationToken).ToBlockingEnumerable().ToArray();
                     cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
                     yield return cite;
                     continue;
@@ -556,7 +535,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project) : IReque
                         Source = content,
                         Parent = parent,
                         Children = default,
-                        Built = Build(content),
+                        Built = await Build(content, cancellationToken),
                     };
                     yield return text;
                     continue;
