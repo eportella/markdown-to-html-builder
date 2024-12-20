@@ -28,13 +28,10 @@ internal sealed class BBuildRequestHandler() : IRequestHandler<BBuildRequest, BB
         if (source == default)
             return source;
 
-        var target = source;
-
-        target = Regex.Replace(
-            target, 
-            @$"({B})", (match) => $"<b>{match.Groups["B_CONTENT"].Value}</b>", 
+        return Regex.Replace(
+            source,
+            $"({B})", 
+            match => $"<b>{match.Groups["B_CONTENT"].Value}</b>",
             RegexOptions.Multiline);
-
-        return target;
     }
 }

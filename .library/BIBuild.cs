@@ -28,14 +28,10 @@ internal sealed class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, 
         if (source == default)
             return source;
 
-        var target = source;
-
-        target = Regex.Replace(
-            target, 
-            @$"({BI})", 
+        return Regex.Replace(
+            source, 
+            $"({BI})", 
             match => $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>", 
             RegexOptions.Multiline);
-        
-        return target;
     }
 }

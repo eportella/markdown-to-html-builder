@@ -29,18 +29,11 @@ internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuil
         if (source == default)
             return source;
 
-        var target = source;
-
-        target = Regex.Replace(
-            target, 
-            @$"({AGE_CALC})", 
-            (match) =>
-            {
-                return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
-            }, 
+        return Regex.Replace(
+            source,
+            $"({AGE_CALC})",
+            match => AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString(),
             RegexOptions.Multiline);
-
-        return target;
     }
 
     private static int AgeCalculate(DateTime birthDate)

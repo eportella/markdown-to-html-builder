@@ -28,17 +28,10 @@ internal sealed class DelBuildRequestHandler() : IRequestHandler<DelBuildRequest
         if (source == default)
             return source;
 
-        var target = source;
-
-        target = Regex.Replace(
-            target, 
-            @$"({DEL})", 
-            (match) =>
-            {
-                return $"<del>{match.Groups["DEL_CONTENT"].Value}</del>";
-            }, 
+        return Regex.Replace(
+            source, 
+            $"({DEL})", 
+            match => $"<del>{match.Groups["DEL_CONTENT"].Value}</del>", 
             RegexOptions.Multiline);
-
-        return target;
     }
 }

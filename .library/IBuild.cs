@@ -28,13 +28,10 @@ internal sealed class IBuildRequestHandler() : IRequestHandler<IBuildRequest, IB
         if (source == default)
             return source;
 
-        var target = source;
-
-        target = Regex.Replace(target, @$"({I})", (match) =>
-        {
-            return $"<i>{match.Groups["I_CONTENT"].Value}</i>";
-        }, RegexOptions.Multiline);
-
-        return target;
+        return Regex.Replace(
+            source,
+            $"({I})",
+            match => $"<i>{match.Groups["I_CONTENT"].Value}</i>",
+            RegexOptions.Multiline);
     }
 }

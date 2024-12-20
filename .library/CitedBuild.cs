@@ -30,8 +30,8 @@ internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildReq
 
         return Regex.Replace(
             source, 
-            @$"({CITED})", 
-            (match) =>
+            $"({CITED})", 
+            match =>
             {
                 var index = match.Groups["CITED_INDEX"].Value;
                 return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";

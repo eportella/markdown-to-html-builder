@@ -27,15 +27,11 @@ internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, 
     {
         if (source == default)
             return source;
-
-        var target = source;
-
-        target = Regex.Replace(
-            target, 
-            $"({BR})", 
-            (match) => "<br />", 
-            RegexOptions.Multiline);
         
-        return target;
+        return Regex.Replace(
+            source, 
+            $"({BR})", 
+            match => "<br />", 
+            RegexOptions.Multiline);
     }
 }

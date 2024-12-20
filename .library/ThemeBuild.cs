@@ -28,36 +28,36 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
     {
         if (source == default)
             return source;
-        var target = source;
 
-        target = Regex.Replace(
-            target,
-            @$"({THEME})",
-            (match) =>
+        return Regex.Replace(
+            source,
+            $"({THEME})",
+            match =>
             {
-                var themes = match.Groups["THEME_RULE"].Captures.Select(capture =>
-                {
-                    return Regex.Replace(capture.Value, THEME_RULE, match =>
-                    {
-                        var location = match.Groups["THEME_LOCATION"].Value;
-                        if (string.IsNullOrWhiteSpace(location))
-                            location = "F";
-                        var color = match.Groups["THEME_COLOR"].Value;
-                        if (string.IsNullOrWhiteSpace(color))
-                            color = "D";
-                        var tonality = match.Groups["THEME_TONALITY"].Value;
-                        if (string.IsNullOrWhiteSpace(tonality))
-                            tonality = "5";
-                        var content = match.Groups["THEME_CONTENT"].Value;
+                var themes = match
+                    .Groups["THEME_RULE"]
+                    .Captures
+                    .Select(capture =>
+                        Regex.Replace(capture.Value, THEME_RULE, match =>
+                        {
+                            var location = match.Groups["THEME_LOCATION"].Value;
+                            if (string.IsNullOrWhiteSpace(location))
+                                location = "F";
+                            var color = match.Groups["THEME_COLOR"].Value;
+                            if (string.IsNullOrWhiteSpace(color))
+                                color = "D";
+                            var tonality = match.Groups["THEME_TONALITY"].Value;
+                            if (string.IsNullOrWhiteSpace(tonality))
+                                tonality = "5";
+                            var content = match.Groups["THEME_CONTENT"].Value;
 
-                        return $"{color.ToLower()}-{location.ToLower()}-{tonality}";
-                    });
-                }).ToArray();
-                var content = match.Groups["THEME_CONTENT"].Value;
-                return @$"<span class=""theme {string.Join(" ", themes)}"">{content}</span>";
+                            return $"{color.ToLower()}-{location.ToLower()}-{tonality}";
+                        })
+                    )
+                    .ToArray();
+
+                return @$"<span class=""theme {string.Join(" ", themes)}"">{match.Groups["THEME_CONTENT"].Value}</span>";
             },
             RegexOptions.Multiline);
-
-        return target;
     }
 }
