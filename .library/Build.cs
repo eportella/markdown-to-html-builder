@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MediatR;
@@ -31,7 +30,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string THEME_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
     const string THEME = @"(?'THEME'\[!" + THEME_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
     const string BR = @"(?'BR'\\(\r?\n))";
-    const string AGE_CALC = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -224,10 +222,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             return $"<del>{match.Groups["DEL_CONTENT"].Value}</del>";
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({AGE_CALC})", (match) =>
-        {
-            return AgeCalculate(DateTime.ParseExact(match.Groups["AGE_CALC_CONTENT"].Value, "yyyy-mm-dd", CultureInfo.InvariantCulture)).ToString();
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
 
@@ -239,17 +234,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
 
         return target;
     }
-    private static int AgeCalculate(DateTime birthDate)
-    {
-        DateTime today = DateTime.Today;
-
-        int age = today.Year - birthDate.Year;
-
-        if (birthDate.Date > today.AddYears(-age).Date)
-            return age - 1;
-
-        return age;
-    }
+    
     private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
