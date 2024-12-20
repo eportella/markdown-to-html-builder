@@ -43,7 +43,6 @@ internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamReque
                 {
                     Source = request.Source,
                     Parent = request.Parent,
-                    Children = default,
                     Built = built,
                 };
                 continue;

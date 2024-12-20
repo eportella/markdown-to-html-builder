@@ -48,12 +48,13 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = default,
         };
-        html.Children = Build(html, request, cancellationToken).ToBlockingEnumerable(cancellationToken).ToArray();
-        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{html.Children.Build()}</html>";
+        var children = Build(html, request, cancellationToken)
+            .ToArray();
+        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{children.Build()}</html>";
         return html;
     }
 
-    private async IAsyncEnumerable<IElement> Build(Html html, BuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private IEnumerable<IElement> Build(Html html, BuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
             yield break;
@@ -62,10 +63,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = html,
         };
-        body.Children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline), cancellationToken)
+        var children = Build(body, Regex.Matches(body.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline), cancellationToken)
             .ToBlockingEnumerable(cancellationToken)
             .ToArray();
-        body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
+        body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         yield return body;
     }
     private async IAsyncEnumerable<IElement> Build(LI? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -115,11 +116,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h1.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h1, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h1.Built = $"<h1>{h1.Children.Build()}</h1>";
+                h1.Built = $"<h1>{children.Build()}</h1>";
                 yield return h1;
                 continue;
             }
@@ -131,11 +132,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h2.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h2, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h2.Built = $"<h2>{h2.Children.Build()}</h2>";
+                h2.Built = $"<h2>{children.Build()}</h2>";
                 yield return h2;
                 continue;
             }
@@ -147,11 +148,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h3.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h3, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h3.Built = $"<h3>{h3.Children.Build()}</h3>";
+                h3.Built = $"<h3>{children.Build()}</h3>";
                 yield return h3;
                 continue;
             }
@@ -163,11 +164,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h4.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h4, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h4.Built = $"<h4>{h4.Children.Build()}</h4>";
+                h4.Built = $"<h4>{children.Build()}</h4>";
                 yield return h4;
                 continue;
             }
@@ -179,11 +180,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h5.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h5, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h5.Built = $"<h5>{h5.Children.Build()}</h5>";
+                h5.Built = $"<h5>{children.Build()}</h5>";
                 yield return h5;
                 continue;
             }
@@ -195,11 +196,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h6.Children = mediator
+                var children = mediator
                     .CreateStream(new TextBuildRequest { Parent = h6, Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                h6.Built = $"<h6>{h6.Children.Build()}</h6>";
+                h6.Built = $"<h6>{children.Build()}</h6>";
                 yield return h6;
                 continue;
             }
@@ -209,7 +210,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value)),
                     Parent = parent,
-                    Children = default,
                 };
 
                 var attribute = string.Empty;
@@ -233,10 +233,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken)
+                var children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
-                blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
+                blockquote.Built = $"<blockquote{attribute}>{children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
             }
@@ -252,10 +252,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, RegexLi.Matches(content), cancellationToken)
+                        var children = Build(ul, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
-                        ul.Built = $"<ul>{ul.Children.Build()}</ul>";
+                        ul.Built = $"<ul>{children.Build()}</ul>";
                         yield return ul;
                         continue;
                     }
@@ -267,10 +267,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, RegexLi.Matches(content), cancellationToken)
+                        var children = Build(ol, RegexLi.Matches(content), cancellationToken)
                             .ToBlockingEnumerable(cancellationToken)
                             .ToArray();
-                        ol.Built = $"<ol>{ol.Children.Build()}</ol>";
+                        ol.Built = $"<ol>{children.Build()}</ol>";
                         yield return ol;
                         continue;
                     }
@@ -286,10 +286,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    li.Children = Build(li, content, cancellationToken)
+                    var children = Build(li, content, cancellationToken)
                         .ToBlockingEnumerable(cancellationToken)
                         .ToArray();
-                    li.Built = $"<li>{li.Children.Build()}</li>";
+                    li.Built = $"<li>{children.Build()}</li>";
                     yield return li;
                     continue;
                 }
@@ -304,11 +304,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    p.Children = mediator
+                    var children = mediator
                         .CreateStream(new TextBuildRequest { Parent = p, Source = content }, cancellationToken)
                         .ToBlockingEnumerable(cancellationToken)
                         .ToArray();
-                    p.Built = $"<p>{p.Children.Build()}</p>";
+                    p.Built = $"<p>{children.Build()}</p>";
                     yield return p;
                     continue;
                 }
@@ -323,11 +323,11 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    cite.Children = mediator
+                    var children = mediator
                         .CreateStream(new TextBuildRequest { Parent = cite, Source = content }, cancellationToken)
                         .ToBlockingEnumerable(cancellationToken)
                         .ToArray();
-                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
+                    cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
                     yield return cite;
                     continue;
                 }
