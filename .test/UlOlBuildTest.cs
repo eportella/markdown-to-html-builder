@@ -88,15 +88,14 @@ public class UlOlBuildTest
             Source = informed
         };
         var mediator = Mock.Of<IMediator>();
-        static async IAsyncEnumerable<Text> YieldBreak()
+        static IEnumerable<Text> YieldBreak()
         {
-            await Task.Yield();
             yield break;
         }
         Mock
             .Get(mediator)
                 .Setup(s => s.CreateStream(It.IsAny<TextBuildRequest>(), CancellationToken.None))
-                .Returns(YieldBreak());
+                .Returns(YieldBreak().ToAsyncEnumerable());
 
         var result = await new BuildRequestHandler(
                 new ProjectBuildResponse
