@@ -22,13 +22,12 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
-    const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
-    static Regex RegexText { get; }
+    static Regex RegexLi { get; }
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
 
     static BuildRequestHandler()
     {
-        RegexText = new Regex(TEXT, RegexOptions.Multiline);
+        RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -89,15 +88,34 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        var matches = Regex.Matches(source, @$"{UL_OL_INNER}", RegexOptions.Multiline);
-        foreach (Group match in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
+        var matches = Regex.Matches(source, UL_OL_INNER, RegexOptions.Multiline);
+        foreach (Group group in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
-            var sourceInner = Regex.Replace(match.Value, "^    ", string.Empty, RegexOptions.Multiline);
-            source = source.Replace(match.Value, Build(parent, Regex.Matches(sourceInner, UL_OL), cancellationToken).ToBlockingEnumerable()?.SingleOrDefault()?.Built);
+            var sourceInner = Regex
+                .Replace(
+                    group.Value,
+                    "^    ",
+                    string.Empty,
+                    RegexOptions.Multiline
+                );
+            source = source
+                .Replace(
+                    group.Value,
+                    Build(
+                        parent,
+                        Regex.Matches(
+                            sourceInner,
+                            UL_OL),
+                        cancellationToken
+                    )
+                    .ToBlockingEnumerable()?
+                    .SingleOrDefault()?
+                    .Built
+                );
         }
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(Ul? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -105,7 +123,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
             yield return element;
     }
 
@@ -114,7 +132,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, Regex.Matches(source, LI, RegexOptions.Multiline), cancellationToken))
+        await foreach (IElement element in Build(parent, RegexLi.Matches(source), cancellationToken))
             yield return element;
     }
 
@@ -123,8 +141,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(H2? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -132,8 +150,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(H3? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -141,8 +159,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(H4? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -150,8 +168,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(H5? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -159,8 +177,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(H6? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -168,8 +186,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(P? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -177,8 +195,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(Cite? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -186,37 +204,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        await foreach (IElement element in Build(parent, RegexText.Matches(source), cancellationToken))
-            yield return element;
-    }
-
-    private async Task<string?> Build(string? source, CancellationToken cancellationToken)
-    {
-        if (source == default)
-            return source;
-        var target = source;
-
-        target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
-
-        return target;
+        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
+            yield return text;
     }
 
     private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -420,14 +409,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 var content = match.Groups["TEXT"].Value;
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    var text = new Text
-                    {
-                        Source = content,
-                        Parent = parent,
-                        Children = default,
-                        Built = await Build(content, cancellationToken),
-                    };
-                    yield return text;
+                    await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = content }, cancellationToken))
+                        yield return text;
                     continue;
                 }
             }

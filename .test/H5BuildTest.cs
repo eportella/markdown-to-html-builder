@@ -31,6 +31,16 @@ public class H5BuildTest
         {
             Source = informed
         };
+        var mediator = Mock.Of<IMediator>();
+        static async IAsyncEnumerable<Text> YieldBreak()
+        {
+            await Task.Yield();
+            yield break;
+        }
+        Mock
+            .Get(mediator)
+                .Setup(s => s.CreateStream(It.IsAny<TextBuildRequest>(), CancellationToken.None))
+                .Returns(YieldBreak());
 
         var result = await new BuildRequestHandler(
                 new ProjectBuildResponse
@@ -38,7 +48,7 @@ public class H5BuildTest
                     Title = "--title--",
                     BaseUrl = new Uri("https://github.com"),
                 },
-                Mock.Of<IMediator>()
+                mediator
             )
             .Handle(
                 arrange,
