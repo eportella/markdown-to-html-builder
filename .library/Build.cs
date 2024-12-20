@@ -60,7 +60,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = html,
         };
-        body.Children = Build(body, request.Source, cancellationToken).ToBlockingEnumerable().ToArray();
+        body.Children = Build(body, request.Source, cancellationToken)
+            .ToBlockingEnumerable(cancellationToken)
+            .ToArray();
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         return [body];
     }
@@ -136,78 +138,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             yield return element;
     }
 
-    private async IAsyncEnumerable<IElement> Build(H1? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(H2? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(H3? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(H4? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(H5? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(H6? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(P? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
-    private async IAsyncEnumerable<IElement> Build(Cite? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Parent = parent, Source = source }, cancellationToken))
-            yield return text;
-    }
-
     private async IAsyncEnumerable<IElement> Build(IElement? parent, MatchCollection matches, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (Match match in matches)
@@ -220,7 +150,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h1.Children = Build(h1, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h1.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h1, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h1.Built = $"<h1>{h1.Children.Build()}</h1>";
                 yield return h1;
                 continue;
@@ -233,7 +166,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h2.Children = Build(h2, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h2.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h2, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h2.Built = $"<h2>{h2.Children.Build()}</h2>";
                 yield return h2;
                 continue;
@@ -246,7 +182,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h3.Children = Build(h3, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h3.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h3, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h3.Built = $"<h3>{h3.Children.Build()}</h3>";
                 yield return h3;
                 continue;
@@ -259,7 +198,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h4.Children = Build(h4, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h4.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h4, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h4.Built = $"<h4>{h4.Children.Build()}</h4>";
                 yield return h4;
                 continue;
@@ -272,7 +214,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h5.Children = Build(h5, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h5.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h5, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h5.Built = $"<h5>{h5.Children.Build()}</h5>";
                 yield return h5;
                 continue;
@@ -285,7 +230,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     Source = content,
                     Parent = parent,
                 };
-                h6.Children = Build(h6, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                h6.Children = mediator
+                    .CreateStream(new TextBuildRequest { Parent = h6, Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 h6.Built = $"<h6>{h6.Children.Build()}</h6>";
                 yield return h6;
                 continue;
@@ -320,7 +268,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, blockquote.Source, cancellationToken).ToBlockingEnumerable().ToArray();
+                blockquote.Children = Build(blockquote, blockquote.Source, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
                 yield return blockquote;
                 continue;
@@ -337,7 +287,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ul.Children = Build(ul, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                        ul.Children = Build(ul, content, cancellationToken)
+                            .ToBlockingEnumerable(cancellationToken)
+                            .ToArray();
                         ul.Built = $"<ul>{ul.Children.Build()}</ul>";
                         yield return ul;
                         continue;
@@ -350,7 +302,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                             Source = content,
                             Parent = parent,
                         };
-                        ol.Children = Build(ol, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                        ol.Children = Build(ol, content, cancellationToken)
+                            .ToBlockingEnumerable(cancellationToken)
+                            .ToArray();
                         ol.Built = $"<ol>{ol.Children.Build()}</ol>";
                         yield return ol;
                         continue;
@@ -367,7 +321,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    li.Children = Build(li, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                    li.Children = Build(li, content, cancellationToken)
+                        .ToBlockingEnumerable(cancellationToken)
+                        .ToArray();
                     li.Built = $"<li>{li.Children.Build()}</li>";
                     yield return li;
                     continue;
@@ -383,7 +339,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    p.Children = Build(p, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                    p.Children = mediator
+                        .CreateStream(new TextBuildRequest { Parent = p, Source = content }, cancellationToken)
+                        .ToBlockingEnumerable(cancellationToken)
+                        .ToArray();
                     p.Built = $"<p>{p.Children.Build()}</p>";
                     yield return p;
                     continue;
@@ -399,7 +358,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                         Source = content,
                         Parent = parent,
                     };
-                    cite.Children = Build(cite, content, cancellationToken).ToBlockingEnumerable().ToArray();
+                    cite.Children = mediator
+                        .CreateStream(new TextBuildRequest { Parent = cite, Source = content }, cancellationToken)
+                        .ToBlockingEnumerable(cancellationToken)
+                        .ToArray();
                     cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {cite.Children.Build()}</cite>";
                     yield return cite;
                     continue;
