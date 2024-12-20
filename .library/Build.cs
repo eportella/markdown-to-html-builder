@@ -40,7 +40,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string SVG_WARNING = @"(?'SVG_WARNING'\[!WARNING\])";
     const string SVG_CAUTION = @"(?'SVG_CAUTION'\[!CAUTION\])";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
-    const string CITED = @$"\[\^(?'CITED_INDEX'\d+)\]";
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -290,11 +289,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             )} <b>Cuidado</b></span>";
         }, RegexOptions.Multiline);
 
-        target = Regex.Replace(target, @$"({CITED})", (match) =>
-        {
-            var index = match.Groups["CITED_INDEX"].Value;
-            return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";
-        }, RegexOptions.Multiline);
+        target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
 
         target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
 
