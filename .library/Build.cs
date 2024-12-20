@@ -68,16 +68,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{body.Children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         yield return body;
     }
-
-    private async IAsyncEnumerable<IElement> Build(Blockquote? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        if (source == default)
-            yield break;
-
-        await foreach (IElement element in Build(parent, Regex.Matches(source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken))
-            yield return element;
-    }
-
     private async IAsyncEnumerable<IElement> Build(LI? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (source == default)
@@ -261,7 +251,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 {
                     attribute = @" class=""caution""";
                 }
-                blockquote.Children = Build(blockquote, blockquote.Source, cancellationToken)
+                blockquote.Children = Build(blockquote, Regex.Matches(blockquote.Source, @$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline), cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .ToArray();
                 blockquote.Built = $"<blockquote{attribute}>{blockquote.Children.Build()}</blockquote>";
