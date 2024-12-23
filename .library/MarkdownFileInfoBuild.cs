@@ -21,9 +21,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
                         cancellationToken),
                 },
                 cancellationToken)
-            )?
-            .Target?
-            .Built;
+            );
 
         if (!request.Target!.Directory!.Exists)
             request.Target.Directory.Create();

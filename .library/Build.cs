@@ -1,15 +1,12 @@
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MediatR;
-internal sealed class BuildRequest : IRequest<BuildResponse>
+internal sealed class BuildRequest : IRequest<string?>
 {
     public string? Source { get; init; }
 }
-internal sealed class BuildResponse
-{
-    internal Html? Target { get; init; }
-}
-internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, BuildResponse>
+
+internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, string?>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
@@ -35,29 +32,24 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
-    public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
-            return new BuildResponse();
+            return default;
 
-        return new BuildResponse
-        {
-            Target = Build(request, cancellationToken),
-        };
+        return Build(request, cancellationToken);
     }
 
-    private Html Build(BuildRequest request, CancellationToken cancellationToken)
+    private string? Build(BuildRequest request, CancellationToken cancellationToken)
     {
-        var html = new Html { };
         if (request.Source == default)
-            return html;
+            return default;
 
         var replaced = RegexBlock.Replace(request.Source, (match) => Replace(match, cancellationToken));
 
         var bodyBuilt = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{replaced}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
-        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{bodyBuilt}</html>";
-        return html;
+        return $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{bodyBuilt}</html>";
     }
     private async IAsyncEnumerable<string?> Build(string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -197,7 +189,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
 
         {
             var content = match.Groups["P"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
+            if ((content ?? string.Empty) != string.Empty)
             {
                 var children = mediator
                     .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
@@ -217,13 +209,13 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             }
         }
         {
-            var content = match.Groups["TEXT"].Value;
+            var content = match.Groups["INLINE"].Value;
             if (!string.IsNullOrWhiteSpace(content))
                 return mediator
                     .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .Build()!;
         }
-        return match.Value;
+        throw new InvalidOperationException($"build with {match.Value} invalid");
     }
 }
