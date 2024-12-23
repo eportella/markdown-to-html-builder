@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MediatR;
-public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
+public sealed class TimeElapsedPipelineBehavior<TResponse> : IPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedPipelineBehavior()
@@ -19,7 +19,7 @@ public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipeline
     }
 }
 
-public sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
+public sealed class TimeElapsedStreamPipelineBehavior<TResponse> : IStreamPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedStreamPipelineBehavior(

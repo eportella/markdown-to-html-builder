@@ -3,8 +3,8 @@ using MediatR;
 
 await new ServiceCollection()
     .AddHttpClient()
-    .AddTransient(typeof(IPipelineBehavior<,>), typeof(TimeElapsedPipelineBehavior<,>))
-    .AddTransient(typeof(IStreamPipelineBehavior<,>), typeof(TimeElapsedStreamPipelineBehavior<,>))
+    .AddTransient<IPipelineBehavior<MarkdownToHtmlBuildRequest, object>, TimeElapsedPipelineBehavior<object>>()
+    .AddTransient<IStreamPipelineBehavior<MarkdownToHtmlBuildRequest, object>, TimeElapsedStreamPipelineBehavior<object>>()
     .AddMediatR(mediatorServiceConfiguration => mediatorServiceConfiguration.RegisterServicesFromAssemblyContaining<MarkdownToHtmlBuildRequest>())
     .ArgsAsInputAdd()
     .TitleAdd()
