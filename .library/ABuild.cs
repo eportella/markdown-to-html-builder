@@ -22,19 +22,8 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
         if (request.Source == default)
             return default;
 
-        return new ABuildResponse
-        {
-            Target = Build(request.Source),
-        };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
+        var target = Regex.Replace(
+            request.Source,
             match =>
             {
                 var href = new Uri(match.Groups["A_HREF"].Value);
@@ -44,5 +33,10 @@ internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequ
 
                 return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
             });
+
+        return new ABuildResponse
+        {
+            Target = target,
+        };
     }
 }

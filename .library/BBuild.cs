@@ -22,19 +22,13 @@ internal sealed class BBuildRequestHandler() : IRequestHandler<BBuildRequest, BB
         if (request.Source == default)
             return default;
 
+        var target = Regex.Replace(
+            request.Source,
+            match => $"<b>{match.Groups["B_CONTENT"].Value}</b>");
+
         return new BBuildResponse
         {
-            Target = Build(request.Source),
+            Target = target,
         };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
-            match => $"<b>{match.Groups["B_CONTENT"].Value}</b>");
     }
 }

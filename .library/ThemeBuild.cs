@@ -25,19 +25,8 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
         if (request.Source == default)
             return default;
 
-        return new ThemeBuildResponse
-        {
-            Target = Build(request.Source),
-        };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
+        var target = Regex.Replace(
+            request.Source,
             match =>
             {
                 var themes = match
@@ -46,7 +35,7 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
                     .Select(capture =>
                         RegexRule
                             .Replace(
-                                capture.Value, 
+                                capture.Value,
                                 match =>
                                 {
                                     var location = match.Groups["THEME_LOCATION"].Value;
@@ -68,5 +57,10 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
 
                 return @$"<span class=""theme {string.Join(" ", themes)}"">{match.Groups["THEME_CONTENT"].Value}</span>";
             });
+
+        return new ThemeBuildResponse
+        {
+            Target = target,
+        };
     }
 }

@@ -21,20 +21,14 @@ internal sealed class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, 
         await Task.Yield();
         if (request.Source == default)
             return default;
+        
+        var target = Regex.Replace(
+            request.Source,
+            match => $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>");
 
         return new BIBuildResponse
         {
-            Target = Build(request.Source),
+            Target = target,
         };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
-            match => $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>");
     }
 }

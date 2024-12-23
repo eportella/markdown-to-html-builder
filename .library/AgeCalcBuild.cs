@@ -23,19 +23,8 @@ internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuil
         if (request.Source == default)
             return default;
 
-        return new AgeCalcBuildResponse
-        {
-            Target = Build(request.Source),
-        };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
+        var target = Regex.Replace(
+            request.Source,
             match => AgeCalculate(
                 DateTime.ParseExact(
                     match.Groups["AGE_CALC_CONTENT"].Value,
@@ -44,6 +33,11 @@ internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuil
                 )
                 .ToString()
             );
+
+        return new AgeCalcBuildResponse
+        {
+            Target = target,
+        };
     }
 
     private static int AgeCalculate(DateTime birthDate)
