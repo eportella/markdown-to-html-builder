@@ -63,7 +63,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
         };
 
-        var children = RegexBody.Replace(body.Source, (match) => { return Replace(match, cancellationToken).Result!; });
+        var children = RegexBody.Replace(body.Source, (match) => Replace(match, cancellationToken));
 
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{children}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{body?.Built}</html>";
@@ -91,7 +91,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                                     string.Empty,
                                     RegexOptions.Multiline
                                 ),
-                                match => Replace(match, cancellationToken).Result!
+                                match => Replace(match, cancellationToken)
                         )
                 );
         }
@@ -99,7 +99,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         await foreach (var text in mediator.CreateStream(new TextBuildRequest { Source = source }, cancellationToken))
             yield return text;
     }
-    private async Task<string?> Replace(Match match, CancellationToken cancellationToken)
+    private string Replace(Match match, CancellationToken cancellationToken)
     {
 
         if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
@@ -214,7 +214,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             {
                 attribute = @" class=""caution""";
             }
-            var children = RegexBlockquote.Replace(blockquote.Source, match => Replace(match, cancellationToken).Result!);
+            var children = RegexBlockquote.Replace(blockquote.Source, match => Replace(match, cancellationToken));
             blockquote.Built = $"<blockquote{attribute}>{children}</blockquote>";
             return blockquote.Built;
         }
@@ -229,7 +229,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     {
                         Source = content,
                     };
-                    var replaced = RegexLi.Replace(content, match => Replace(match, cancellationToken).Result!);
+                    var replaced = RegexLi.Replace(content, match => Replace(match, cancellationToken));
 
                     ul.Built = $"<ul>{replaced}</ul>";
                     return ul.Built;
@@ -241,7 +241,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     {
                         Source = content,
                     };
-                    var children = RegexLi.Replace(content, match => Replace(match, cancellationToken).Result!);
+                    var children = RegexLi.Replace(content, match => Replace(match, cancellationToken));
                     ol.Built = $"<ol>{children}</ol>";
                     return ol.Built;
                 }
