@@ -39,6 +39,6 @@ default)]
                 CancellationToken.None
             );
 
-        Assert.Equal(expected, result.Target?.Built);
+        Assert.Equal(expected, result);
     }
 }

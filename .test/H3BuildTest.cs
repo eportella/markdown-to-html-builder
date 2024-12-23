@@ -55,6 +55,6 @@ public class H3BuildTest
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result.Target?.Built);
+        Assert.Contains(expected, result);
     }
 }
