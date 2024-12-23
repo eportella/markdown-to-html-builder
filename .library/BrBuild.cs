@@ -22,19 +22,13 @@ internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, 
         if (request.Source == default)
             return default;
 
+        var target = Regex.Replace(
+            request.Source,
+            match => "<br />");
+
         return new BrBuildResponse
         {
-            Target = Build(request.Source),
+            Target = target,
         };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
-            match => "<br />");
     }
 }

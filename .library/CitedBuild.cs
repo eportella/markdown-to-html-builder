@@ -22,23 +22,17 @@ internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildReq
         if (request.Source == default)
             return default;
 
-        return new CitedBuildResponse
-        {
-            Target = Build(request.Source),
-        };
-    }
-
-    private string? Build(string? source)
-    {
-        if (source == default)
-            return source;
-
-        return Regex.Replace(
-            source,
+        var target = Regex.Replace(
+            request.Source,
             match =>
             {
                 var index = match.Groups["CITED_INDEX"].Value;
                 return @$"<cite id=""cited-{index}""><a href=""#cite-{index}""><sup>({index})</sup></a></cite>";
             });
+
+        return new CitedBuildResponse
+        {
+            Target = target,
+        };
     }
 }
