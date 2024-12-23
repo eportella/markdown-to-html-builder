@@ -56,20 +56,19 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             Source = request.Source,
             Parent = default,
         };
-        var children = Build(
+        var body = Build(
                 html,
                 request,
                 cancellationToken
-            )
-            .ToArray();
-        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{children.Build()}</html>";
+            );
+        html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{body?.Built}</html>";
         return html;
     }
 
-    private IEnumerable<IElement> Build(Html html, BuildRequest request, CancellationToken cancellationToken)
+    private Body? Build(Html html, BuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
-            yield break;
+            return default;
         var body = new Body
         {
             Source = request.Source,
@@ -83,7 +82,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             .ToBlockingEnumerable(cancellationToken)
             .ToArray();
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{children.Build()}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
-        yield return body;
+        return body;
     }
     private async IAsyncEnumerable<IElement> Build(LI? parent, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
