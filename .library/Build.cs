@@ -89,22 +89,25 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (source == default)
             yield break;
 
-        var matches = RegexOlUlInner.Matches(source);
-        foreach (Group group in matches.Select(m => m.Groups["UL_OL"]).Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
+        foreach (Group group in RegexOlUlInner
+            .Matches(source)
+            .Select(m => m.Groups["UL_OL"])
+            .Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
         {
-            var sourceInner = Regex
-                .Replace(
-                    group.Value,
-                    "^    ",
-                    string.Empty,
-                    RegexOptions.Multiline
-                );
             source = source
                 .Replace(
                     group.Value,
                     Build(
                         parent,
-                        RegexOlUl.Matches(sourceInner),
+                        RegexOlUl
+                            .Matches(Regex
+                            .Replace(
+                                group.Value,
+                                "^    ",
+                                string.Empty,
+                                RegexOptions.Multiline
+                            )
+                        ),
                         cancellationToken
                     )
                     .ToBlockingEnumerable()?
