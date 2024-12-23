@@ -1,5 +1,5 @@
 using MediatR;
-public sealed class MarkdownToHtmlBuildRequest : IRequest
+public class MarkdownToHtmlBuildRequest : IRequest
 {
 }
 internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<MarkdownToHtmlBuildRequest>
