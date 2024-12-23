@@ -23,19 +23,17 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
-    static Regex RegexLi { get; }
-    static Regex RegexBody { get; }
-    static Regex RegexBlockquote { get; }
+    static Regex RegexBlock { get; }
     static Regex RegexOlUl { get; }
     static Regex RegexOlUlInner { get; }
+    static Regex RegexLi { get; }
 
     static BuildRequestHandler()
     {
-        RegexLi = new Regex(LI, RegexOptions.Multiline);
-        RegexBody = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
-        RegexBlockquote = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
+        RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
@@ -55,13 +53,13 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (request.Source == default)
             return html;
 
-        var replaced = RegexBody.Replace(request.Source, (match) => Replace(match, cancellationToken));
+        var replaced = RegexBlock.Replace(request.Source, (match) => Replace(match, cancellationToken));
 
         var bodyBuilt = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{replaced}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{bodyBuilt}</html>";
         return html;
     }
-    private async IAsyncEnumerable<IElement> Build(string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<string?> Build(string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
@@ -88,7 +86,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 );
         }
 
-        await foreach (var text in mediator.CreateStream(new TextBuildRequest { Source = source }, cancellationToken))
+        await foreach (var text in mediator.CreateStream(new InlineBuildRequest { Source = source }, cancellationToken))
             yield return text;
     }
     private string Replace(Match match, CancellationToken cancellationToken)
@@ -98,7 +96,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var content = match.Groups["H1_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h1>{children.Build()}</h1>";
         }
@@ -107,7 +105,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["H2_CONTENT"].Value;
 
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h2>{children.Build()}</h2>";
         }
@@ -115,7 +113,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var content = match.Groups["H3_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h3>{children.Build()}</h3>";
         }
@@ -124,7 +122,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["H4_CONTENT"].Value;
 
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h4>{children.Build()}</h4>";
         }
@@ -132,7 +130,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var content = match.Groups["H5_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h5>{children.Build()}</h5>";
         }
@@ -140,15 +138,13 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var content = match.Groups["H6_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
             return $"<h6>{children.Build()}</h6>"; ;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
             var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
-            var blockquote = new Blockquote { };
-
             var attribute = string.Empty;
             if (content.StartsWith("[!NOTE]"))
             {
@@ -170,7 +166,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             {
                 attribute = @" class=""caution""";
             }
-            var children = RegexBlockquote.Replace(content, match => Replace(match, cancellationToken));
+            var children = RegexBlock.Replace(content, match => Replace(match, cancellationToken));
 
             return $"<blockquote{attribute}>{children}</blockquote>";
         }
@@ -204,7 +200,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             if (!string.IsNullOrWhiteSpace(content))
             {
                 var children = mediator
-                    .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
                 return $"<p>{children.Build()}</p>";
             }
@@ -215,7 +211,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             if (!string.IsNullOrWhiteSpace(index))
             {
                 var children = mediator
-                    .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
                 return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
             }
@@ -224,7 +220,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
                 return mediator
-                    .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken)
                     .Build()!;
         }
