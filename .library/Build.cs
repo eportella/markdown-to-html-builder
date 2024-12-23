@@ -145,8 +145,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
             var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
-            var blockquote = new Blockquote { };
-
             var attribute = string.Empty;
             if (content.StartsWith("[!NOTE]"))
             {

@@ -3,7 +3,7 @@ internal interface IElement
     internal string? Built { get; }
 }
 
-internal static class IElementExtensions
+internal static class StringExtensions
 {
     internal static string Build(this IEnumerable<string?> elements)
     {
@@ -11,10 +11,6 @@ internal static class IElementExtensions
     }
 }
 internal class Html : IElement
-{
-    public string? Built { get; internal set; }
-}
-internal class Blockquote : IElement
 {
     public string? Built { get; internal set; }
 }
