@@ -7,7 +7,6 @@ internal sealed class BlockBuildRequest : IRequest<string?>
 }
 internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockBuildRequest, string?>
 {
-    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).*(\r?\n|)))";
     const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
     const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
@@ -26,18 +25,22 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({PBuildRequestHandler.PATTERN}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
 
-    public Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
-            return Task.FromResult(default(string?));
+            return default;
 
-        return Task.FromResult(RegexBlock?.Replace(request.Source, (match) => Replace(match, cancellationToken)));
+        var target = request.Source;
+
+        target = await mediator.Send(new PBuildRequest { Source = target }, cancellationToken);
+
+        return RegexBlock?.Replace(target, (match) => Replace(match, cancellationToken));
     }
 
     private async IAsyncEnumerable<string?> Build(string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -179,12 +182,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
         {
             var content = match.Groups["P"].Value;
             if ((content ?? string.Empty) != string.Empty)
-            {
-                var children = mediator
-                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken);
-                return $"<p>{children.Build()}</p>";
-            }
+                return mediator.Send(new PBuildRequest { Source = content }, cancellationToken).Result;
         }
         {
             var index = match.Groups["CITE_INDEX"].Value;
