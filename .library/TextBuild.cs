@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using MediatR;
 internal sealed class TextBuildRequest : IStreamRequest<Text>
 {
-    public IElement? Parent { get; init; }
     internal string? Source { get; init; }
 }
 internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<TextBuildRequest, Text>
@@ -42,7 +41,6 @@ internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamReque
                 yield return new Text
                 {
                     Source = request.Source,
-                    Parent = request.Parent,
                     Built = built,
                 };
                 continue;
