@@ -51,21 +51,15 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
 
     private Html Build(BuildRequest request, CancellationToken cancellationToken)
     {
-        var html = new Html
-        {
-            Source = request.Source,
-        };
+        var html = new Html { };
         if (request.Source == default)
             return html;
 
-        var body = new Body
-        {
-            Source = request.Source,
-        };
+        var body = new Body { };
 
-        var children = RegexBody.Replace(body.Source, (match) => { return Replace(match, cancellationToken).Result!; });
+        var replaced = RegexBody.Replace(request.Source, (match) => Replace(match, cancellationToken));
 
-        body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{children}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
+        body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{replaced}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{body?.Built}</html>";
         return html;
     }
@@ -91,7 +85,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                                     string.Empty,
                                     RegexOptions.Multiline
                                 ),
-                                match => Replace(match, cancellationToken).Result!
+                                match => Replace(match, cancellationToken)
                         )
                 );
         }
@@ -99,124 +93,88 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         await foreach (var text in mediator.CreateStream(new TextBuildRequest { Source = source }, cancellationToken))
             yield return text;
     }
-    private async Task<string?> Replace(Match match, CancellationToken cancellationToken)
+    private string Replace(Match match, CancellationToken cancellationToken)
     {
 
         if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
         {
             var content = match.Groups["H1_CONTENT"].Value;
-            var h1 = new H1
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h1.Built = $"<h1>{children.Build()}</h1>";
-            return h1.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h1>{children.Build()}</h1>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
         {
             var content = match.Groups["H2_CONTENT"].Value;
-            var h2 = new H2
-            {
-                Source = content,
-            };
+
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h2.Built = $"<h2>{children.Build()}</h2>";
-            return h2.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h2>{children.Build()}</h2>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
         {
             var content = match.Groups["H3_CONTENT"].Value;
-            var h3 = new H3
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h3.Built = $"<h3>{children.Build()}</h3>";
-            return h3.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h3>{children.Build()}</h3>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
         {
             var content = match.Groups["H4_CONTENT"].Value;
-            var h4 = new H4
-            {
-                Source = content,
-            };
+
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h4.Built = $"<h4>{children.Build()}</h4>";
-            return h4.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h4>{children.Build()}</h4>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
         {
             var content = match.Groups["H5_CONTENT"].Value;
-            var h5 = new H5
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h5.Built = $"<h5>{children.Build()}</h5>";
-            return h5.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h5>{children.Build()}</h5>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
         {
             var content = match.Groups["H6_CONTENT"].Value;
-            var h6 = new H6
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken)
-                .ToArray();
-            h6.Built = $"<h6>{children.Build()}</h6>";
-            return h6.Built;
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<h6>{children.Build()}</h6>"; ;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
-            var blockquote = new Blockquote
-            {
-                Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value)),
-            };
+            var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
+            var blockquote = new Blockquote { };
 
             var attribute = string.Empty;
-            if (blockquote.Source.StartsWith("[!NOTE]"))
+            if (content.StartsWith("[!NOTE]"))
             {
                 attribute = @" class=""note""";
             }
-            else if (blockquote.Source.StartsWith("[!TIP]"))
+            else if (content.StartsWith("[!TIP]"))
             {
                 attribute = @" class=""tip""";
             }
-            else if (blockquote.Source.StartsWith("[!IMPORTANT]"))
+            else if (content.StartsWith("[!IMPORTANT]"))
             {
                 attribute = @" class=""important""";
             }
-            else if (blockquote.Source.StartsWith("[!WARNING]"))
+            else if (content.StartsWith("[!WARNING]"))
             {
                 attribute = @" class=""warning""";
             }
-            else if (blockquote.Source.StartsWith("[!CAUTION]"))
+            else if (content.StartsWith("[!CAUTION]"))
             {
                 attribute = @" class=""caution""";
             }
-            var children = RegexBlockquote.Replace(blockquote.Source, match => Replace(match, cancellationToken).Result!);
-            blockquote.Built = $"<blockquote{attribute}>{children}</blockquote>";
-            return blockquote.Built;
+            var children = RegexBlockquote.Replace(content, match => Replace(match, cancellationToken));
+
+            return $"<blockquote{attribute}>{children}</blockquote>";
         }
 
         {
@@ -224,27 +182,12 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             if (!string.IsNullOrWhiteSpace(content))
             {
                 if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
-                {
-                    var ul = new Ul
-                    {
-                        Source = content,
-                    };
-                    var replaced = RegexLi.Replace(content, match => Replace(match, cancellationToken).Result!);
-
-                    ul.Built = $"<ul>{replaced}</ul>";
-                    return ul.Built;
-                }
+                    return $"<ul>{RegexLi.Replace(content, match => Replace(match, cancellationToken))}</ul>";
 
                 if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-                {
-                    var ol = new Ol
-                    {
-                        Source = content,
-                    };
-                    var children = RegexLi.Replace(content, match => Replace(match, cancellationToken).Result!);
-                    ol.Built = $"<ol>{children}</ol>";
-                    return ol.Built;
-                }
+                    return $"<ol>{RegexLi.Replace(content, match => Replace(match, cancellationToken))}</ol>";
+
+                return content;
             }
         }
 
@@ -252,15 +195,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["LI"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var li = new LI
-                {
-                    Source = content,
-                };
                 var children = Build(content, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken)
-                    .ToArray();
-                li.Built = $"<li>{children.Build()}</li>";
-                return li.Built;
+                    .ToBlockingEnumerable(cancellationToken);
+                return $"<li>{children.Build()}</li>";
             }
         }
 
@@ -268,16 +205,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["P"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var p = new P
-                {
-                    Source = content,
-                };
                 var children = mediator
                     .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken)
-                    .ToArray();
-                p.Built = $"<p>{children.Build()}</p>";
-                return p.Built;
+                    .ToBlockingEnumerable(cancellationToken);
+                return $"<p>{children.Build()}</p>";
             }
         }
         {
@@ -285,24 +216,19 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["CITE_CONTENT"].Value;
             if (!string.IsNullOrWhiteSpace(index))
             {
-                var cite = new Cite
-                {
-                    Source = content,
-                };
                 var children = mediator
                     .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken)
-                    .ToArray();
-                cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
-                return cite.Built;
+                    .ToBlockingEnumerable(cancellationToken);
+                return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
             }
         }
         {
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
-            {
-                return string.Join(string.Empty, mediator.CreateStream(new TextBuildRequest { Source = content }, cancellationToken).ToBlockingEnumerable(cancellationToken).Select(text => text.Built));
-            }
+                return mediator
+                    .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
+                    .ToBlockingEnumerable(cancellationToken)
+                    .Build()!;
         }
         return match.Value;
     }

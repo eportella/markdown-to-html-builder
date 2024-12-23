@@ -40,7 +40,6 @@ internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamReque
 
                 yield return new Text
                 {
-                    Source = request.Source,
                     Built = built,
                 };
                 continue;
