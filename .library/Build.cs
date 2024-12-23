@@ -300,9 +300,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         {
             var content = match.Groups["TEXT"].Value;
             if (!string.IsNullOrWhiteSpace(content))
-            {
-                return string.Join(string.Empty, mediator.CreateStream(new TextBuildRequest { Source = content }, cancellationToken).ToBlockingEnumerable(cancellationToken).Select(text => text.Built));
-            }
+                return mediator.CreateStream(new TextBuildRequest { Source = content }, cancellationToken).ToBlockingEnumerable(cancellationToken).ToArray().Build()!;
         }
         return match.Value;
     }
