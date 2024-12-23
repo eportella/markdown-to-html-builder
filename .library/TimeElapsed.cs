@@ -1,25 +1,27 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MediatR;
-public sealed class TimeElapsedPipelineBehavior<TResponse> : IPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
+public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : notnull, MarkdownToHtmlBuildRequest
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedPipelineBehavior()
     {
         Stopwatch = new Stopwatch();
     }
-    public async Task<TResponse> Handle(MarkdownToHtmlBuildRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         Stopwatch.Start();
 
         var response = await next();
         Stopwatch.Stop();
-        Console.WriteLine($"{typeof(MarkdownToHtmlBuildRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"{typeof(TRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
         return response;
     }
 }
 
-public sealed class TimeElapsedStreamPipelineBehavior<TResponse> : IStreamPipelineBehavior<MarkdownToHtmlBuildRequest, TResponse>
+public sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
+        where TRequest : notnull, MarkdownToHtmlBuildRequest
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedStreamPipelineBehavior(
@@ -28,7 +30,7 @@ public sealed class TimeElapsedStreamPipelineBehavior<TResponse> : IStreamPipeli
         Stopwatch = new Stopwatch();
     }
     public async IAsyncEnumerable<TResponse> Handle(
-        MarkdownToHtmlBuildRequest request,
+        TRequest request,
         StreamHandlerDelegate<TResponse> next,
         [EnumeratorCancellation] CancellationToken cancellationToken
     )
@@ -37,6 +39,6 @@ public sealed class TimeElapsedStreamPipelineBehavior<TResponse> : IStreamPipeli
         await foreach (var item in next())
             yield return item;
         Stopwatch.Stop();
-        Console.WriteLine($"{typeof(MarkdownToHtmlBuildRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"{typeof(TRequest).FullName} Time Elapsed {Stopwatch.ElapsedMilliseconds}ms");
     }
 }
