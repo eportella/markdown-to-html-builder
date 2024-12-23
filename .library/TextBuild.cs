@@ -22,23 +22,21 @@ internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IS
 
         foreach (Match match in RegexText.Matches(request.Source))
         {
-            var content = match.Groups["TEXT"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
+            var target = match.Groups["TEXT"].Value;
+            if (!string.IsNullOrWhiteSpace(target))
             {
-                var built = content;
+                target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
+                target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
 
-                built = (await mediator.Send(new BrBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new BIBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new BBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new IBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new DelBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new AgeCalcBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new ABuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new SvgBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new CitedBuildRequest { Source = built }, cancellationToken))?.Target;
-                built = (await mediator.Send(new ThemeBuildRequest { Source = built }, cancellationToken))?.Target;
-
-                yield return built;
+                yield return target;
                 continue;
             }
             var debug = string.Empty;
