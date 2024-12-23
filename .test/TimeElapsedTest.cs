@@ -8,9 +8,9 @@ public class TimeElapsedTest
     [Fact]
     public async Task Success()
     {
-        var arrange = new MarkdownToHtmlBuildRequest();
+        var arrange = Mock.Of<ITimmerElapsedLog>();
 
-        var act = new TimeElapsedPipelineBehavior<MarkdownToHtmlBuildRequest, Unit>();
+        var act = new TimeElapsedPipelineBehavior<ITimmerElapsedLog, Unit>();
 
         var assert = await act.Handle(
             arrange,
@@ -22,13 +22,13 @@ public class TimeElapsedTest
     [Fact]
     public async Task StreamSuccess()
     {
-        var arrange = new MarkdownToHtmlBuildRequest();
+        var arrange = Mock.Of<ITimmerElapsedLog>();
         var next = Mock.Of<StreamHandlerDelegate<Unit>>();
         Mock.Get(next)
             .Setup(@delegate => @delegate())
             .Returns(AsyncEnumerable);
 
-        var act = new TimeElapsedStreamPipelineBehavior<MarkdownToHtmlBuildRequest, Unit>();
+        var act = new TimeElapsedStreamPipelineBehavior<ITimmerElapsedLog, Unit>();
 
         await foreach (var assert in act.Handle(
                 arrange,
