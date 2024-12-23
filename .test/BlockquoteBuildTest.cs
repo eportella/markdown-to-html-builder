@@ -27,7 +27,7 @@ public class BlockquoteBuildTest
 
 >quote2
 ",
-@"<blockquote><p></p></blockquote><blockquote><p></p></blockquote>")]
+@"<blockquote><p></p></blockquote><p></p><blockquote><p></p></blockquote>")]
     [InlineData(
 @">a
 >>b

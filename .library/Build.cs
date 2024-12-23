@@ -189,7 +189,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
 
         {
             var content = match.Groups["P"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
+            if ((content ?? string.Empty) != string.Empty)
             {
                 var children = mediator
                     .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
