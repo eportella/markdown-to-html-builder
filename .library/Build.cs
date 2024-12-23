@@ -8,13 +8,13 @@ internal sealed class BuildRequest : IRequest<string?>
 
 internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, string?>
 {
-    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
-    const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).+(\r?\n|)))";
-    const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).+(\r?\n|)))";
-    const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).+(\r?\n|)))";
-    const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).+(\r?\n|)))";
-    const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).+(\r?\n|)))";
-    const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).+(\r?\n|)))";
+    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).*(\r?\n|))+(\r?\n|))";
+    const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).*(\r?\n|)))";
+    const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
+    const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
+    const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
+    const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).*(\r?\n|)))";
+    const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).*(\r?\n|)))";
     const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'>(?'BLOCKQUOTE_CONTENT' *.*(\r?\n|)))+";
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
@@ -216,7 +216,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     .ToBlockingEnumerable(cancellationToken)
                     .Build()!;
         }
-        //throw new InvalidOperationException($"build with {match.Value} invalid");
-        return match.Value;
+        if (match.Value == string.Empty)
+            return match.Value;
+            
+        throw new InvalidOperationException($"build with {match.Value} invalid");
     }
 }
