@@ -216,6 +216,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     .ToBlockingEnumerable(cancellationToken)
                     .Build()!;
         }
-        return match.Value;
+        throw new InvalidOperationException($"build with {match.Value} invalid");
     }
 }

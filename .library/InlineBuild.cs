@@ -39,7 +39,7 @@ internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IS
                 yield return target;
                 continue;
             }
-            var debug = string.Empty;
+            throw new InvalidOperationException($"build with {target} invalid");
         }
     }
 }
