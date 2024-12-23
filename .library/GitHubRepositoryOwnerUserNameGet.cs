@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using MediatR;
-internal sealed class GitHubRepositoryOwnerUserNameGetRequest : IRequest<string?>
+internal sealed class GitHubRepositoryOwnerUserNameGetRequest : IRequest<string?>, ITimmerElapsedLog
 {
     public string? Name { get; set; }
 }

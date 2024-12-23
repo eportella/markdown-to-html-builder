@@ -1,8 +1,10 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MediatR;
+
+public interface ITimmerElapsedLog { }
 public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull, MarkdownToHtmlBuildRequest
+        where TRequest : notnull, ITimmerElapsedLog
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedPipelineBehavior()
@@ -21,7 +23,7 @@ public sealed class TimeElapsedPipelineBehavior<TRequest, TResponse> : IPipeline
 }
 
 public sealed class TimeElapsedStreamPipelineBehavior<TRequest, TResponse> : IStreamPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull, MarkdownToHtmlBuildRequest
+        where TRequest : notnull, ITimmerElapsedLog
 {
     Stopwatch Stopwatch { get; }
     public TimeElapsedStreamPipelineBehavior(
