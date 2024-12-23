@@ -217,5 +217,6 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     .Build()!;
         }
         //throw new InvalidOperationException($"build with {match.Value} invalid");
+        return match.Value;
     }
 }
