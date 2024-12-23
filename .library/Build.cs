@@ -8,7 +8,7 @@ internal sealed class BuildRequest : IRequest<string?>
 
 internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, string?>
 {
-    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).*(\r?\n|))+(\r?\n|))";
+    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).*(\r?\n|)))";
     const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
     const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
