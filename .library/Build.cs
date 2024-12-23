@@ -105,80 +105,52 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
         {
             var content = match.Groups["H1_CONTENT"].Value;
-            var h1 = new H1
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h1.Built = $"<h1>{children.Build()}</h1>";
-            return h1.Built;
+            return $"<h1>{children.Build()}</h1>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
         {
             var content = match.Groups["H2_CONTENT"].Value;
-            var h2 = new H2
-            {
-                Source = content,
-            };
+
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h2.Built = $"<h2>{children.Build()}</h2>";
-            return h2.Built;
+            return $"<h2>{children.Build()}</h2>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
         {
             var content = match.Groups["H3_CONTENT"].Value;
-            var h3 = new H3
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h3.Built = $"<h3>{children.Build()}</h3>";
-            return h3.Built;
+            return $"<h3>{children.Build()}</h3>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
         {
             var content = match.Groups["H4_CONTENT"].Value;
-            var h4 = new H4
-            {
-                Source = content,
-            };
+
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h4.Built = $"<h4>{children.Build()}</h4>";
-            return h4.Built;
+            return $"<h4>{children.Build()}</h4>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
         {
             var content = match.Groups["H5_CONTENT"].Value;
-            var h5 = new H5
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h5.Built = $"<h5>{children.Build()}</h5>";
-            return h5.Built;
+            return $"<h5>{children.Build()}</h5>";
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
         {
             var content = match.Groups["H6_CONTENT"].Value;
-            var h6 = new H6
-            {
-                Source = content,
-            };
             var children = mediator
                 .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            h6.Built = $"<h6>{children.Build()}</h6>";
-            return h6.Built;
+            return $"<h6>{children.Build()}</h6>"; ;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
@@ -209,8 +181,8 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                 attribute = @" class=""caution""";
             }
             var children = RegexBlockquote.Replace(blockquote.Source, match => Replace(match, cancellationToken));
-            blockquote.Built = $"<blockquote{attribute}>{children}</blockquote>";
-            return blockquote.Built;
+
+            return $"<blockquote{attribute}>{children}</blockquote>";
         }
 
         {
@@ -218,27 +190,12 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             if (!string.IsNullOrWhiteSpace(content))
             {
                 if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
-                {
-                    var ul = new Ul
-                    {
-                        Source = content,
-                    };
-                    var replaced = RegexLi.Replace(content, match => Replace(match, cancellationToken));
-
-                    ul.Built = $"<ul>{replaced}</ul>";
-                    return ul.Built;
-                }
+                    return $"<ul>{RegexLi.Replace(content, match => Replace(match, cancellationToken))}</ul>";
 
                 if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-                {
-                    var ol = new Ol
-                    {
-                        Source = content,
-                    };
-                    var children = RegexLi.Replace(content, match => Replace(match, cancellationToken));
-                    ol.Built = $"<ol>{children}</ol>";
-                    return ol.Built;
-                }
+                    return $"<ol>{RegexLi.Replace(content, match => Replace(match, cancellationToken))}</ol>";
+
+                return content;
             }
         }
 
@@ -246,14 +203,9 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["LI"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var li = new LI
-                {
-                    Source = content,
-                };
                 var children = Build(content, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
-                li.Built = $"<li>{children.Build()}</li>";
-                return li.Built;
+                return $"<li>{children.Build()}</li>";
             }
         }
 
@@ -261,15 +213,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["P"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                var p = new P
-                {
-                    Source = content,
-                };
                 var children = mediator
                     .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
-                p.Built = $"<p>{children.Build()}</p>";
-                return p.Built;
+                return $"<p>{children.Build()}</p>";
             }
         }
         {
@@ -277,15 +224,10 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             var content = match.Groups["CITE_CONTENT"].Value;
             if (!string.IsNullOrWhiteSpace(index))
             {
-                var cite = new Cite
-                {
-                    Source = content,
-                };
                 var children = mediator
                     .CreateStream(new TextBuildRequest { Source = content }, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
-                cite.Built = @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
-                return cite.Built;
+                return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
             }
         }
         {
