@@ -14,10 +14,6 @@ internal class Html : IElement
 {
     public string? Built { get; internal set; }
 }
-internal class Body : IElement
-{
-    public string? Built { get; internal set; }
-}
 internal class Blockquote : IElement
 {
     public string? Built { get; internal set; }
