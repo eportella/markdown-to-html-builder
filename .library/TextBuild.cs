@@ -1,21 +1,21 @@
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MediatR;
-internal sealed class TextBuildRequest : IStreamRequest<Text>
+internal sealed class InlineBuildRequest : IStreamRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<TextBuildRequest, Text>
+internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<InlineBuildRequest, string?>
 {
-    const string TEXT = @"^(?'TEXT'((.*(\r?\n|))*))";
+    const string PATTERN = @"^(?'TEXT'((.*(\r?\n|))*))";
     static Regex RegexText { get; }
 
-    static TextBuildRequestHandler()
+    static InlineVerticalBuildRequestHandler()
     {
-        RegexText = new Regex(TEXT, RegexOptions.Multiline);
+        RegexText = new Regex(PATTERN, RegexOptions.Multiline);
     }
 
-    public async IAsyncEnumerable<Text> Handle(TextBuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<string?> Handle(InlineBuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (request.Source == default)
             yield break;
@@ -38,10 +38,7 @@ internal sealed class TextBuildRequestHandler(IMediator mediator) : IStreamReque
                 built = (await mediator.Send(new CitedBuildRequest { Source = built }, cancellationToken))?.Target;
                 built = (await mediator.Send(new ThemeBuildRequest { Source = built }, cancellationToken))?.Target;
 
-                yield return new Text
-                {
-                    Built = built,
-                };
+                yield return built;
                 continue;
             }
             var debug = string.Empty;
