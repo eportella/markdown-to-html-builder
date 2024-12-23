@@ -51,19 +51,13 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
 
     private Html Build(BuildRequest request, CancellationToken cancellationToken)
     {
-        var html = new Html
-        {
-            Source = request.Source,
-        };
+        var html = new Html { };
         if (request.Source == default)
             return html;
 
-        var body = new Body
-        {
-            Source = request.Source,
-        };
+        var body = new Body { };
 
-        var children = RegexBody.Replace(body.Source, (match) => Replace(match, cancellationToken));
+        var children = RegexBody.Replace(request.Source, (match) => Replace(match, cancellationToken));
 
         body.Built = @$"<body><h1><a href=""{project.BaseUrl}""/>{project.Title}</a></h1>{children}{(project.OwnerTitle != default && project.OwnerBaseUrl != default ? @$"<span class=""owner""><a href=""{project.OwnerBaseUrl}""/>{project.OwnerTitle}</a></span>" : string.Empty)}</body>";
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{body?.Built}</html>";
@@ -154,33 +148,31 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
-            var blockquote = new Blockquote
-            {
-                Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value)),
-            };
+            var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
+            var blockquote = new Blockquote { };
 
             var attribute = string.Empty;
-            if (blockquote.Source.StartsWith("[!NOTE]"))
+            if (content.StartsWith("[!NOTE]"))
             {
                 attribute = @" class=""note""";
             }
-            else if (blockquote.Source.StartsWith("[!TIP]"))
+            else if (content.StartsWith("[!TIP]"))
             {
                 attribute = @" class=""tip""";
             }
-            else if (blockquote.Source.StartsWith("[!IMPORTANT]"))
+            else if (content.StartsWith("[!IMPORTANT]"))
             {
                 attribute = @" class=""important""";
             }
-            else if (blockquote.Source.StartsWith("[!WARNING]"))
+            else if (content.StartsWith("[!WARNING]"))
             {
                 attribute = @" class=""warning""";
             }
-            else if (blockquote.Source.StartsWith("[!CAUTION]"))
+            else if (content.StartsWith("[!CAUTION]"))
             {
                 attribute = @" class=""caution""";
             }
-            var children = RegexBlockquote.Replace(blockquote.Source, match => Replace(match, cancellationToken));
+            var children = RegexBlockquote.Replace(content, match => Replace(match, cancellationToken));
 
             return $"<blockquote{attribute}>{children}</blockquote>";
         }

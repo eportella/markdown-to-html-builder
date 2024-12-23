@@ -12,21 +12,17 @@ internal static class IElementExtensions
 }
 internal class Html : IElement
 {
-    internal string? Source { get; init; }
     public string? Built { get; internal set; }
 }
 internal class Body : IElement
 {
-    internal string? Source { get; init; }
     public string? Built { get; internal set; }
 }
 internal class Blockquote : IElement
 {
-    internal string? Source { get; init; }
     public string? Built { get; internal set; }
 }
 internal class Text : IElement
 {
-    internal string? Source { get; init; }
     public string? Built { get; init; }
 }
