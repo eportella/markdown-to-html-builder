@@ -84,7 +84,7 @@ public class UlOlBuildTest
 @"<blockquote><ul><li></li><li></li><li></li></ul><ul><li></li><li></li><li></li></ul><ol><li></li><li></li><li></li></ol><ol><li></li><li></li><li></li></ol></blockquote>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BuildRequest
+        var arrange = new BlockBuildRequest
         {
             Source = informed
         };
@@ -98,12 +98,7 @@ public class UlOlBuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
 
-        var result = await new BuildRequestHandler(
-                new ProjectBuildResponse
-                {
-                    Title = "--title--",
-                    BaseUrl = new Uri("https://github.com"),
-                },
+        var result = await new BlockBuildRequestHandler(
                 mediator
             )
             .Handle(
@@ -111,6 +106,6 @@ public class UlOlBuildTest
                 CancellationToken.None
             );
 
-        Assert.Contains(expected, result);
+        Assert.Equal(expected, result);
     }
 }
