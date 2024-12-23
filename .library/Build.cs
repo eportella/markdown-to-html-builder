@@ -23,19 +23,19 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
-    static Regex RegexLi { get; }
     static Regex RegexBody { get; }
     static Regex RegexBlockquote { get; }
     static Regex RegexOlUl { get; }
     static Regex RegexOlUlInner { get; }
+    static Regex RegexLi { get; }
 
     static BuildRequestHandler()
     {
-        RegexLi = new Regex(LI, RegexOptions.Multiline);
         RegexBody = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexBlockquote = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
+        RegexLi = new Regex(LI, RegexOptions.Multiline);
     }
     public async Task<BuildResponse> Handle(BuildRequest request, CancellationToken cancellationToken)
     {
