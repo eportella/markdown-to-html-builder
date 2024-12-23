@@ -217,7 +217,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
             }
         }
         {
-            var content = match.Groups["TEXT"].Value;
+            var content = match.Groups["INLINE"].Value;
             if (!string.IsNullOrWhiteSpace(content))
                 return mediator
                     .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)

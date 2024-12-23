@@ -7,7 +7,7 @@ internal sealed class InlineBuildRequest : IStreamRequest<string?>
 }
 internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<InlineBuildRequest, string?>
 {
-    const string PATTERN = @"^(?'TEXT'((.*(\r?\n|))*))";
+    const string PATTERN = @"^(?'INLINE'((.*(\r?\n|))*))";
     static Regex Regex { get; }
 
     static InlineVerticalBuildRequestHandler()
@@ -22,7 +22,7 @@ internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IS
 
         foreach (Match match in Regex.Matches(request.Source))
         {
-            var target = match.Groups["TEXT"].Value;
+            var target = match.Groups["INLINE"].Value;
             if (!string.IsNullOrWhiteSpace(target))
             {
                 target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
