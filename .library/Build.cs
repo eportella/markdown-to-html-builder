@@ -75,7 +75,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
         html.Built = $@"<!DOCTYPE html><html lang=""pt-BR""><head><title>{project.Title}</title><meta content=""text/html; charset=UTF-8;"" http-equiv=""Content-Type"" /><meta name=""viewport"" content=""width=device-width, initial-scale=1.0""><meta name=""color-scheme"" content=""dark light""><link rel=""stylesheet"" href=""{project.BaseUrl!.ToString().TrimEnd('/')}/stylesheet.css""></style></head>{body?.Built}</html>";
         return html;
     }
-    private async IAsyncEnumerable<IElement> Build(LI? li, string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IElement> Build(string? source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (source == default)
             yield break;
@@ -284,7 +284,7 @@ internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediato
                     {
                         Source = content,
                     };
-                    var children = Build(li, content, cancellationToken)
+                    var children = Build(content, cancellationToken)
                         .ToBlockingEnumerable(cancellationToken)
                         .ToArray();
                     li.Built = $"<li>{children.Build()}</li>";
