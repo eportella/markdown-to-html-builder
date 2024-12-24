@@ -6,7 +6,7 @@ internal sealed class BlockquoteBuildRequest : IRequest<string?>
 }
 internal sealed class BlockquoteBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockquoteBuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'BLOCKQUOTE'>(?'BLOCKQUOTE_CONTENT' *.*(\r?\n|)))+";
+    const string PATTERN = @"^(?'BLOCKQUOTE'>(?'BLOCKQUOTE_CONTENT' *.*(\r?\n|)))+";
     static Regex Regex { get; }
     static BlockquoteBuildRequestHandler()
     {

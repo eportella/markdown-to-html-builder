@@ -6,7 +6,7 @@ internal sealed class CiteBuildRequest : IRequest<string?>
 }
 internal sealed class CiteBuildRequestHandler(IMediator mediator) : IRequestHandler<CiteBuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'CITE'\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*))";
+    const string PATTERN = @"^(?'CITE'\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*))";
     static Regex Regex { get; }
     static CiteBuildRequestHandler()
     {

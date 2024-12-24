@@ -6,7 +6,7 @@ internal sealed class H4BuildRequest : IRequest<string?>
 }
 internal sealed class H4BuildRequestHandler(IMediator mediator) : IRequestHandler<H4BuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
+    const string PATTERN = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
     static Regex Regex { get; }
     static H4BuildRequestHandler()
     {

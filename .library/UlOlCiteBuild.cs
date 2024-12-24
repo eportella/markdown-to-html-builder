@@ -7,7 +7,7 @@ internal sealed class UlOlBuildRequest : IRequest<string?>
 }
 internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHandler<UlOlBuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
+    const string PATTERN = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
     static Regex Regex { get; }

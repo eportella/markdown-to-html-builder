@@ -6,7 +6,7 @@ internal sealed class H3BuildRequest : IRequest<string?>
 }
 internal sealed class H3BuildRequestHandler(IMediator mediator) : IRequestHandler<H3BuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
+    const string PATTERN = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
     static Regex Regex { get; }
     static H3BuildRequestHandler()
     {

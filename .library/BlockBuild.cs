@@ -6,13 +6,6 @@ internal sealed class BlockBuildRequest : IRequest<string?>
 }
 internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockBuildRequest, string?>
 {
-    static Regex RegexBlock { get; }
-
-    static BlockBuildRequestHandler()
-    {
-        RegexBlock = new Regex(@$"({PBuildRequestHandler.PATTERN}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UlOlBuildRequestHandler.PATTERN}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
-    }
-
     public async Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
