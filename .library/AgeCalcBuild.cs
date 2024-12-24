@@ -38,7 +38,7 @@ internal sealed partial class AgeCalcBuildRequestHandler() : IRequestHandler<Age
 
     private static int AgeCalculate(DateTime birthDate)
     {
-        DateTime today = DateTime.Today;
+        var today = DateTime.Today;
 
         int age = today.Year - birthDate.Year;
 
