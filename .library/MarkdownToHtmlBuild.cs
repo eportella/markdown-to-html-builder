@@ -2,14 +2,14 @@ using MediatR;
 public sealed class MarkdownToHtmlBuildRequest : IRequest, ITimmerElapsedLog
 {
 }
-internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<MarkdownToHtmlBuildRequest>
+internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Task<InputBuildResponse> input) : IRequestHandler<MarkdownToHtmlBuildRequest>
 {
     public async Task Handle(MarkdownToHtmlBuildRequest request, CancellationToken cancellationToken)
     {
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
-                Path = input.SourcePath
+                Path = (await input).SourcePath
             },
             cancellationToken);
 
@@ -35,8 +35,8 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
                         .Send(new DirectoryInfoGetRequest
                         {
                             Path = string.IsNullOrWhiteSpace(sufix) ?
-                                input.TargetPath :
-                                $"{input.TargetPath}{Path.DirectorySeparatorChar}{sufix}"
+                                (await input).TargetPath :
+                                $"{(await input).TargetPath}{Path.DirectorySeparatorChar}{sufix}"
                         },
                          cancellationToken);
 
@@ -44,7 +44,7 @@ internal sealed class MarkdownToHtmlBuildRequestHandler(IMediator mediator, Inpu
                 .Send(new MarkdownFileInfoBuildRequest
                 {
                     Source = source,
-                    Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{input.TargetFileName}"),
+                    Target = new FileInfo($"{target}{Path.DirectorySeparatorChar}{(await input).TargetFileName}"),
                 },
                 cancellationToken);
 

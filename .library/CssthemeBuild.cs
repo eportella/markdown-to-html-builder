@@ -2,21 +2,21 @@ using MediatR;
 internal sealed class CssThemeBuildRequest : IRequest
 {
 }
-internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildResponse input) : IRequestHandler<CssThemeBuildRequest>
+internal sealed class CssThemeBuildHandler(IMediator mediator, Task<InputBuildResponse> input) : IRequestHandler<CssThemeBuildRequest>
 {
     public async Task Handle(CssThemeBuildRequest request, CancellationToken cancellationToken)
     {
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
-                Path = input.ActionPath
+                Path = (await input).ActionPath
             },
             cancellationToken);
 
         var targetDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
-                Path = input.TargetPath
+                Path = (await input).TargetPath
             },
             cancellationToken);
 
