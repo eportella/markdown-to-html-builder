@@ -9,38 +9,45 @@ public class BlockquoteBuildTest
     [InlineData(
 @">a
 ",
-@"<blockquote></blockquote>")]
+@"<blockquote></blockquote>
+")]
     [InlineData(
 @">a
 >b
 ",
-@"<blockquote></blockquote>")]
+@"<blockquote></blockquote>
+")]
     [InlineData(
 @">a
 >b
 >c
 ",
-@"<blockquote></blockquote>")]
+@"<blockquote></blockquote>
+")]
     [InlineData(
 @">quote 1
 
 >quote2
 ",
 @"<blockquote></blockquote>
-<blockquote></blockquote>")]
+
+<blockquote></blockquote>
+")]
     [InlineData(
 @">a
 >>b
 >c
 ",
-@"<blockquote></blockquote>")]
+@"<blockquote></blockquote>
+")]
     [InlineData(
 @">a
 >>b
 >>>c
 >>>d
 >e",
-@"<blockquote></blockquote>")]
+@"<blockquote></blockquote>
+")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BlockquoteBuildRequest

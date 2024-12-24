@@ -12,19 +12,26 @@ public class H6BuildTest
 ######b
 ######d
 ",
-@"<h6></h6><h6></h6><h6></h6>")]
+@"<h6></h6>
+<h6></h6>
+<h6></h6>
+")]
     [InlineData(
 @"######prefix *infix italic* sufix",
-@"<h6></h6>")]
+@"<h6></h6>
+")]
     [InlineData(
 @"######prefix **infix bold** sufix",
-@"<h6></h6>")]
+@"<h6></h6>
+")]
     [InlineData(
 @"######prefix **infix bold** *sufix italic*",
-@"<h6></h6>")]
+@"<h6></h6>
+")]
     [InlineData(
 @"###### prefix infix sufix",
-@"<h6></h6>")]
+@"<h6></h6>
+")]
 
     public async Task Success(string informed, string expected)
     {

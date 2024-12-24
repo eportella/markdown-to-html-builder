@@ -13,7 +13,13 @@ public class UlOlBuildTest
 - list item 3
 - listitem4
 -listitem5",
-@"<ul><li></li><li></li><li></li><li></li><li></li></ul>")]
+@"<ul><li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+")]
     [InlineData(
 @"- list item 1
 
@@ -22,7 +28,14 @@ public class UlOlBuildTest
 
 -listitem3
 ",
-@"<ul><li></li></ul><ul><li></li><li></li></ul><ul><li></li></ul>")]
+@"<ul><li></li>
+</ul>
+<ul><li></li>
+<li></li>
+</ul>
+<ul><li></li>
+</ul>
+")]
     [InlineData(
 @"- li 1.0
 - li 1.1
@@ -51,7 +64,23 @@ public class UlOlBuildTest
     1. li 2.0
     9. li 2.1
     8. li 2.2",
-@"<ul><li></li><li></li><li></li></ul><ul><li></li><li></li><li></li></ul><ol><li></li><li></li><li></li></ol><ol><li></li><li></li><li></li></ol>")]
+@"<ul><li></li>
+<li></li>
+<li></li>
+</ul>
+<ul><li></li>
+<li></li>
+<li></li>
+</ul>
+<ol><li></li>
+<li></li>
+<li></li>
+</ol>
+<ol><li></li>
+<li></li>
+<li></li>
+</ol>
+")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new UlOlBuildRequest

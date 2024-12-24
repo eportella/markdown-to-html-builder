@@ -12,19 +12,26 @@ public class H3BuildTest
 ###b
 ###d
 ",
-@"<h3></h3><h3></h3><h3></h3>")]
+@"<h3></h3>
+<h3></h3>
+<h3></h3>
+")]
     [InlineData(
 @"###prefix *infix italic* sufix",
-@"<h3></h3>")]
+@"<h3></h3>
+")]
     [InlineData(
 @"###prefix **infix bold** sufix",
-@"<h3></h3>")]
+@"<h3></h3>
+")]
     [InlineData(
 @"###prefix **infix bold** *sufix italic*",
-@"<h3></h3>")]
+@"<h3></h3>
+")]
     [InlineData(
 @"### prefix infix sufix",
-@"<h3></h3>")]
+@"<h3></h3>
+")]
 
     public async Task Success(string informed, string expected)
     {
