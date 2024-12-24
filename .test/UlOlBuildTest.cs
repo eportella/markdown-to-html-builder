@@ -54,7 +54,7 @@ public class UlOlBuildTest
 @"<ul><li></li><li></li><li></li></ul><ul><li></li><li></li><li></li></ul><ol><li></li><li></li><li></li></ol><ol><li></li><li></li><li></li></ol>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BlockBuildRequest
+        var arrange = new UlOlBuildRequest
         {
             Source = informed
         };
@@ -68,7 +68,7 @@ public class UlOlBuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
 
-        var result = await new BlockBuildRequestHandler(
+        var result = await new UlOlBuildRequestHandler(
                 mediator
             )
             .Handle(
