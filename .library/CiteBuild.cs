@@ -23,9 +23,8 @@ internal sealed class CiteBuildRequestHandler(IMediator mediator) : IRequestHand
             var index = match.Groups["CITE_INDEX"].Value;
             var content = match.Groups["CITE_CONTENT"].Value;
             var children = mediator
-                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken);
-                return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
+                    .Send(new InlineBuildRequest { Source = content }, cancellationToken).Result;
+                return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children}</cite>";
         });
     }
 }

@@ -54,11 +54,11 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
             {
                 var children = Build(content, cancellationToken)
                     .ToBlockingEnumerable(cancellationToken);
-                return $"<li>{children.Build()}</li>";
+                return $"<li>{string.Join(string.Empty, children)}</li>";
             }
         }
 
-        
+
         throw new InvalidOperationException($"build with {match.Value} invalid");
     }
 
@@ -89,7 +89,7 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
                 );
         }
 
-        await foreach (var text in mediator.CreateStream(new InlineBuildRequest { Source = source }, cancellationToken))
-            yield return text;
+        yield return await mediator.Send(new InlineBuildRequest { Source = source }, cancellationToken);
+
     }
 }

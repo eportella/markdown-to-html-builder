@@ -1,44 +1,43 @@
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MediatR;
-internal sealed class InlineBuildRequest : IStreamRequest<string?>
+internal sealed class InlineBuildRequest : IRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class InlineVerticalBuildRequestHandler(IMediator mediator) : IStreamRequestHandler<InlineBuildRequest, string?>
+internal sealed class InlineBuildRequestHandler(IMediator mediator) : IRequestHandler<InlineBuildRequest, string?>
 {
     const string PATTERN = @"^(?'INLINE'((.*(\r?\n|))*))";
     static Regex Regex { get; }
 
-    static InlineVerticalBuildRequestHandler()
+    static InlineBuildRequestHandler()
     {
         Regex = new Regex(PATTERN, RegexOptions.Multiline);
     }
 
-    public async IAsyncEnumerable<string?> Handle(InlineBuildRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async Task<string?> Handle(InlineBuildRequest request, CancellationToken cancellationToken)
     {
-        if (request.Source == default)
-            yield break;
+        await Task.Yield();
 
-        foreach (Match match in Regex.Matches(request.Source))
+        if (request.Source == default)
+            return default;
+
+        return Regex.Replace(request.Source, match =>
         {
             var target = match.Groups["INLINE"].Value;
 
-            target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
+            target = mediator.Send(new BrBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new BIBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new BBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new IBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new DelBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new ABuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken).Result?.Target;
+            target = mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken).Result?.Target;
 
-            yield return target;
-            continue;
+            return target;
+        });
 
-            throw new InvalidOperationException($"build with {target} invalid");
-        }
     }
 }

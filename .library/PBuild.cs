@@ -21,9 +21,8 @@ internal sealed class PBuildRequestHandler(IMediator mediator) : IRequestHandler
         return Regex.Replace(request.Source, match =>
         {
             var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<p>{children.Build()}</p>";
+                .Send(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
+            return $"<p>{children}</p>";
         });
     }
 }
