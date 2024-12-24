@@ -22,7 +22,7 @@ internal sealed class PBuildRequestHandler(IMediator mediator) : IRequestHandler
         {
             var children = mediator
                 .Send(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
-            return $"<p>{children}</p>";
+            return $"<p>{children}</p>{Environment.NewLine}";
         });
     }
 }
