@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 using MediatR;
-public sealed class InputBuildRequest : IRequest<InputBuildResponse>
+public sealed class InputBuildRequest : IRequest<InputBuildResponse>, ITimmerElapsedLog
 {
     public string[]? Args { internal get; init; }
 }
