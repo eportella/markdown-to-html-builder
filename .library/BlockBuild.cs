@@ -10,15 +10,16 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({PBuildRequestHandler.PATTERN}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UlOlBuildRequestHandler.PATTERN}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
+        RegexBlock = new Regex($"({PBuildRequestHandler.PATTERN}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UlOlBuildRequestHandler.PATTERN}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
     }
 
-    public Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
     {
+        await Task.Yield();
         if (request.Source == default)
-            return Task.FromResult(default(string?));
+            return default;
 
-        return Task.FromResult(RegexBlock?.Replace(request.Source, (match) =>
+        return RegexBlock?.Replace(request.Source, (match) =>
         {
             if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
                 return mediator.Send(new H1BuildRequest { Source = match.Groups["H1"].Value }, cancellationToken).Result;
@@ -48,6 +49,6 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
                 return match.Value;
 
             throw new InvalidOperationException($"build with {match.Value} invalid");
-        }));
+        });
     }
 }
