@@ -20,8 +20,9 @@ internal sealed class H6BuildRequestHandler(IMediator mediator) : IRequestHandle
 
         return Regex.Replace(request.Source, match =>
         {
+            var content = match.Groups["H6_CONTENT"].Value;
             var children = mediator
-                .Send(new InlineBuildRequest { Source = match.Groups["H6_CONTENT"].Value }, cancellationToken).Result;
+                .Send(new InlineBuildRequest { Source = content }, cancellationToken).Result;
             return $"<h6>{children}</h6>";
         });
     }

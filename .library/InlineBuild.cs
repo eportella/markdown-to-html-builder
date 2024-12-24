@@ -36,7 +36,7 @@ internal sealed class InlineBuildRequestHandler(IMediator mediator) : IRequestHa
             target = mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken).Result?.Target;
             target = mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken).Result?.Target;
 
-            return target ?? string.Empty;
+            return target;
         });
 
     }
