@@ -6,7 +6,7 @@ internal sealed class PBuildRequest : IRequest<string?>
 }
 internal sealed class PBuildRequestHandler(IMediator mediator) : IRequestHandler<PBuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
+    internal const string PATTERN = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:|</?.+?>)).+(\r?\n|))+(\r?\n|))";
     static Regex Regex { get; }
     static PBuildRequestHandler()
     {
