@@ -28,10 +28,10 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
         return Regex.Replace(request.Source, match =>
         {
             if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
-                return $"<ul>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ul>";
+                return $"<ul>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ul>{Environment.NewLine}";
 
             if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-                return $"<ol>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ol>";
+                return $"<ol>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ol>{Environment.NewLine}";
 
             return match.Value;
         });
@@ -48,7 +48,7 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
         {
             var children = Build(match.Groups["LI"].Value, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken);
-            return $"<li>{string.Join(string.Empty, children)}</li>";
+            return $"<li>{string.Join(string.Empty, children)}</li>{Environment.NewLine}";
         }
 
         throw new InvalidOperationException($"build with {match.Value} invalid");
