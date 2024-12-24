@@ -22,9 +22,8 @@ internal sealed class H4BuildRequestHandler(IMediator mediator) : IRequestHandle
         {
             var content = match.Groups["H4_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h4>{children.Build()}</h4>";
+                .Send(new InlineBuildRequest { Source = content }, cancellationToken).Result;
+            return $"<h4>{children}</h4>";
         });
     }
 }

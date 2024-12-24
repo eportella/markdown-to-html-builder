@@ -42,9 +42,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
                 return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["INLINE"].Value))
                 return mediator
-                    .CreateStream(new InlineBuildRequest { Source = match.Groups["INLINE"].Value }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken)
-                    .Build()!;
+                    .Send(new InlineBuildRequest { Source = match.Groups["INLINE"].Value }, cancellationToken).Result;
 
             if (match.Value == string.Empty)
                 return match.Value;

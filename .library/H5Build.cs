@@ -22,9 +22,8 @@ internal sealed class H5BuildRequestHandler(IMediator mediator) : IRequestHandle
         {
             var content = match.Groups["H5_CONTENT"].Value;
             var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h5>{children.Build()}</h5>";
+                .Send(new InlineBuildRequest { Source = content }, cancellationToken).Result;
+            return $"<h5>{children}</h5>";
         });
     }
 }
