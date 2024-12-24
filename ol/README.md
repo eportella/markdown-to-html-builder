@@ -5,9 +5,9 @@ Essa é a **lista ordenada**, ela pode ser usada em diversos pontos da página, 
 
 ## Uma lista com três itens
 
-- item um
-- item dois
-- item três
+1. item um
+1. item dois
+1. item três
 
 ## Uma lista com cinco itens contendo sub níveis
 
