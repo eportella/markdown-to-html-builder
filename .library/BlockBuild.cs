@@ -14,7 +14,6 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
     const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
     const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).*(\r?\n|)))";
     const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).*(\r?\n|)))";
-    const string BLOCKQUOTE = @"^(?'BLOCKQUOTE'>(?'BLOCKQUOTE_CONTENT' *.*(\r?\n|)))+";
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
@@ -26,7 +25,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BLOCKQUOTE}|{UL_OL}|{CITE})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
@@ -125,31 +124,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
-            var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
-            var attribute = string.Empty;
-            if (content.StartsWith("[!NOTE]"))
-            {
-                attribute = @" class=""note""";
-            }
-            else if (content.StartsWith("[!TIP]"))
-            {
-                attribute = @" class=""tip""";
-            }
-            else if (content.StartsWith("[!IMPORTANT]"))
-            {
-                attribute = @" class=""important""";
-            }
-            else if (content.StartsWith("[!WARNING]"))
-            {
-                attribute = @" class=""warning""";
-            }
-            else if (content.StartsWith("[!CAUTION]"))
-            {
-                attribute = @" class=""caution""";
-            }
-            var children = RegexBlock.Replace(content, match => Replace(match, cancellationToken));
-
-            return $"<blockquote{attribute}>{children}</blockquote>";
+            return mediator.Send(new BlockquoteBuildRequest { Source = match.Groups["BLOCKQUOTE"].Value }, cancellationToken).Result;
         }
 
         {
