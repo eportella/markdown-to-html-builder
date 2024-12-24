@@ -11,7 +11,6 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
-    const string CITE = @"^\[\^(?'CITE_INDEX'\d+)\]: +(?'CITE_CONTENT'.*)";
     static Regex RegexBlock { get; }
     static Regex RegexOlUl { get; }
     static Regex RegexOlUlInner { get; }
@@ -19,7 +18,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
@@ -80,7 +79,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
             return mediator.Send(new H6BuildRequest { Source = match.Groups["H6"].Value }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
             return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
-        
+
         {
             var content = match.Groups["UL_OL"].Value;
             if (!string.IsNullOrWhiteSpace(content))
@@ -115,17 +114,10 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
                 return $"<p>{children.Build()}</p>";
             }
         }
-        {
-            var index = match.Groups["CITE_INDEX"].Value;
-            var content = match.Groups["CITE_CONTENT"].Value;
-            if (!string.IsNullOrWhiteSpace(index))
-            {
-                var children = mediator
-                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken);
-                return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children.Build()}</cite>";
-            }
-        }
+
+        if (!string.IsNullOrWhiteSpace(match.Groups["CITE"].Value))
+            return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
+
         {
             var content = match.Groups["INLINE"].Value;
             if (!string.IsNullOrWhiteSpace(content))
