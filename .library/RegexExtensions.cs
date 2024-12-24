@@ -5,16 +5,23 @@ internal static class RegexExtensions
     {
         var result = input;
         var offset = 0;
-        foreach (Match matched in regex.Matches(input))
+        foreach (var item in regex
+            .Matches(input)
+            .Select(async matched =>
+            {
+                var item = new
+                {
+                    Replaced = await match(matched) ?? string.Empty,
+                    Start = matched.Index + offset,
+                    End = matched.Length
+                };
+                offset += item.Replaced.Length - item.End;
+                return item;
+            }))
         {
-            var replaced = await match(matched) ?? string.Empty;
-            var start = matched.Index + offset;
-            var end = matched.Length;
             result = result
-                .Remove(start, end)
-                .Insert(start, replaced);
-
-            offset += replaced.Length - end;
+                .Remove((await item).Start, (await item).End)
+                .Insert((await item).Start, (await item).Replaced);
         }
         return result;
     }
@@ -25,16 +32,23 @@ internal static class RegexExtensions
 
         var result = input;
         var offset = 0;
-        foreach (Match matched in regex.Matches(input))
+        foreach (var item in regex
+            .Matches(input)
+            .Select(matched =>
+            {
+                var item = new
+                {
+                    Replaced = match(matched) ?? string.Empty,
+                    Start = matched.Index + offset,
+                    End = matched.Length
+                };
+                offset += item.Replaced.Length - item.End;
+                return item;
+            }))
         {
-            var replaced = match(matched) ?? string.Empty;
-            var start = matched.Index + offset;
-            var end = matched.Length;
             result = result
-                .Remove(start, end)
-                .Insert(start, replaced);
-
-            offset += replaced.Length - end;
+                .Remove(item.Start, item.End)
+                .Insert(item.Start, item.Replaced);
         }
         return result;
     }
