@@ -26,7 +26,7 @@ Citado[^3] algo o mais próximo do início de um parágrafo.
 > Uma citação em *itálico[^12]*, em **negrito[^13]**, ***itálico mais negrito[^14]***, dentro de um [hiperlink[^15]](/) e agora uma citação sem formatação[^16].
 > Uma citação[^17] dentro de um bloco de código
 >
-> [^17]: citação dentro de um bloco de código
+>[^17]: 17ª citação de algo.
 
 
 [^4]: 4ª citação de algo.
