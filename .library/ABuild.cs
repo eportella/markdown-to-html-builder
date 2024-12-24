@@ -11,7 +11,7 @@ internal sealed class ABuildResponse
 internal sealed partial class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
 {
     const string PATTERN = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
-    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline | RegexOptions.IgnoreCase)]
     private static partial Regex Regex();
     public async Task<ABuildResponse?> Handle(ABuildRequest request, CancellationToken cancellationToken)
     {
