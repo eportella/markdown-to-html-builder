@@ -18,7 +18,7 @@ internal sealed class BlockquoteBuildRequestHandler(IMediator mediator) : IReque
         if (request.Source == default)
             return default;
 
-        return Regex.Replace(request.Source, async match =>
+        return Regex.Replace(request.Source, match =>
         {
             var content = string.Join(string.Empty, match.Groups["BLOCKQUOTE_CONTENT"].Captures.Select(c => c.Value));
             var attribute = string.Empty;
@@ -42,7 +42,7 @@ internal sealed class BlockquoteBuildRequestHandler(IMediator mediator) : IReque
             {
                 attribute = @" class=""caution""";
             }
-            var children = await mediator.Send(new BlockBuildRequest { Source = content }, cancellationToken);
+            var children = mediator.Send(new BlockBuildRequest { Source = content }, cancellationToken).Result;
 
             return $"<blockquote{attribute}>{children}</blockquote>";
         });
