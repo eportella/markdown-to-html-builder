@@ -7,12 +7,11 @@ internal sealed class BlockBuildRequest : IRequest<string?>
 }
 internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockBuildRequest, string?>
 {
-    const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
     static Regex RegexBlock { get; }
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UlOlBuildRequestHandler.PATTERN}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({PBuildRequestHandler.PATTERN}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UlOlBuildRequestHandler.PATTERN}|{CiteBuildRequestHandler.PATTERN})", RegexOptions.Multiline);
     }
 
     public Task<string?> Handle(BlockBuildRequest request, CancellationToken cancellationToken)
@@ -43,12 +42,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
         if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
             return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result;
         if (match.Groups["P"].Value != string.Empty)
-        {
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<p>{children.Build()}</p>";
-        }
+            return mediator.Send(new PBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["CITE"].Value))
             return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["INLINE"].Value))
