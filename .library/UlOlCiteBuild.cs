@@ -38,8 +38,6 @@ internal sealed partial class UlOlBuildRequestHandler(IMediator mediator) : IReq
 
     private string Replace(Match match, CancellationToken cancellationToken)
     {
-
-
         if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
             return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result ?? string.Empty;
 
