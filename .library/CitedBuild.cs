@@ -15,11 +15,11 @@ internal sealed partial class CitedBuildRequestHandler() : IRequestHandler<Cited
     private static partial Regex Regex();
     public async Task<CitedBuildResponse?> Handle(CitedBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
+        
         if (request.Source == default)
             return default;
 
-        var target = Regex().Replace(
+        var target = await Regex().ReplaceAsync(
             request.Source,
             match =>
             {

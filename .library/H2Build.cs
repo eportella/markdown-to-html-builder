@@ -11,14 +11,13 @@ internal sealed partial class H2BuildRequestHandler(IMediator mediator) : IReque
     private static partial Regex Regex();
     public async Task<string?> Handle(H2BuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex().Replace(request.Source, match =>
+        return await Regex().ReplaceAsync(request.Source, async match =>
         {
-            var children = mediator
-                .Send(new InlineBuildRequest { Source = match.Groups["H2_CONTENT"].Value }, cancellationToken).Result;
+            var children = await mediator
+                .Send(new InlineBuildRequest { Source = match.Groups["H2_CONTENT"].Value }, cancellationToken);
             return $"<h2>{children}</h2>{Environment.NewLine}";
         });
     }

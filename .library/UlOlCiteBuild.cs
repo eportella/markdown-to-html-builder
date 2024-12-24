@@ -20,26 +20,25 @@ internal sealed partial class UlOlBuildRequestHandler(IMediator mediator) : IReq
     private static partial Regex RegexInner();
     public async Task<string?> Handle(UlOlBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex().Replace(request.Source, match =>
+        return await Regex().ReplaceAsync(request.Source, async match =>
         {
             if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
-                return $"<ul>{RegexLi().Replace(match.Value, match => Replace(match, cancellationToken))}</ul>{Environment.NewLine}";
+                return $"<ul>{await RegexLi().ReplaceAsync(match.Value, async match => await Replace(match, cancellationToken))}</ul>{Environment.NewLine}";
 
             if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-                return $"<ol>{RegexLi().Replace(match.Value, match => Replace(match, cancellationToken))}</ol>{Environment.NewLine}";
+                return $"<ol>{await RegexLi().ReplaceAsync(match.Value, async match => await Replace(match, cancellationToken))}</ol>{Environment.NewLine}";
 
             return match.Value;
         });
     }
 
-    private string Replace(Match match, CancellationToken cancellationToken)
+    private async Task<string> Replace(Match match, CancellationToken cancellationToken)
     {
         if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
-            return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result ?? string.Empty;
+            return (await mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken)) ?? string.Empty;
 
         if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
         {
@@ -64,14 +63,14 @@ internal sealed partial class UlOlBuildRequestHandler(IMediator mediator) : IReq
             source = source
                 .Replace(
                     group.Value,
-                    Regex()
-                        .Replace(
+                    await Regex()
+                        .ReplaceAsync(
                             RegexInner()
                                 .Replace(
                                     group.Value,
                                     string.Empty
                                 ),
-                                match => Replace(match, cancellationToken)
+                                async match => await Replace(match, cancellationToken)
                         )
                 );
         }

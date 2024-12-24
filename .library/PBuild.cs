@@ -12,14 +12,13 @@ internal sealed partial class PBuildRequestHandler(IMediator mediator) : IReques
     
     public async Task<string?> Handle(PBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex().Replace(request.Source, match =>
+        return await Regex().ReplaceAsync(request.Source, async match =>
         {
-            var children = mediator
-                .Send(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
+            var children = await mediator
+                .Send(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken);
             return $"<p>{children}</p>{Environment.NewLine}";
         });
     }

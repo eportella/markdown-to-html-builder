@@ -18,11 +18,10 @@ internal sealed partial class ThemeBuildRequestHandler() : IRequestHandler<Theme
     private static partial Regex RegexRule();
     public async Task<ThemeBuildResponse?> Handle(ThemeBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex().Replace(
+        var target = await Regex().ReplaceAsync(
             request.Source,
             match =>
             {

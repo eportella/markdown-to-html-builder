@@ -11,15 +11,14 @@ internal sealed partial class CiteBuildRequestHandler(IMediator mediator) : IReq
     private static partial Regex Regex();
     public async Task<string?> Handle(CiteBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex().Replace(request.Source, match =>
+        return await Regex().ReplaceAsync(request.Source, async match =>
         {
             var index = match.Groups["CITE_INDEX"].Value;
-            var children = mediator
-                    .Send(new InlineBuildRequest { Source = match.Groups["CITE_CONTENT"].Value }, cancellationToken).Result;
+            var children = await mediator
+                    .Send(new InlineBuildRequest { Source = match.Groups["CITE_CONTENT"].Value }, cancellationToken);
                 return @$"<cite id=""cite-{index}""><a href=""#cited-{index}"">({index})</a>. {children}</cite>{Environment.NewLine}";
         });
     }

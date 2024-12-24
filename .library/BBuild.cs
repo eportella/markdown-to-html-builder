@@ -15,11 +15,10 @@ internal sealed partial class BBuildRequestHandler() : IRequestHandler<BBuildReq
     private static partial Regex Regex();
     public async Task<BBuildResponse?> Handle(BBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex().Replace(
+        var target = await Regex().ReplaceAsync(
             request.Source,
             match => $"<b>{match.Groups["B_CONTENT"].Value}</b>");
 

@@ -8,9 +8,9 @@ internal sealed class HtmlFileGetStreamHandler : IStreamRequestHandler<HtmlFileG
 {
     public async IAsyncEnumerable<FileInfo> Handle(HtmlFileGetStreamRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        await Task.Yield();
+
         foreach (var item in request.DirectoryInfo!.EnumerateFiles("*.html", new EnumerationOptions() { RecurseSubdirectories = true }))
             yield return item;
-
-        await Task.Yield();
     }
 }

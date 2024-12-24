@@ -8,9 +8,10 @@ internal sealed class MarkdownFileInfoGetStreamHandler : IStreamRequestHandler<M
 {
     public async IAsyncEnumerable<FileInfo> Handle(MarkdownFileInfoGetStreamRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        await Task.Yield();
+        
         foreach (var item in request.DirectoryInfo!.EnumerateFiles("*.md", new EnumerationOptions() { RecurseSubdirectories = true }))
             yield return item;
 
-        await Task.Yield();
     }
 }

@@ -16,11 +16,10 @@ internal sealed partial class AgeCalcBuildRequestHandler() : IRequestHandler<Age
     private static partial Regex Regex();
     public async Task<AgeCalcBuildResponse?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex().Replace(
+        var target = await Regex().ReplaceAsync(
             request.Source,
             match => AgeCalculate(
                 DateTime.ParseExact(

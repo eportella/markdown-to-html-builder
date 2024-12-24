@@ -15,11 +15,10 @@ internal sealed partial class DelBuildRequestHandler() : IRequestHandler<DelBuil
     private static partial Regex Regex();
     public async Task<DelBuildResponse?> Handle(DelBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex().Replace(
+        var target = await Regex().ReplaceAsync(
             request.Source,
             match => $"<del>{match.Groups["DEL_CONTENT"].Value}</del>");
 

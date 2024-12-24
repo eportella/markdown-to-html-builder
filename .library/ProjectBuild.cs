@@ -14,8 +14,6 @@ internal sealed class ProjectBuildRequestHandler(IMediator mediator, InputBuildR
 {
     public async Task<ProjectBuildResponse> Handle(ProjectBuildRequest request, CancellationToken cancellationToken)
     {
-        await Task.Yield();
-
         var project = input.BaseUrl!.AbsolutePath.TrimStart('/');
         var ownerTitle = (
                 await mediator

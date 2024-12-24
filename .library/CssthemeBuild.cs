@@ -6,7 +6,6 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
 {
     public async Task Handle(CssThemeBuildRequest request, CancellationToken cancellationToken)
     {
-        
         var sourceDirectoryInfo = await mediator
             .Send(new DirectoryInfoGetRequest
             {
@@ -30,6 +29,5 @@ internal sealed class CssThemeBuildHandler(IMediator mediator, InputBuildRespons
             item.CopyTo($"{targetDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{item.Name}");
         }
 
-        await Task.Yield();
     }
 }

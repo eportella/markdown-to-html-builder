@@ -24,9 +24,13 @@ public class TimeElapsedTest
     {
         var arrange = Mock.Of<ITimmerElapsedLog>();
         var next = Mock.Of<StreamHandlerDelegate<Unit>>();
+        static IEnumerable<Unit> YieldBreak()
+        {
+            yield break;
+        };
         Mock.Get(next)
             .Setup(@delegate => @delegate())
-            .Returns(AsyncEnumerable);
+            .Returns(YieldBreak().ToAsyncEnumerable());
 
         var act = new TimeElapsedStreamPipelineBehavior<ITimmerElapsedLog, Unit>();
 
@@ -35,11 +39,5 @@ public class TimeElapsedTest
                 next,
                 CancellationToken.None
             )) ;
-
-        static async IAsyncEnumerable<Unit> AsyncEnumerable()
-        {
-            await Task.Yield();
-            yield break;
-        };
     }
 }
