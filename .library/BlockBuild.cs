@@ -42,18 +42,13 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
             return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
             return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result;
-
+        if (match.Groups["P"].Value != string.Empty)
         {
-            var content = match.Groups["P"].Value;
-            if ((content ?? string.Empty) != string.Empty)
-            {
-                var children = mediator
-                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken);
-                return $"<p>{children.Build()}</p>";
-            }
+            var children = mediator
+                .CreateStream(new InlineBuildRequest { Source = match.Groups["P"].Value }, cancellationToken)
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<p>{children.Build()}</p>";
         }
-
         if (!string.IsNullOrWhiteSpace(match.Groups["CITE"].Value))
             return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["INLINE"].Value))
@@ -61,7 +56,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
                 .CreateStream(new InlineBuildRequest { Source = match.Groups["INLINE"].Value }, cancellationToken)
                 .ToBlockingEnumerable(cancellationToken)
                 .Build()!;
-        
+
         if (match.Value == string.Empty)
             return match.Value;
 
