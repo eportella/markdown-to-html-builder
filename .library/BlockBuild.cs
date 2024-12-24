@@ -8,11 +8,6 @@ internal sealed class BlockBuildRequest : IRequest<string?>
 internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockBuildRequest, string?>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
-    const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
-    const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
-    const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
-    const string H5 = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).*(\r?\n|)))";
-    const string H6 = @"^(?'H6'###### *(?'H6_CONTENT'(?!#).*(\r?\n|)))";
     const string UL_OL = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
@@ -24,7 +19,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2}|{H3}|{H4}|{H5}|{H6}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2BuildRequestHandler.PATTERN}|{H3BuildRequestHandler.PATTERN}|{H4BuildRequestHandler.PATTERN}|{H5BuildRequestHandler.PATTERN}|{H6BuildRequestHandler.PATTERN}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
@@ -77,45 +72,23 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
         {
-            var content = match.Groups["H2_CONTENT"].Value;
-
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h2>{children.Build()}</h2>";
+            return mediator.Send(new H2BuildRequest { Source = match.Groups["H2"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
         {
-            var content = match.Groups["H3_CONTENT"].Value;
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h3>{children.Build()}</h3>";
+            return mediator.Send(new H3BuildRequest { Source = match.Groups["H3"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
         {
-            var content = match.Groups["H4_CONTENT"].Value;
-
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h4>{children.Build()}</h4>";
+            return mediator.Send(new H4BuildRequest { Source = match.Groups["H4"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
         {
-            var content = match.Groups["H5_CONTENT"].Value;
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h5>{children.Build()}</h5>";
+            return mediator.Send(new H5BuildRequest { Source = match.Groups["H5"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
         {
-            var content = match.Groups["H6_CONTENT"].Value;
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h6>{children.Build()}</h6>"; ;
+            return mediator.Send(new H6BuildRequest { Source = match.Groups["H6"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
