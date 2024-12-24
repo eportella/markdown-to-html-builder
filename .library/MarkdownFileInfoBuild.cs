@@ -11,7 +11,7 @@ internal sealed class MarkdownFileInfoBuildRequesttHandler(IMediator mediator) :
     {
         var built = (
             await mediator
-                .Send(new BuildRequest
+                .Send(new HtmlBuildRequest
                 {
                     Source = await mediator
                         .Send(new FileInfoTextReadRequest

@@ -1,15 +1,15 @@
 using MediatR;
-internal sealed class BuildRequest : IRequest<string?>
+internal sealed class HtmlBuildRequest : IRequest<string?>
 {
     public string? Source { get; init; }
 }
 
-internal sealed class BuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<BuildRequest, string?>
+internal sealed class HtmlBuildRequestHandler(ProjectBuildResponse project, IMediator mediator) : IRequestHandler<HtmlBuildRequest, string?>
 {
-    static BuildRequestHandler()
+    static HtmlBuildRequestHandler()
     {
     }
-    public async Task<string?> Handle(BuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(HtmlBuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
             return default;
