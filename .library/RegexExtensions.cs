@@ -9,13 +9,12 @@ internal static class RegexExtensions
         {
             var replaced = await match(matched) ?? string.Empty;
             var start = matched.Index + offset;
-            var buffer = replaced.Length;
             var end = matched.Length;
             result = result
                 .Remove(start, end)
                 .Insert(start, replaced);
 
-            offset += buffer - end;
+            offset += replaced.Length - end;
         }
         return result;
     }
@@ -30,13 +29,12 @@ internal static class RegexExtensions
         {
             var replaced = match(matched) ?? string.Empty;
             var start = matched.Index + offset;
-            var buffer = replaced.Length;
             var end = matched.Length;
             result = result
                 .Remove(start, end)
                 .Insert(start, replaced);
 
-            offset += buffer - end;
+            offset += replaced.Length - end;
         }
         return result;
     }
