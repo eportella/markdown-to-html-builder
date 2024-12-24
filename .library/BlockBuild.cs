@@ -67,34 +67,20 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
     {
 
         if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
-        {
             return mediator.Send(new H1BuildRequest { Source = match.Groups["H1"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
-        {
             return mediator.Send(new H2BuildRequest { Source = match.Groups["H2"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["H3"].Value))
-        {
             return mediator.Send(new H3BuildRequest { Source = match.Groups["H3"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["H4"].Value))
-        {
             return mediator.Send(new H4BuildRequest { Source = match.Groups["H4"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["H5"].Value))
-        {
             return mediator.Send(new H5BuildRequest { Source = match.Groups["H5"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["H6"].Value))
-        {
             return mediator.Send(new H6BuildRequest { Source = match.Groups["H6"].Value }, cancellationToken).Result;
-        }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
-        {
             return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
-        }
-
+        
         {
             var content = match.Groups["UL_OL"].Value;
             if (!string.IsNullOrWhiteSpace(content))
