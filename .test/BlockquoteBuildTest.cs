@@ -43,7 +43,7 @@ public class BlockquoteBuildTest
 @"<blockquote><p></p><blockquote><p></p><blockquote><p></p></blockquote></blockquote><p></p></blockquote>")]
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BlockBuildRequest
+        var arrange = new BlockquoteBuildRequest
         {
             Source = informed
         };
@@ -57,7 +57,7 @@ public class BlockquoteBuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
 
-        var result = await new BlockBuildRequestHandler(
+        var result = await new BlockquoteBuildRequestHandler(
                 mediator
             )
             .Handle(
