@@ -8,7 +8,6 @@ internal sealed class BlockBuildRequest : IRequest<string?>
 internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHandler<BlockBuildRequest, string?>
 {
     const string P = @"^(?'P'((?!(#|>| *-| *\d+\.|\[\^\d+\]:)).+(\r?\n|))+(\r?\n|))";
-    const string H1 = @"^(?'H1'# *(?'H1_CONTENT'(?!#).*(\r?\n|)))";
     const string H2 = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
     const string H3 = @"^(?'H3'### *(?'H3_CONTENT'(?!#).*(\r?\n|)))";
     const string H4 = @"^(?'H4'#### *(?'H4_CONTENT'(?!#).*(\r?\n|)))";
@@ -25,7 +24,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
     static BlockBuildRequestHandler()
     {
-        RegexBlock = new Regex(@$"({P}|{H1}|{H2}|{H3}|{H4}|{H5}|{H6}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
+        RegexBlock = new Regex(@$"({P}|{H1BuildRequestHandler.PATTERN}|{H2}|{H3}|{H4}|{H5}|{H6}|{BlockquoteBuildRequestHandler.PATTERN}|{UL_OL}|{CITE})", RegexOptions.Multiline);
         RegexOlUl = new Regex(UL_OL);
         RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
         RegexLi = new Regex(LI, RegexOptions.Multiline);
@@ -74,11 +73,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
         if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
         {
-            var content = match.Groups["H1_CONTENT"].Value;
-            var children = mediator
-                .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                .ToBlockingEnumerable(cancellationToken);
-            return $"<h1>{children.Build()}</h1>";
+            return mediator.Send(new H1BuildRequest { Source = match.Groups["H1"].Value }, cancellationToken).Result;
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
         {
