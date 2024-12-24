@@ -40,12 +40,8 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
             return mediator.Send(new H6BuildRequest { Source = match.Groups["H6"].Value }, cancellationToken).Result;
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
             return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
-
-        {
-            var content = match.Groups["UL_OL"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
-                return mediator.Send(new UlOlBuildRequest { Source = content }, cancellationToken).Result;
-        }
+        if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
+            return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result;
 
         {
             var content = match.Groups["P"].Value;
