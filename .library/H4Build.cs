@@ -22,7 +22,7 @@ internal sealed class H4BuildRequestHandler(IMediator mediator) : IRequestHandle
         {
             var children = mediator
                 .Send(new InlineBuildRequest { Source = match.Groups["H4_CONTENT"].Value }, cancellationToken).Result;
-            return $"<h4>{children}</h4>";
+            return $"<h4>{children}</h4>{Environment.NewLine}";
         });
     }
 }

@@ -22,7 +22,7 @@ internal sealed class H3BuildRequestHandler(IMediator mediator) : IRequestHandle
         {
             var children = mediator
                 .Send(new InlineBuildRequest { Source = match.Groups["H3_CONTENT"].Value }, cancellationToken).Result;
-            return $"<h3>{children}</h3>";
+            return $"<h3>{children}</h3>{Environment.NewLine}";
         });
     }
 }
