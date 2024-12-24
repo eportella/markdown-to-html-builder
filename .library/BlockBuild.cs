@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MediatR;
 internal sealed class BlockBuildRequest : IRequest<string?>
