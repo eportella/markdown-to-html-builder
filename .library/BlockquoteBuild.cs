@@ -44,7 +44,7 @@ internal sealed class BlockquoteBuildRequestHandler(IMediator mediator) : IReque
             }
             var children = mediator.Send(new BlockBuildRequest { Source = content }, cancellationToken).Result;
 
-            return $"<blockquote{attribute}>{children}</blockquote>";
+            return $"<blockquote{attribute}>{children}</blockquote>{Environment.NewLine}";
         });
     }
 }
