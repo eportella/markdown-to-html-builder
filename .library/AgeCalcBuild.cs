@@ -9,21 +9,18 @@ internal sealed class AgeCalcBuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuildRequest, AgeCalcBuildResponse?>
+internal sealed partial class AgeCalcBuildRequestHandler() : IRequestHandler<AgeCalcBuildRequest, AgeCalcBuildResponse?>
 {
     const string PATTERN = @"(?'AGE_CALC'`\[age-calc\]:(?'AGE_CALC_CONTENT'[\d]{4}\-[\d]{2}\-[\d]{2})\`)";
-    static Regex Regex { get; }
-    static AgeCalcBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<AgeCalcBuildResponse?> Handle(AgeCalcBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match => AgeCalculate(
                 DateTime.ParseExact(

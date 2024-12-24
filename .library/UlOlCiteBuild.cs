@@ -5,33 +5,32 @@ internal sealed class UlOlBuildRequest : IRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHandler<UlOlBuildRequest, string?>
+internal sealed partial class UlOlBuildRequestHandler(IMediator mediator) : IRequestHandler<UlOlBuildRequest, string?>
 {
     const string PATTERN = @"^(?'UL_OL'(((?'UL'-)|(?'OL'\d+\.)) *.+(\r?\n|))( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|))";
     const string UL_OL_INNER = @"^(((.+?\r?\n))(?'UL_OL'( *((-)|(\d+\.)) *.+(\r?\n|))*(\r?\n|)))";
     const string LI = @"^(-|\d+\.) *(?'LI'(.*(\r?\n|)+(?!(-|\d+\.)))+(\r?\n|))";
-    static Regex Regex { get; }
-    static Regex RegexOlUlInner { get; }
-    static Regex RegexLi { get; }
-    static UlOlBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-        RegexOlUlInner = new Regex(UL_OL_INNER, RegexOptions.Multiline);
-        RegexLi = new Regex(LI, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
+    [GeneratedRegex(UL_OL_INNER, RegexOptions.Multiline)]
+    private static partial Regex RegexOlUlInner();
+    [GeneratedRegex(LI, RegexOptions.Multiline)]
+    private static partial Regex RegexLi();
+    [GeneratedRegex("^    ", RegexOptions.Multiline)]
+    private static partial Regex RegexInner();
     public async Task<string?> Handle(UlOlBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex.Replace(request.Source, match =>
+        return Regex().Replace(request.Source, match =>
         {
             if (!string.IsNullOrWhiteSpace(match.Groups["UL"].Value))
-                return $"<ul>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ul>{Environment.NewLine}";
+                return $"<ul>{RegexLi().Replace(match.Value, match => Replace(match, cancellationToken))}</ul>{Environment.NewLine}";
 
             if (!string.IsNullOrWhiteSpace(match.Groups["OL"].Value))
-                return $"<ol>{RegexLi.Replace(match.Value, match => Replace(match, cancellationToken))}</ol>{Environment.NewLine}";
+                return $"<ol>{RegexLi().Replace(match.Value, match => Replace(match, cancellationToken))}</ol>{Environment.NewLine}";
 
             return match.Value;
         });
@@ -59,7 +58,7 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
         if (source == default)
             yield break;
 
-        foreach (Group group in RegexOlUlInner
+        foreach (Group group in RegexOlUlInner()
             .Matches(source)
             .Select(m => m.Groups["UL_OL"])
             .Where(g => g.Success && !string.IsNullOrWhiteSpace(g.Value)))
@@ -67,14 +66,12 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
             source = source
                 .Replace(
                     group.Value,
-                    Regex
+                    Regex()
                         .Replace(
-                            Regex
+                            RegexInner()
                                 .Replace(
                                     group.Value,
-                                    "^    ",
-                                    string.Empty,
-                                    RegexOptions.Multiline
+                                    string.Empty
                                 ),
                                 match => Replace(match, cancellationToken)
                         )

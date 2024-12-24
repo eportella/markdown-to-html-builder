@@ -8,21 +8,18 @@ internal sealed class BrBuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, BrBuildResponse?>
+internal sealed partial class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, BrBuildResponse?>
 {
     const string PATTERN = @"(?'BR'\\(\r?\n))";
-    static Regex Regex { get; }
-    static BrBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<BrBuildResponse?> Handle(BrBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match => "<br />");
 

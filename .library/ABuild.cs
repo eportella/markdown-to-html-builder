@@ -8,21 +8,18 @@ internal sealed class ABuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
+internal sealed partial class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
 {
     const string PATTERN = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
-    static Regex Regex { get; }
-    static ABuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline | RegexOptions.IgnoreCase);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<ABuildResponse?> Handle(ABuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match =>
             {

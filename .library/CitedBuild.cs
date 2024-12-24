@@ -8,21 +8,18 @@ internal sealed class CitedBuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class CitedBuildRequestHandler() : IRequestHandler<CitedBuildRequest, CitedBuildResponse?>
+internal sealed partial class CitedBuildRequestHandler() : IRequestHandler<CitedBuildRequest, CitedBuildResponse?>
 {
     const string PATTERN = @$"\[\^(?'CITED_INDEX'\d+)\]";
-    static Regex Regex { get; }
-    static CitedBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<CitedBuildResponse?> Handle(CitedBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match =>
             {

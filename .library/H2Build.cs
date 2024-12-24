@@ -4,21 +4,18 @@ internal sealed class H2BuildRequest : IRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class H2BuildRequestHandler(IMediator mediator) : IRequestHandler<H2BuildRequest, string?>
+internal sealed partial class H2BuildRequestHandler(IMediator mediator) : IRequestHandler<H2BuildRequest, string?>
 {
     const string PATTERN = @"^(?'H2'## *(?'H2_CONTENT'(?!#).*(\r?\n|)))";
-    static Regex Regex { get; }
-    static H2BuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<string?> Handle(H2BuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        return Regex.Replace(request.Source, match =>
+        return Regex().Replace(request.Source, match =>
         {
             var children = mediator
                 .Send(new InlineBuildRequest { Source = match.Groups["H2_CONTENT"].Value }, cancellationToken).Result;

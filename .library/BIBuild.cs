@@ -8,21 +8,18 @@ internal sealed class BIBuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, BIBuildResponse?>
+internal sealed partial class BIBuildRequestHandler() : IRequestHandler<BIBuildRequest, BIBuildResponse?>
 {
     const string PATTERN = @"(?'BI'\*{3}(?'BI_CONTENT'[^\*| ].+?)\*{3})";
-    static Regex Regex { get; }
-    static BIBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<BIBuildResponse?> Handle(BIBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
         
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match => $"<b><i>{match.Groups["BI_CONTENT"].Value}</i></b>");
 

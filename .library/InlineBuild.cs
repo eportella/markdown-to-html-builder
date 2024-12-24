@@ -4,16 +4,11 @@ internal sealed class InlineBuildRequest : IRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class InlineBuildRequestHandler(IMediator mediator) : IRequestHandler<InlineBuildRequest, string?>
+internal sealed partial class InlineBuildRequestHandler(IMediator mediator) : IRequestHandler<InlineBuildRequest, string?>
 {
     const string PATTERN = @"^(?'INLINE'((.*(\r?\n|))*))";
-    static Regex Regex { get; }
-
-    static InlineBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-    }
-
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     public async Task<string?> Handle(InlineBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -21,7 +16,7 @@ internal sealed class InlineBuildRequestHandler(IMediator mediator) : IRequestHa
         if (request.Source == default)
             return default;
 
-        return Regex.Replace(request.Source, match =>
+        return Regex().Replace(request.Source, match =>
         {
             var target = match.Groups["INLINE"].Value;
 

@@ -8,24 +8,21 @@ internal sealed class ThemeBuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildRequest, ThemeBuildResponse?>
+internal sealed partial class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildRequest, ThemeBuildResponse?>
 {
     const string PATTERN = @"(?'THEME'\[!" + PATTERN_RULE + @"{1,2}\](?'THEME_CONTENT'\w+))";
-    static Regex Regex { get; }
+    [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
+    private static partial Regex Regex();
     const string PATTERN_RULE = @"(?'THEME_RULE'\.(?'THEME_LOCATION'(B|F|))(?'THEME_COLOR'(D|N|T|I|W|C|))(?'THEME_TONALITY'(0|1|2|3|4|5|6|7|8|9|)))";
-    static Regex RegexRule { get; }
-    static ThemeBuildRequestHandler()
-    {
-        Regex = new Regex(PATTERN, RegexOptions.Multiline);
-        RegexRule = new Regex(PATTERN_RULE, RegexOptions.Multiline);
-    }
+    [GeneratedRegex(PATTERN_RULE, RegexOptions.Multiline)]
+    private static partial Regex RegexRule();
     public async Task<ThemeBuildResponse?> Handle(ThemeBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
         if (request.Source == default)
             return default;
 
-        var target = Regex.Replace(
+        var target = Regex().Replace(
             request.Source,
             match =>
             {
@@ -33,7 +30,7 @@ internal sealed class ThemeBuildRequestHandler() : IRequestHandler<ThemeBuildReq
                     .Groups["THEME_RULE"]
                     .Captures
                     .Select(capture =>
-                        RegexRule
+                        RegexRule()
                             .Replace(
                                 capture.Value,
                                 match =>
