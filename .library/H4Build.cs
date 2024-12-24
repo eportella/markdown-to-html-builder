@@ -20,9 +20,8 @@ internal sealed class H4BuildRequestHandler(IMediator mediator) : IRequestHandle
 
         return Regex.Replace(request.Source, match =>
         {
-            var content = match.Groups["H4_CONTENT"].Value;
             var children = mediator
-                .Send(new InlineBuildRequest { Source = content }, cancellationToken).Result;
+                .Send(new InlineBuildRequest { Source = match.Groups["H4_CONTENT"].Value }, cancellationToken).Result;
             return $"<h4>{children}</h4>";
         });
     }

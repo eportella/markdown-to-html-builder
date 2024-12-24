@@ -40,24 +40,16 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
     private string Replace(Match match, CancellationToken cancellationToken)
     {
 
-        {
-            var content = match.Groups["UL_OL"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
-            {
-                return mediator.Send(new UlOlBuildRequest { Source = content }, cancellationToken).Result;
-            }
-        }
 
-        {
-            var content = match.Groups["LI"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
-            {
-                var children = Build(content, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken);
-                return $"<li>{string.Join(string.Empty, children)}</li>";
-            }
-        }
+        if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
+            return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result ?? string.Empty;
 
+        if (!string.IsNullOrWhiteSpace(match.Groups["LI"].Value))
+        {
+            var children = Build(match.Groups["LI"].Value, cancellationToken)
+                .ToBlockingEnumerable(cancellationToken);
+            return $"<li>{string.Join(string.Empty, children)}</li>";
+        }
 
         throw new InvalidOperationException($"build with {match.Value} invalid");
     }
