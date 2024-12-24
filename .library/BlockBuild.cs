@@ -124,7 +124,7 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
         }
         if (!string.IsNullOrWhiteSpace(match.Groups["BLOCKQUOTE"].Value))
         {
-            return mediator.Send(new BlockquoteBuildRequest { Source = match.Groups["BLOCKQUOTE"].Value }, cancellationToken).Result;
+            return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
         }
 
         {
