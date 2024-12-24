@@ -32,11 +32,11 @@ default)]
         Mock.Get(mediator).Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None)).Returns(YieldBreak().ToAsyncEnumerable());
 
         var result = await new HtmlBuildRequestHandler(
-                new ProjectBuildResponse
+                Task.FromResult(new ProjectBuildResponse
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://domain"),
-                },
+                }),
                 mediator
             )
             .Handle(

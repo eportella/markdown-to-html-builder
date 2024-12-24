@@ -8,7 +8,7 @@ internal sealed class ABuildResponse
 {
     internal string? Target { get; init; }
 }
-internal sealed partial class ABuildRequestHandler(ProjectBuildResponse project) : IRequestHandler<ABuildRequest, ABuildResponse?>
+internal sealed partial class ABuildRequestHandler(Task<ProjectBuildResponse> project) : IRequestHandler<ABuildRequest, ABuildResponse?>
 {
     const string PATTERN = @"(?'A'\[(?!(\^|!))(?'A_CONTENT'.*?)\]\((?'A_HREF'.*?)(?'A_HREF_SUFIX'readme.md.*?|)\))";
     [GeneratedRegex(PATTERN, RegexOptions.Multiline | RegexOptions.IgnoreCase)]
@@ -20,12 +20,12 @@ internal sealed partial class ABuildRequestHandler(ProjectBuildResponse project)
 
         var target = await Regex().ReplaceAsync(
             request.Source,
-            match =>
+            async match =>
             {
                 var href = new Uri(match.Groups["A_HREF"].Value);
 
                 if (string.IsNullOrWhiteSpace(href.Host))
-                    return $@"<a href=""{project.BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
+                    return $@"<a href=""{(await project).BaseUrl!.AbsoluteUri.TrimEnd('/')}/{href.LocalPath.TrimStart('/')}"">{match.Groups["A_CONTENT"].Value}</a>";
 
                 return $@"<a href=""{href}{match.Groups["A_HREF_SUFIX"].Value}"">{match.Groups["A_CONTENT"].Value}</a>";
             });

@@ -18,11 +18,11 @@ public class ABuildTest
         };
 
         var result = await new ABuildRequestHandler(
-                new ProjectBuildResponse
+                Task.FromResult(new ProjectBuildResponse
                 {
                     Title = "--title--",
                     BaseUrl = new Uri("https://route-1")
-                }
+                })
             )
             .Handle(
                 arrange,
