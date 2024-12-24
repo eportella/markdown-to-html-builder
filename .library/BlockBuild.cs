@@ -20,6 +20,8 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
         return Task.FromResult(RegexBlock?.Replace(request.Source, (match) =>
         {
+            if (match.Groups["P"].Value != string.Empty)
+                return mediator.Send(new PBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["H1"].Value))
                 return mediator.Send(new H1BuildRequest { Source = match.Groups["H1"].Value }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["H2"].Value))
@@ -36,8 +38,6 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
                 return mediator.Send(new BlockquoteBuildRequest { Source = string.Join(string.Empty, match.Groups["BLOCKQUOTE"].Captures.Select(s => s.Value)) }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["UL_OL"].Value))
                 return mediator.Send(new UlOlBuildRequest { Source = match.Groups["UL_OL"].Value }, cancellationToken).Result;
-            if (match.Groups["P"].Value != string.Empty)
-                return mediator.Send(new PBuildRequest { Source = match.Groups["P"].Value }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["CITE"].Value))
                 return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
             if (!string.IsNullOrWhiteSpace(match.Groups["INLINE"].Value))
