@@ -44,7 +44,7 @@ internal sealed class UlOlBuildRequestHandler(IMediator mediator) : IRequestHand
             var content = match.Groups["UL_OL"].Value;
             if (!string.IsNullOrWhiteSpace(content))
             {
-                return mediator.Send(new UlOlBuildRequest { Source = content }, cancellationToken).Result;
+                return mediator.Send(new UlOlBuildRequest { Source = content }, cancellationToken).Result ?? string.Empty;
             }
         }
 
