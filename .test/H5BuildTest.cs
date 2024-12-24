@@ -28,7 +28,7 @@ public class H5BuildTest
 
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BlockBuildRequest
+        var arrange = new H5BuildRequest
         {
             Source = informed
         };
@@ -42,7 +42,7 @@ public class H5BuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
 
-        var result = await new BlockBuildRequestHandler(
+        var result = await new H5BuildRequestHandler(
                 mediator
             )
             .Handle(

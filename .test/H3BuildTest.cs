@@ -28,7 +28,7 @@ public class H3BuildTest
 
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BlockBuildRequest
+        var arrange = new H3BuildRequest
         {
             Source = informed
         };
@@ -42,7 +42,7 @@ public class H3BuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
 
-        var result = await new BlockBuildRequestHandler(
+        var result = await new H3BuildRequestHandler(
                 mediator
             )
             .Handle(

@@ -28,7 +28,7 @@ public class H4BuildTest
 
     public async Task Success(string informed, string expected)
     {
-        var arrange = new BlockBuildRequest
+        var arrange = new H4BuildRequest
         {
             Source = informed
         };
@@ -42,7 +42,7 @@ public class H4BuildTest
                 .Setup(s => s.CreateStream(It.IsAny<InlineBuildRequest>(), CancellationToken.None))
                 .Returns(YieldBreak().ToAsyncEnumerable());
         
-        var result = await new BlockBuildRequestHandler(
+        var result = await new H4BuildRequestHandler(
                 mediator
             )
             .Handle(
