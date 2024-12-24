@@ -6,7 +6,7 @@ internal sealed class H5BuildRequest : IRequest<string?>
 }
 internal sealed class H5BuildRequestHandler(IMediator mediator) : IRequestHandler<H5BuildRequest, string?>
 {
-    internal const string PATTERN = @"^(?'H5'# *(?'H5_CONTENT'(?!#).*(\r?\n|)))";
+    internal const string PATTERN = @"^(?'H5'##### *(?'H5_CONTENT'(?!#).*(\r?\n|)))";
     static Regex Regex { get; }
     static H5BuildRequestHandler()
     {
