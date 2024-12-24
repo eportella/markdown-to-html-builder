@@ -42,7 +42,7 @@ internal sealed class BlockquoteBuildRequestHandler(IMediator mediator) : IReque
             {
                 attribute = @" class=""caution""";
             }
-            var children = mediator.Send(new BlockBuildRequest { Source = content }, cancellationToken);
+            var children = mediator.Send(new BlockBuildRequest { Source = content }, cancellationToken).Result;
 
             return $"<blockquote{attribute}>{children}</blockquote>";
         });
