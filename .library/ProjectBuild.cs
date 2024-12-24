@@ -1,5 +1,5 @@
 using MediatR;
-public sealed class ProjectBuildRequest : IRequest<ProjectBuildResponse>
+public sealed class ProjectBuildRequest : IRequest<ProjectBuildResponse>, ITimmerElapsedLog
 {
     public string[]? Args { internal get; init; }
 }

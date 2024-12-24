@@ -16,7 +16,7 @@ public static class IServiceCollectionExtensions
                 )
             );
     }
-    public static IServiceCollection TitleAdd(this IServiceCollection serviceCollection)
+    public static IServiceCollection ProjectAdd(this IServiceCollection serviceCollection)
     {
         return serviceCollection
             .AddSingleton(async serviceProvider => await serviceProvider

@@ -7,7 +7,7 @@ await new ServiceCollection()
     .AddTransient(typeof(IStreamPipelineBehavior<,>), typeof(TimeElapsedStreamPipelineBehavior<,>))
     .AddMediatR(mediatorServiceConfiguration => mediatorServiceConfiguration.RegisterServicesFromAssemblyContaining<MarkdownToHtmlBuildRequest>())
     .ArgsAsInputAdd()
-    .TitleAdd()
+    .ProjectAdd()
     .BuildServiceProvider()
     .GetRequiredService<IMediator>()
     .Send(new MarkdownToHtmlBuildRequest(), CancellationToken.None);
