@@ -56,15 +56,12 @@ internal sealed class BlockBuildRequestHandler(IMediator mediator) : IRequestHan
 
         if (!string.IsNullOrWhiteSpace(match.Groups["CITE"].Value))
             return mediator.Send(new CiteBuildRequest { Source = match.Groups["CITE"].Value }, cancellationToken).Result;
-
-        {
-            var content = match.Groups["INLINE"].Value;
-            if (!string.IsNullOrWhiteSpace(content))
-                return mediator
-                    .CreateStream(new InlineBuildRequest { Source = content }, cancellationToken)
-                    .ToBlockingEnumerable(cancellationToken)
-                    .Build()!;
-        }
+        if (!string.IsNullOrWhiteSpace(match.Groups["INLINE"].Value))
+            return mediator
+                .CreateStream(new InlineBuildRequest { Source = match.Groups["INLINE"].Value }, cancellationToken)
+                .ToBlockingEnumerable(cancellationToken)
+                .Build()!;
+        
         if (match.Value == string.Empty)
             return match.Value;
 
