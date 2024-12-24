@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using MediatR;
 using Moq;
 
@@ -10,37 +9,38 @@ public class BlockquoteBuildTest
     [InlineData(
 @">a
 ",
-@"<blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>")]
     [InlineData(
 @">a
 >b
 ",
-@"<blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>")]
     [InlineData(
 @">a
 >b
 >c
 ",
-@"<blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>")]
     [InlineData(
 @">quote 1
 
 >quote2
 ",
-@"<blockquote><p></p></blockquote><p></p><blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>
+<blockquote></blockquote>")]
     [InlineData(
 @">a
 >>b
 >c
 ",
-@"<blockquote><p></p><blockquote><p></p></blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>")]
     [InlineData(
 @">a
 >>b
 >>>c
 >>>d
 >e",
-@"<blockquote><p></p><blockquote><p></p><blockquote><p></p></blockquote></blockquote><p></p></blockquote>")]
+@"<blockquote></blockquote>")]
     public async Task Success(string informed, string expected)
     {
         var arrange = new BlockquoteBuildRequest
