@@ -15,6 +15,8 @@ internal sealed class InputBuildResponse
 }
 internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildRequest, InputBuildResponse>
 {
+    const string PATTERN = @"((?'SOURCE_PATH_KEY'--source-path)(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|((?'TARGET_PATH_KEY'--target-path)(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|((?'TARGET_FILE_NAME_KEY'--target-file-name)(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|((?'REPOSITORY_OWNER_KEY'--repository_owner)(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|(((?'SOURCE_URL_BASE_KEY'--source-url-base)(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+|(((?'ACTION_PATH_KEY'--action-path)(\n|)(?'ACTION_PATH_VALUE'.+)(\n|)))+";
+    
     public async Task<InputBuildResponse> Handle(InputBuildRequest request, CancellationToken cancellationToken)
     {
         await Task.Yield();
@@ -22,7 +24,7 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
         if (request.Args == default)
             throw new ArgumentNullException(nameof(request.Args));
 
-        var matches = Regex.Matches(string.Join("\n", request.Args), @"((?'SOURCE_PATH_KEY'--source-path)(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|((?'TARGET_PATH_KEY'--target-path)(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|((?'TARGET_FILE_NAME_KEY'--target-file-name)(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|((?'REPOSITORY_OWNER_KEY'--repository_owner)(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|(((?'SOURCE_URL_BASE_KEY'--source-url-base)(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+|(((?'ACTION_PATH_KEY'--action-path)(\n|)(?'ACTION_PATH_VALUE'.+)(\n|)))+", RegexOptions.Multiline | RegexOptions.ExplicitCapture).Where(match => match.Success);
+        var matches = Regex.Matches(string.Join("\n", request.Args), PATTERN, RegexOptions.Multiline | RegexOptions.ExplicitCapture).Where(match => match.Success);
 
         if (!matches.Any())
             throw new ArgumentException($"'{nameof(request.Args)}' not any match");
