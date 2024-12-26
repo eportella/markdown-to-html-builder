@@ -1,19 +1,15 @@
 using System.Text.RegularExpressions;
 using MediatR;
-internal sealed class BrBuildRequest : IRequest<BrBuildResponse?>
+internal sealed class BrBuildRequest : IRequest<string?>
 {
     internal string? Source { get; init; }
 }
-internal sealed class BrBuildResponse
-{
-    internal string? Target { get; init; }
-}
-internal sealed partial class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, BrBuildResponse?>
+internal sealed partial class BrBuildRequestHandler() : IRequestHandler<BrBuildRequest, string?>
 {
     const string PATTERN = @"(?'BR'\\(\r?\n))";
     [GeneratedRegex(PATTERN, RegexOptions.Multiline)]
     private static partial Regex Regex();
-    public async Task<BrBuildResponse?> Handle(BrBuildRequest request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(BrBuildRequest request, CancellationToken cancellationToken)
     {
         if (request.Source == default)
             return default;
@@ -22,9 +18,6 @@ internal sealed partial class BrBuildRequestHandler() : IRequestHandler<BrBuildR
             request.Source,
             match => "<br />");
 
-        return new BrBuildResponse
-        {
-            Target = target,
-        };
+        return target;
     }
 }

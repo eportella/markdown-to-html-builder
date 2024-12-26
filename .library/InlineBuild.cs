@@ -18,16 +18,16 @@ internal sealed partial class InlineBuildRequestHandler(IMediator mediator) : IR
         {
             var target = match.Groups["INLINE"].Value;
 
-            target = (await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new BBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new IBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new ABuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken))?.Target;
-            target = (await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken))?.Target;
+            target = await mediator.Send(new BrBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new BIBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new BBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new IBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new DelBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new AgeCalcBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new ABuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new SvgBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new CitedBuildRequest { Source = target }, cancellationToken);
+            target = await mediator.Send(new ThemeBuildRequest { Source = target }, cancellationToken);
 
             return target ?? string.Empty;
         });
