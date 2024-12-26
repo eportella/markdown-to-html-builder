@@ -36,6 +36,6 @@ public class BBuildTest
                 CancellationToken.None
             );
 
-        Assert.Equal(expected, result!.Target);
+        Assert.Equal(expected, result);
     }
 }
