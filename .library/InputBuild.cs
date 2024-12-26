@@ -69,11 +69,11 @@ internal static class MatchesExtensions
         if (key.Skip(1).Any())
             throw new ArgumentException($"'{argumentName}' multiple found");
 
-        var itemValue = matches.SingleOrDefault(match => match.Groups[argumentValue].Success);
+        var itemValue = key.SingleOrDefault(match => match.Groups[argumentValue].Success);
 
         if (itemValue?.Success != true)
             throw new ArgumentException($"value of '{argumentName}' not found");
 
-        return itemValue.Value;
+        return itemValue.Groups[argumentValue].Value;
     }
 }
