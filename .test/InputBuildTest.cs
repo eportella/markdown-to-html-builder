@@ -17,7 +17,11 @@ public class InputBuildTest
                 arrange,
                 CancellationToken.None
             );
-
-        
+        Assert.Equal("/home/runner/work/markdown-to-html-builder", result.ActionPath);
+        Assert.Equal("https://eportella.github.io/markdown-to-html-builder", result.BaseUrl!.ToString());
+        Assert.Equal("eportella", result.RepositoryOnwer);
+        Assert.Equal("/home/runner/work/markdown-to-html-builder/markdown-to-html-builder", result.SourcePath);
+        Assert.Equal("index.html", result.TargetFileName);
+        Assert.Equal("/home/runner/work/markdown-to-html-builder/markdown-to-html-builder/_site", result.TargetPath);
     }
 }
