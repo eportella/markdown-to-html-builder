@@ -27,50 +27,35 @@ internal sealed class InputBuildRequestHandler() : IRequestHandler<InputBuildReq
         if (!matches.Any())
             throw new ArgumentException($"'{nameof(request.Args)}' not any match");
 
-        if (!matches.Any(match => match.Groups["ACTION_PATH_KEY"].Success))
-            throw new ArgumentException($"'--action-path' not found");
-
-        if (!matches.Any(match => match.Groups["ACTION_PATH_VALUE"].Success))
-            throw new ArgumentException($"value of '--action-path' not found");
-
-        if (!matches.Any(match => match.Groups["SOURCE_PATH_KEY"].Success))
-            throw new ArgumentException($"'--source-path' not found");
-
-        if (!matches.Any(match => match.Groups["SOURCE_PATH_VALUE"].Success))
-            throw new ArgumentException($"value of '--source-path' not found");
-
-        if (!matches.Any(match => match.Groups["TARGET_PATH_KEY"].Success))
-            throw new ArgumentException($"'--target-path' not found");
-
-        if (!matches.Any(match => match.Groups["TARGET_PATH_VALUE"].Success))
-            throw new ArgumentException($"value of '--target-path' not found");
-
-        if (!matches.Any(match => match.Groups["TARGET_FILE_NAME_KEY"].Success))
-            throw new ArgumentException($"'--target-file-name' not found");
-
-        if (!matches.Any(match => match.Groups["TARGET_FILE_NAME_VALUE"].Success))
-            throw new ArgumentException($"value of '--target-file-name' not found");
-
-        if (!matches.Any(match => match.Groups["REPOSITORY_OWNER_KEY"].Success))
-            throw new ArgumentException($"'--repository_owner' not found");
-
-        if (!matches.Any(match => match.Groups["REPOSITORY_OWNER_VALUE"].Success))
-            throw new ArgumentException($"value of '--repository_owner' not found");
-
-        if (!matches.Any(match => match.Groups["SOURCE_URL_BASE_KEY"].Success))
-            throw new ArgumentException($"'--source-url-base' not found");
-
-        if (!matches.Any(match => match.Groups["SOURCE_URL_BASE_VALUE"].Success))
-            throw new ArgumentException($"value of '--source-url-base' not found");
-
         return new InputBuildResponse
         {
-            ActionPath = matches.Select(match => match.Groups["ACTION_PATH_VALUE"]).Single(group => group.Success).Value,
-            SourcePath = matches.Select(match => match.Groups["SOURCE_PATH_VALUE"]).Single(group => group.Success).Value,
-            TargetPath = matches.Select(match => match.Groups["TARGET_PATH_VALUE"]).Single(group => group.Success).Value,
-            TargetFileName = matches.Select(match => match.Groups["TARGET_FILE_NAME_VALUE"]).Single(group => group.Success).Value,
-            RepositoryOnwer = matches.Select(match => match.Groups["REPOSITORY_OWNER_VALUE"]).Single(group => group.Success).Value,
-            BaseUrl = new Uri(matches.Select(match => match.Groups["SOURCE_URL_BASE_VALUE"]).Single(group => group.Success).Value),
+            ActionPath = matches.Value("--action-path", "ACTION_PATH_KEY", "ACTION_PATH_VALUE"),
+            SourcePath = matches.Value("--source-path", "SOURCE_PATH_KEY", "SOURCE_PATH_VALUE"),
+            TargetPath = matches.Value("--target-path", "TARGET_PATH_KEY", "TARGET_PATH_VALUE"),
+            TargetFileName = matches.Value("--target-file-name", "TARGET_FILE_NAME_KEY", "TARGET_FILE_NAME_VALUE"),
+            RepositoryOnwer = matches.Value("--repository_owner", "REPOSITORY_OWNER_KEY", "REPOSITORY_OWNER_VALUE"),
+            BaseUrl = new Uri(matches.Value("--source-url-base", "SOURCE_URL_BASE_KEY", "SOURCE_URL_BASE_VALUE")),
         };
+    }
+}
+
+internal static class MatchesExtensions
+{
+    internal static string Value(this IEnumerable<Match> matches, string argumentName, string argumentKey, string argumentValue)
+    {
+        var key = matches.Where(match => match.Groups[argumentKey].Success);
+
+        if (!key.Any())
+            throw new ArgumentException($"'{argumentName}' not found");
+
+        if (key.Skip(1).Any())
+            throw new ArgumentException($"'{argumentName}' multiple found");
+
+        var itemValue = matches.SingleOrDefault(match => match.Groups[argumentValue].Success);
+
+        if (itemValue?.Success != true)
+            throw new ArgumentException($"value of '{argumentName}' not found");
+
+        return itemValue.Value;
     }
 }
