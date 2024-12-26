@@ -15,7 +15,20 @@ internal sealed class InputBuildResponse
 }
 internal sealed partial class InputBuildRequestHandler() : IRequestHandler<InputBuildRequest, InputBuildResponse>
 {
-    const string PATTERN = @"((?'SOURCE_PATH_KEY'--source-path)(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|((?'TARGET_PATH_KEY'--target-path)(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|((?'TARGET_FILE_NAME_KEY'--target-file-name)(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|((?'REPOSITORY_OWNER_KEY'--repository_owner)(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|(((?'SOURCE_URL_BASE_KEY'--source-url-base)(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+|(((?'ACTION_PATH_KEY'--action-path)(\n|)(?'ACTION_PATH_VALUE'.+)(\n|)))+";
+    const string ACTION_PATH = "--action-path";
+    const string SOURCE_PATH = "--source-path";
+    const string TARGET_PATH = "--target-path";
+    const string TARGET_FILE_NAME = "--target-file-name";
+    const string REPOSITORY_OWNER = "--repository_owner";
+    const string SOURCE_URL_BASE = "--source-url-base";
+    const string PATTERN =
+        @"((?'SOURCE_PATH_KEY'" + SOURCE_PATH + ")(\n|)(?'SOURCE_PATH_VALUE'.+)(\n|))+|" +
+         "((?'TARGET_PATH_KEY'" + TARGET_PATH + ")(\n|)(?'TARGET_PATH_VALUE'.+)(\n|))+|" +
+         "((?'TARGET_FILE_NAME_KEY'" + TARGET_FILE_NAME + ")(\n|)(?'TARGET_FILE_NAME_VALUE'.+)(\n|))+|" +
+         "((?'REPOSITORY_OWNER_KEY'" + REPOSITORY_OWNER + ")(\n|)(?'REPOSITORY_OWNER_VALUE'.+)(\n|))+|" +
+         "(((?'SOURCE_URL_BASE_KEY'" + SOURCE_URL_BASE + ")(\n|)(?'SOURCE_URL_BASE_VALUE'.+)(\n|)))+|" +
+         "(((?'ACTION_PATH_KEY'" + ACTION_PATH + ")(\n|)(?'ACTION_PATH_VALUE'.+)(\n|)))+";
+
     [GeneratedRegex(PATTERN, RegexOptions.Multiline | RegexOptions.ExplicitCapture)]
     private static partial Regex Regex();
 
@@ -34,12 +47,12 @@ internal sealed partial class InputBuildRequestHandler() : IRequestHandler<Input
 
         return new InputBuildResponse
         {
-            ActionPath = matches.Value("--action-path", "ACTION_PATH_KEY", "ACTION_PATH_VALUE"),
-            SourcePath = matches.Value("--source-path", "SOURCE_PATH_KEY", "SOURCE_PATH_VALUE"),
-            TargetPath = matches.Value("--target-path", "TARGET_PATH_KEY", "TARGET_PATH_VALUE"),
-            TargetFileName = matches.Value("--target-file-name", "TARGET_FILE_NAME_KEY", "TARGET_FILE_NAME_VALUE"),
-            RepositoryOnwer = matches.Value("--repository_owner", "REPOSITORY_OWNER_KEY", "REPOSITORY_OWNER_VALUE"),
-            BaseUrl = new Uri(matches.Value("--source-url-base", "SOURCE_URL_BASE_KEY", "SOURCE_URL_BASE_VALUE")),
+            ActionPath = matches.Value(ACTION_PATH, "ACTION_PATH_KEY", "ACTION_PATH_VALUE"),
+            SourcePath = matches.Value(SOURCE_PATH, "SOURCE_PATH_KEY", "SOURCE_PATH_VALUE"),
+            TargetPath = matches.Value(TARGET_PATH, "TARGET_PATH_KEY", "TARGET_PATH_VALUE"),
+            TargetFileName = matches.Value(TARGET_FILE_NAME, "TARGET_FILE_NAME_KEY", "TARGET_FILE_NAME_VALUE"),
+            RepositoryOnwer = matches.Value(REPOSITORY_OWNER, "REPOSITORY_OWNER_KEY", "REPOSITORY_OWNER_VALUE"),
+            BaseUrl = new Uri(matches.Value(SOURCE_URL_BASE, "SOURCE_URL_BASE_KEY", "SOURCE_URL_BASE_VALUE")),
         };
     }
 }
