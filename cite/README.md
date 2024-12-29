@@ -13,12 +13,12 @@ Algo que está sendo citado[^2] no meio de um parágrafo.
 
 Citado[^3] algo o mais próximo do início de um parágrafo.
 
-# Citação[^4] no títulodo tipo 1
-## Citação[^5] no títulodo tipo 2
-### Citação[^6] no títulodo tipo 3
-#### Citação[^7] no títulodo tipo 4
-##### Citação[^8] no títulodo tipo 5
-###### Citação[^9] no títulodo tipo 6
+# Citação[^4] no título do tipo 1
+## Citação[^5] no título do tipo 2
+### Citação[^6] no título do tipo 3
+#### Citação[^7] no título do tipo 4
+##### Citação[^8] no título do tipo 5
+###### Citação[^9] no título do tipo 6
 
 - Adicionando uma citação[^10] em um lista não ordenada
 1. Adicionando uma citação[^11] em um lista ordenada
