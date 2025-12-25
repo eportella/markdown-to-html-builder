@@ -67,7 +67,7 @@ Essa ***palavra*** tem **negrito** com *itálico*, já essa **~~palavra~~** tem 
 >
 >**Um parágrafo inteiro em negirto**
 
-[!CAUTION]
+>[!CAUTION]
 >Um parágrafo com **negrito** no meio do texto
 >
 >**negrito** no início de um parágrafo
