@@ -56,7 +56,7 @@ Essa ~~*palavra*~~ tem ~~tachado~~ com *itálico*, já essa ~~**palavra**~~ tem 
 >
 >~~Um parágrafo inteiro em tachado~~
 
-[!WARNING]
+>[!WARNING]
 >Um parágrafo com ~~tachado~~ no meio do texto
 >
 >~~tachado~~ no início de um parágrafo
