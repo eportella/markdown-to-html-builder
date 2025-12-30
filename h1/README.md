@@ -9,7 +9,6 @@ Esse é o **Título do tipo 1**, ele pode ser usado em diversos pontos da págin
 # ***Título do tipo 1 em itálico e negrito***
 # Tìtulo do tipo 1 com parte em *itálico*
 # Título do tipo 1 com parte em **negrito**, um [hiperlink](/README.md) e uma citação[^1] qualquer
-# Título do tipo 1 em itálico e **negrito***
 
 ># Título do tipo 1 dentro de uma citação em bloco
 
