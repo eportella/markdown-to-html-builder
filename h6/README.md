@@ -9,7 +9,6 @@ Esse é o **Título do tipo 6**, ele pode ser usado em diversos pontos da págin
 ###### ***Título do tipo 6 em itálico e negrito***
 ###### Tìtulo do tipo 6 com parte em *itálico*
 ###### Título do tipo 6 com parte em **negrito**, um [hiperlink](/README.md) e uma citação[^1] qualquer
-###### Título do tipo 6 em itálico e **negrito***
 
 >###### Título do tipo 6 dentro de uma citação em bloco
 
